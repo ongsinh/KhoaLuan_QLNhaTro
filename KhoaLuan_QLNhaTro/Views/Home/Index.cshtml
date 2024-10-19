@@ -1,8 +1,172 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý danh sách phòng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/custom.css" />
+    <style>
+        /* Sidebar styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+        .header-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin: 10px;
+        }
+
+            .header-buttons .btn {
+                margin-right: 5px;
+            }
+
+        .filter-section {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+            .filter-section .filter-btn {
+                margin-right: 15px;
+                font-size: 20px;
+            }
+
+        .room-status-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+            .room-status-buttons .btn {
+                background-color: #d9edf7;
+                border: none;
+                color: #31708f;
+                border-radius: 20px;
+                padding: 5px 10px;
+            }
+
+        .room-table {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ced4da;
+        }
+
+        .status-badge {
+            padding: 5px 8px;
+            border-radius: 12px;
+            color: #fff;
+        }
+
+        .status-warning {
+            background-color: #f0ad4e;
+        }
+
+        .status-danger {
+            background-color: #d9534f;
+        }
+
+        .status-success {
+            background-color: #5cb85c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="header-buttons">
+            <button class="btn btn-success"><i class="fas fa-play"></i></button>
+            <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
+            <button class="btn btn-outline-secondary">Ẩn/Hiện cột</button>
+            <button class="btn btn-outline-secondary">Xuất excel</button>
+        </div>
+
+        <div class="filter-section">
+            <i class="fas fa-filter filter-btn"></i>
+            <div class="room-status-buttons">
+                <button class="btn">Đang ở <span class="badge badge-pill badge-success">10</span></button>
+                <button class="btn">Đang trống <span class="badge badge-pill badge-info">4</span></button>
+                <button class="btn">Sắp hết hạn hợp đồng <span class="badge badge-pill badge-warning">3</span></button>
+                <button class="btn">Đã quá hạn hợp đồng <span class="badge badge-pill badge-danger">2</span></button>
+            </div>
+        </div>
+
+        <div class="room-table">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Tên phòng</th>
+                        <th>Nhóm</th>
+                        <th>Giá thuê</th>
+                        <th>Tiền nợ</th>
+                        <th>Khách thuê</th>
+                        <th>Ngày lập</th>
+                        <th>Ngày vào ở</th>
+                        <th>Tình trạng</th>
+                        <th>Tài chính</th>
+                        <th>Ngày kết thúc</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Phòng 1</td>
+                        <td>Khương</td>
+                        <td>3.242.432.424 ₫</td>
+                        <td>0 ₫</td>
+                        <td>2 người</td>
+                        <td>10/09/2024</td>
+                        <td>27/09/2024</td>
+                        <td><span class="status-badge status-warning">Sắp kết thúc</span></td>
+                        <td><span class="status-badge status-danger">Chưa thu tiền</span></td>
+                        <td>27/09/2024</td>
+                    </tr>
+                    <tr>
+                        <td>Phòng 2</td>
+                        <td>Hùng</td>
+                        <td>3.242.432.424 ₫</td>
+                        <td>1.000.000 ₫</td>
+                        <td>1 người</td>
+                        <td>10/09/2024</td>
+                        <td>19/09/2024</td>
+                        <td><span class="status-badge status-success">Đã hết hạn</span></td>
+                        <td><span class="status-badge status-danger">Chưa thu tiền</span></td>
+                        <td>27/09/2024</td>
+                    </tr>
+                    <tr>
+                        <td>Phòng 3</td>
+                        <td>Khương</td>
+                        <td>12.000.000 ₫</td>
+                        <td>0 ₫</td>
+                        <td>1 người</td>
+                        <td>02/05/2004</td>
+                        <td>18/10/2024</td>
+                        <td><span class="status-badge status-warning">Sắp kết thúc</span></td>
+                        <td><span class="status-badge status-danger">Chưa thu tiền</span></td>
+                        <td>27/09/2024</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

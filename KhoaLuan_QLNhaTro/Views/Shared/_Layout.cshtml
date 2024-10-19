@@ -7,43 +7,96 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/KhoaLuan_QLNhaTro.styles.css" asp-append-version="true" />
+    <style>
+        /* Custom styles for sidebar and content */
+        .sidebar {
+            background-color: #2b3e50;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+        }
+
+            .sidebar a {
+                color: white;
+                padding: 15px;
+                text-decoration: none;
+                display: block;
+            }
+
+                .sidebar a:hover {
+                    background-color: #1a252f;
+                }
+
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+            .content .container {
+                padding: 0;
+                margin: 0;
+                width: 100%;
+            }
+
+
+        /* Custom style for the logout section */
+        .logout-section {
+            background-color: #f8f9fa;
+            padding: 10px 20px;
+            border-bottom: 1px solid #e3e6f0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+            .logout-section button {
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                cursor: pointer;
+                border-radius: 4px;
+            }
+
+                .logout-section button:hover {
+                    background-color: #c82333;
+                }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">KhoaLuan_QLNhaTro</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="sidebar">
+        <div class="sidebar-header text-center py-4">
+            <h4>Võ Trường</h4>
+            <p>Chào mừng bạn trở lại</p>
+        </div>
+        <a href="#"><i class="fas fa-shopping-cart"></i> POS Bán Hàng</a>
+        <a href="#"><i class="fas fa-tachometer-alt"></i> Bảng điều khiển</a>
+        <a href="#"><i class="fas fa-user-tie"></i> Quản lý nhân viên</a>
+        <a href="#"><i class="fas fa-user"></i> Quản lý khách hàng</a>
+        <a href="#"><i class="fas fa-box"></i> Quản lý sản phẩm</a>
+        <a href="#"><i class="fas fa-receipt"></i> Quản lý đơn hàng</a>
+        <a href="#"><i class="fas fa-cogs"></i> Quản lý nội bộ</a>
+        <a href="#"><i class="fas fa-money-check-alt"></i> Bảng kê lương</a>
+        <a href="#"><i class="fas fa-chart-line"></i> Báo cáo doanh thu</a>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - KhoaLuan_QLNhaTro - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <div class="content">
+        <!-- Logout Section -->
+        <div class="logout-section">
+            <button onclick="window.location.href='/Account/Logout'">Logout</button>
         </div>
-    </footer>
+
+        <div class="container">
+            <main role="main">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
