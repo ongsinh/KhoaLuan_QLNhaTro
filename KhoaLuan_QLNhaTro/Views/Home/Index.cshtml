@@ -65,12 +65,14 @@
             background-color: #fff;
             border-radius: 8px;
             overflow: hidden;
+            border-collapse: collapse;
         }
 
         th, td {
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #ced4da;
+            border: 0.5px solid #ced4da;
         }
 
         .status-badge {
@@ -125,6 +127,7 @@
                         <th>Tình trạng</th>
                         <th>Tài chính</th>
                         <th>Ngày kết thúc</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -139,6 +142,7 @@
                         <td><span class="status-badge status-warning">Sắp kết thúc</span></td>
                         <td><span class="status-badge status-danger">Chưa thu tiền</span></td>
                         <td>27/09/2024</td>
+                        <td><i class="fas fa-ellipsis-v action-icon"></i></td>
                     </tr>
                     <tr>
                         <td>Phòng 2</td>
@@ -151,6 +155,7 @@
                         <td><span class="status-badge status-success">Đã hết hạn</span></td>
                         <td><span class="status-badge status-danger">Chưa thu tiền</span></td>
                         <td>27/09/2024</td>
+                        <td><i class="fas fa-ellipsis-v action-icon"></i></td>
                     </tr>
                     <tr>
                         <td>Phòng 3</td>
@@ -163,6 +168,7 @@
                         <td><span class="status-badge status-warning">Sắp kết thúc</span></td>
                         <td><span class="status-badge status-danger">Chưa thu tiền</span></td>
                         <td>27/09/2024</td>
+                        <td><i class="fas fa-ellipsis-v action-icon"></i></td>
                     </tr>
                 </tbody>
             </table>
