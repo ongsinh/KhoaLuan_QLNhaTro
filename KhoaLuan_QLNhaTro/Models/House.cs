@@ -1,7 +1,10 @@
-﻿namespace KhoaLuan_QLNhaTro.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KhoaLuan_QLNhaTro.Models
 {
     public class House
     {
+        [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }

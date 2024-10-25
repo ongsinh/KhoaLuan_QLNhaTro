@@ -1,5 +1,9 @@
+using KhoaLuan_QLNhaTro.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<NhaTroDbContext>( option => option.UseSqlServer(builder.Configuration.GetConnectionString("QLNTconnection")));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

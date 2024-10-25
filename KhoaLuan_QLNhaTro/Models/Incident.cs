@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KhoaLuan_QLNhaTro.Models
 {
@@ -13,5 +14,6 @@ namespace KhoaLuan_QLNhaTro.Models
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
         public Guid AccountId { get; set; }
+        public virtual Account Account { get; set; }
     }
 }

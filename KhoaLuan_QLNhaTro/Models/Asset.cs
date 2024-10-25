@@ -1,7 +1,10 @@
-﻿namespace KhoaLuan_QLNhaTro.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KhoaLuan_QLNhaTro.Models
 {
     public class Asset
     {
+        [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
         public float Price { get; set; }
