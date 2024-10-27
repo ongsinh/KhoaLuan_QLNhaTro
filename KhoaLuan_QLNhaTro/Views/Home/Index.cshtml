@@ -114,10 +114,11 @@
             position: relative;
         }
 
+        /* Điều chỉnh vị trí của popup menu để hiện ngay dưới icon tương ứng */
         .popup-menu {
             position: absolute;
-            top: 25px; /* Điều chỉnh khoảng cách để popup xuất hiện ngay dưới icon */
-            left: 0; /* Canh trái theo icon */
+            top: 25px; /* Giữ lại khoảng cách xuất hiện dưới icon */
+            left: 50px;
             margin-top: 5px;
             display: none;
             background: #fff;
@@ -128,6 +129,7 @@
             width: 220px;
             padding: 10px 0;
         }
+
 
 
             .popup-menu a {
@@ -245,7 +247,14 @@
             $('.action-icon').click(function (e) {
                 e.stopPropagation(); // Ngăn việc đóng popup ngay khi bấm vào icon
                 $('.popup-menu').hide(); // Ẩn tất cả các popup khác
-                $(this).next('.popup-menu').toggle(); // Hiển thị popup tương ứng
+
+                // Lấy vị trí của td và định vị lại popup menu
+                const popupMenu = $(this).next('.popup-menu');
+                const iconPosition = $(this).position();
+                popupMenu.css({
+                    top: iconPosition.top + $(this).outerHeight() + 5, // Căn dưới icon
+                    left: iconPosition.left
+                }).toggle(); // Hiển thị popup tương ứng
             });
 
             // Đóng popup khi bấm ra ngoài
@@ -253,6 +262,7 @@
                 $('.popup-menu').hide();
             });
         });
+
     </script>
 </body>
 </html>
