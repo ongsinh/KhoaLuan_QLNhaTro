@@ -17,7 +17,10 @@ namespace KhoaLuan_QLNhaTro.Controllers
         {
             return View();
         }
-
+        public IActionResult AddHouseModal()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

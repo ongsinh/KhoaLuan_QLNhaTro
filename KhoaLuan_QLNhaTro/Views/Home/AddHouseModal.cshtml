@@ -1,0 +1,33 @@
+﻿@* AddHouseModal.cshtml *@
+<div class="modal fade" id="addHouseModal" tabindex="-1" role="dialog" aria-labelledby="addHouseModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addHouseModalLabel">Thêm Nhà Trọ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addHouseForm">
+                    <div class="form-group">
+                        <label for="houseName">Tên Nhà Trọ</label>
+                        <input type="text" class="form-control" id="houseName" placeholder="Nhập tên nhà trọ" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="houseAddress">Địa Chỉ</label>
+                        <input type="text" class="form-control" id="houseAddress" placeholder="Nhập địa chỉ" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="housePrice">Giá Thuê</label>
+                        <input type="number" class="form-control" id="housePrice" placeholder="Nhập giá thuê" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="saveHouseButton">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>

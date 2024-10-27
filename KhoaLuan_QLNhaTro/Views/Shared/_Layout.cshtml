@@ -7,68 +7,20 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/KhoaLuan_QLNhaTro.styles.css" asp-append-version="true" />
-    <style>
-        /* Custom styles for sidebar and content */
-        .sidebar {
-            background-color: #2b3e50;
-            color: white;
-            height: 100vh;
-            position: fixed;
-            width: 250px;
-        }
-
-            .sidebar a {
-                color: white;
-                padding: 15px;
-                text-decoration: none;
-                display: block;
-            }
-
-                .sidebar a:hover {
-                    background-color: #1a252f;
-                }
-
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-        }
-
-            .content .container {
-                padding: 0;
-                margin: 0;
-                width: 100%;
-            }
-
-
-        /* Custom style for the logout section */
-        .logout-section {
-            background-color: #f8f9fa;
-            padding: 10px 20px;
-            border-bottom: 1px solid #e3e6f0;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
-
-            .logout-section button {
-                background-color: #dc3545;
-                color: white;
-                border: none;
-                padding: 8px 16px;
-                cursor: pointer;
-                border-radius: 4px;
-            }
-
-                .logout-section button:hover {
-                    background-color: #c82333;
-                }
-    </style>
+    <link rel="stylesheet" href="~/css/layout.css" />
 </head>
 <body>
     <div class="sidebar">
-        <div class="sidebar-header text-center py-4">
-            <h4>Võ Trường</h4>
-            <p>Chào mừng bạn trở lại</p>
+        <div class="sidebar-header">
+            <div class="notification-badge">2</div>
+            <div class="icon-text">
+                <div class="house-icon">🏠</div>
+                <div>
+                    <div class="status-text">Đang quản lý</div>
+                    <div class="property-name">Nhà trọ 123456789</div>
+                </div>
+            </div>
+            <div class="add-button">+</div>
         </div>
         <a href="#"><i class="fas fa-shopping-cart"></i> POS Bán Hàng</a>
         <a href="#"><i class="fas fa-tachometer-alt"></i> Bảng điều khiển</a>
@@ -92,10 +44,24 @@
                 @RenderBody()
             </main>
         </div>
+        @Html.Partial("AddHouseModal")
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        var addHouseUrl = '@Url.Action("AddHouseModal", "HomeController")'; // Thay YourControllerName bằng tên controller của bạn
+
+        $(document).ready(function () {
+            // Mở modal khi bấm vào dấu cộng
+            $('.add-button').click(function () {
+                $('#addHouseModal').modal('show');
+            });
+            $('.close, .btn-secondary').click(function () {
+                $('#addHouseModal').modal('hide');
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
