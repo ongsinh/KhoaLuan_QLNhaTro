@@ -13,5 +13,10 @@ namespace KhoaLuan_QLNhaTro.Controllers
         {
             return View();
         }
+        [Route("UpdateRoom")]
+        public IActionResult UpdateRoom()
+        {
+            return View();
+        }
     }
 }

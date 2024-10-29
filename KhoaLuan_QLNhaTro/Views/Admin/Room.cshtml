@@ -15,7 +15,6 @@
             background-color: #f7f7f7;
         }
 
-
         .header-buttons {
             display: flex;
             justify-content: flex-end;
@@ -92,6 +91,24 @@
         .status-success {
             background-color: #5cb85c;
         }
+
+        /* Dropdown styling */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            min-width: 120px;
+        }
+
+        .dropdown.show .dropdown-menu {
+            display: block;
+        }
+
+        .action-icon {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -142,37 +159,38 @@
                         <td><span class="status-badge status-warning">Sắp kết thúc</span></td>
                         <td><span class="status-badge status-danger">Chưa thu tiền</span></td>
                         <td>27/09/2024</td>
-                        <td><i class="fas fa-ellipsis-v action-icon"></i></td>
+                        <td>
+                            <div class="dropdown">
+                                <i class="fas fa-ellipsis-v action-icon" onclick="toggleDropdown(event, this)"></i>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Edit</a>
+                                    <a class="dropdown-item" href="#">Delete</a>
+                                    <a class="dropdown-item" href="#">View</a>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>Phòng 2</td>
-                        <td>Hùng</td>
-                        <td>3.242.432.424 ₫</td>
-                        <td>1.000.000 ₫</td>
-                        <td>1 người</td>
-                        <td>10/09/2024</td>
-                        <td>19/09/2024</td>
-                        <td><span class="status-badge status-success">Đã hết hạn</span></td>
-                        <td><span class="status-badge status-danger">Chưa thu tiền</span></td>
-                        <td>27/09/2024</td>
-                        <td><i class="fas fa-ellipsis-v action-icon"></i></td>
-                    </tr>
-                    <tr>
-                        <td>Phòng 3</td>
-                        <td>Khương</td>
-                        <td>12.000.000 ₫</td>
-                        <td>0 ₫</td>
-                        <td>1 người</td>
-                        <td>02/05/2004</td>
-                        <td>18/10/2024</td>
-                        <td><span class="status-badge status-warning">Sắp kết thúc</span></td>
-                        <td><span class="status-badge status-danger">Chưa thu tiền</span></td>
-                        <td>27/09/2024</td>
-                        <td><i class="fas fa-ellipsis-v action-icon"></i></td>
-                    </tr>
+                    <!-- Repeat for other rows -->
                 </tbody>
             </table>
         </div>
     </div>
+
+    <script>
+        function toggleDropdown(event, element) {
+            event.stopPropagation();
+            // Close any open dropdowns
+            document.querySelectorAll('.dropdown').forEach(drop => drop.classList.remove('show'));
+
+            // Toggle the clicked dropdown
+            const dropdown = element.parentElement;
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function () {
+            document.querySelectorAll('.dropdown').forEach(drop => drop.classList.remove('show'));
+        }
+    </script>
 </body>
 </html>

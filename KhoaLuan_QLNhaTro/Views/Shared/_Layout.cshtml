@@ -14,7 +14,7 @@
         <div class="sidebar-header">
             <div class="notification-badge">2</div>
             <div class="icon-text">
-                <div class="house-icon">🏠</div>
+                <div class="house-icon" id="houseIcon">🏠</div>
                 <div>
                     <div class="status-text">Đang quản lý</div>
                     <div class="property-name">Nhà trọ 123456789</div>
@@ -44,8 +44,84 @@
                 @RenderBody()
             </main>
         </div>
-        @Html.Partial("AddHouseModal")
+        @* @Html.Partial("AddHouseModal") *@
     </div>
+
+    @* Add House *@
+    <div class="modal fade" id="addHouseModal" tabindex="-1" role="dialog" aria-labelledby="addHouseModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addHouseModalLabel">Thêm Nhà Trọ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addHouseForm">
+                        <div class="form-group">
+                            <label for="houseName">Tên Nhà Trọ</label>
+                            <input type="text" class="form-control" id="houseName" placeholder="Nhập tên nhà trọ" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="houseAddress">Địa Chỉ</label>
+                            <input type="text" class="form-control" id="houseAddress" placeholder="Nhập địa chỉ" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="floorNumber">Số tầng </label>
+                            <input type="number" class="form-control" id="floorNumber" placeholder="Nhập số tầng " required>
+                        </div>
+                        <div class="form-group">
+                            <label for="roomNumber">Số phòng</label>
+                            <input type="number" class="form-control" id="roomNumber" placeholder="Nhập số phòng" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="housePrice">Giá Thuê</label>
+                            <input type="number" class="form-control" id="housePrice" placeholder="Nhập giá thuê" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="saveHouseButton">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Hiện list *@
+    <!-- House List Modal -->
+    <div class="modal fade" id="houseListModal" tabindex="-1" role="dialog" aria-labelledby="houseListModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="houseListModalLabel">
+                        <i class="fas fa-home"></i> Danh sách nhà trọ của bạn
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Example of a house item -->
+                    <div class="house-item active">
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <strong>Nhà trọ Nha12334</strong>
+                                <p>96 Định Công, Quận Hoàng Mai , Hà Nội</p>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
+                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-select"><i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -60,9 +136,14 @@
             $('.close, .btn-secondary').click(function () {
                 $('#addHouseModal').modal('hide');
             });
+            $('#houseIcon').click(function () {
+                $('#houseListModal').modal('show');
+            });
+            $('.close').click(function () {
+                $('#houseListModal').modal('hide');
+            });
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
