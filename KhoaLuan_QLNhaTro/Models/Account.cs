@@ -8,10 +8,7 @@ namespace KhoaLuan_QLNhaTro.Models
         [Key]
         public Guid Id { get; set; }
         public float Name { get; set; }
-        public string CCCD { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public DateTime Dob { get; set; }
+        
         public string Address { get; set; }
         public string Password { get; set; }
         public DateTime CreatedAt { get; set; }
