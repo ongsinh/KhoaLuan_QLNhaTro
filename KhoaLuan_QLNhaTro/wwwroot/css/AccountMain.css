@@ -1,0 +1,230 @@
+﻿.header-text {
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.btn-filter, .btn-export {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    font-weight: bold;
+}
+
+.filter-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #f44336;
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 50%;
+}
+
+.table-section {
+    background-color: #f1f8ff;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.room-header {
+    background-color: #e3f2fd;
+    font-weight: bold;
+}
+
+.status-badge {
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    color: white;
+    font-size: 0.875rem;
+}
+
+.status-complete {
+    background-color: #28a745;
+}
+
+.status-incomplete {
+    background-color: #ffc107;
+}
+
+.status-not-registered {
+    background-color: #dc3545;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+
+.header-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.title-section {
+    display: flex;
+    flex-direction: column;
+}
+
+    .title-section h1 {
+        color: #2f772f;
+        font-size: 24px;
+        margin: 0;
+    }
+
+.subtitle {
+    color: gray;
+    margin: 0;
+}
+
+.add-button-account {
+    background-color: #65b565;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    display: flex;
+    /*align-items: center;*/
+    justify-content: center;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+
+.filter-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.search-bar {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.options-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+
+.dropdown {
+    width: 140px;
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+    
+
+    .dropdown a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        cursor: pointer;
+    }
+
+        .dropdown a:hover {
+            background-color: #f0f0f0;
+        }
+
+
+/* Customize the popup modal */
+/* Customize the popup modal */
+.modal-lg-custom {
+    max-width: 90%; /* Set the width to be larger */
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    border-bottom: none;
+}
+.modal-footer {
+    border-top: none;
+}
+
+    .modal-header h5 {
+        margin-left: 8px;
+    }
+
+.modal-content {
+    padding: 20px;
+}
+
+.room-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.room-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 7px;
+    text-align: left;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(50% - 10px); /* 2 items per row */
+    transition: all 0.2s ease;
+}
+
+.person {
+    margin-left: 30px
+}
+.room-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+    .room-item.active {
+        border-color: green;
+    }
+
+
+.room-details {
+    flex-grow: 1;
+}
+
+    .room-details h6 {
+        margin: 0;
+        font-weight: bold;
+    }
+
+    .room-details p {
+        margin: 0;
+        font-size: 0.9em;
+        color: #555;
+    }
+
+.form-section {
+    border-left: 1px solid #ddd;
+    padding-left: 20px;
+}
+
+    .form-section label {
+        font-weight: bold;
+    }
+
+.padding1 {
+    padding: 0px 5px 0px 10px;
+}
+.padding2 {
+    padding: 0px 10px 0px 10px;
+}

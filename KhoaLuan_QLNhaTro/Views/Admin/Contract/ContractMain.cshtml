@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý danh sách khách thuê</title>
+    @* <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="~/css/contractmain.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-4">
+
+        <div class="header-section">
+            <div class="title-section">
+                <h1>Tất cả hợp đồng</h1>
+                <p class="subtitle">Danh sách hợp đồng được tạo khi thêm phiên ở mới</p>
+            </div>
+            <button class="add-button-contract" onclick="openModal()">+</button>
+        </div>
+        <div class="filter-section">
+            <input type="text" class="search-bar" placeholder="Tìm kiếm hợp đồng...">
+        </div>
+
+
+        <div class="table-section">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th>Tên phòng</th>
+                        <th>Thành viên</th>
+                        <th>Giá thuê</th>
+                        <th>Ngày lập</th>
+                        <th>Ngày vào ở </th>
+                        <th>Thời hạn hợp đồng</th>
+                        <th>Tình trạng</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td>
+                            @* <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Image"> *@
+                            Phòng 1<br><small>Đại diện: Minh Trần</small>
+                        </td>
+                        <td>1 người</td>
+                        <td>3000000 đ</td>
+                        <td>06/11/2024</td>
+                        <td>07/11/2024</td>
+                        <td>6 tháng</td>
+                        <td><span class="status-active">Trong thời hạn</span></td>
+                        <!-- Biểu tượng ba chấm và dropdown -->
+                        <td class="options-icon" onclick="toggleDropdown(this)">
+                            <i class="fas fa-ellipsis-v"></i>
+                            <div class="dropdown">
+                                <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
+                                <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            @* <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Image"> *@
+                            Phòng 2<br><small>Đại diện: Minh Ánh</small>
+                        </td>
+                        <td>2 người</td>
+                        <td>3500000 đ</td>
+                        <td>08/11/2024</td>
+                        <td>09/11/2024</td>
+                        <td>6 tháng</td>
+                        <td><span class="status-active">Trong thời hạn</span></td>
+                        <!-- Biểu tượng ba chấm và dropdown -->
+                        <td class="options-icon" onclick="toggleDropdown(this)">
+                            <i class="fas fa-ellipsis-v"></i>
+                            <div class="dropdown">
+                                <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
+                                <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

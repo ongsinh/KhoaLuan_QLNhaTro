@@ -14,8 +14,8 @@ namespace KhoaLuan_QLNhaTro.Models
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
         public Guid RoomId { get; set; }
-        public Guid AccountId { get; set; }
+        public Guid UserId { get; set; }
         public virtual Room Room { get; set; }
-        public virtual Account Account { get; set; }
+        public virtual User User { get; set; }
     }
 }

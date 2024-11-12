@@ -6,28 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KhoaLuan_QLNhaTro.Migrations
 {
     /// <inheritdoc />
-    public partial class DbNhaTro : Migration
+    public partial class dbQLNT : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Assets",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<float>(type: "real", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Assets", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Houses",
                 columns: table => new
@@ -66,6 +49,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -79,12 +63,6 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<float>(type: "real", nullable: false),
-                    CCCD = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -102,6 +80,32 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<float>(type: "real", nullable: false),
+                    CCCD = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Incidents",
                 columns: table => new
                 {
@@ -112,15 +116,15 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Incidents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Incidents_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
+                        name: "FK_Incidents_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -138,45 +142,43 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HouseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Rooms_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Rooms_Houses_HouseId",
                         column: x => x.HouseId,
                         principalTable: "Houses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Rooms_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AssetRooms",
+                name: "Assets",
                 columns: table => new
                 {
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<float>(type: "real", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<float>(type: "real", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AssetRooms", x => new { x.AssetId, x.RoomId });
+                    table.PrimaryKey("PK_Assets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AssetRooms_Assets_AssetId",
-                        column: x => x.AssetId,
-                        principalTable: "Assets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AssetRooms_Rooms_RoomId",
+                        name: "FK_Assets_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
@@ -190,25 +192,26 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Total = table.Column<float>(type: "real", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bills", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bills_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Bills_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Bills_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -223,22 +226,47 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Contracts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Contracts_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Contracts_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Contracts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IncidentRooms",
+                columns: table => new
+                {
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IncidentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IncidentRooms", x => new { x.IncidentId, x.RoomId });
+                    table.ForeignKey(
+                        name: "FK_IncidentRooms_Incidents_IncidentId",
+                        column: x => x.IncidentId,
+                        principalTable: "Incidents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_IncidentRooms_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -268,7 +296,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Details",
+                name: "DetailBills",
                 columns: table => new
                 {
                     BillId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -279,15 +307,15 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Details", x => new { x.BillId, x.ServiceId });
+                    table.PrimaryKey("PK_DetailBills", x => new { x.BillId, x.ServiceId });
                     table.ForeignKey(
-                        name: "FK_Details_Bills_BillId",
+                        name: "FK_DetailBills_Bills_BillId",
                         column: x => x.BillId,
                         principalTable: "Bills",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Details_Services_ServiceId",
+                        name: "FK_DetailBills_Services_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Services",
                         principalColumn: "Id",
@@ -300,31 +328,24 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 {
                     ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DetailContracts", x => new { x.ContractId, x.AssetId, x.ServiceId });
+                    table.PrimaryKey("PK_DetailContracts", x => new { x.ContractId, x.AssetId });
                     table.ForeignKey(
                         name: "FK_DetailContracts_Assets_AssetId",
                         column: x => x.AssetId,
                         principalTable: "Assets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DetailContracts_Contracts_ContractId",
                         column: x => x.ContractId,
                         principalTable: "Contracts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DetailContracts_Services_ServiceId",
-                        column: x => x.ServiceId,
-                        principalTable: "Services",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -333,14 +354,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AssetRooms_RoomId",
-                table: "AssetRooms",
+                name: "IX_Assets_RoomId",
+                table: "Assets",
                 column: "RoomId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Bills_AccountId",
-                table: "Bills",
-                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bills_RoomId",
@@ -348,9 +364,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contracts_AccountId",
-                table: "Contracts",
-                column: "AccountId");
+                name: "IX_Bills_UserId",
+                table: "Bills",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contracts_RoomId",
@@ -359,29 +375,29 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Contracts_UserId",
+                table: "Contracts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetailBills_ServiceId",
+                table: "DetailBills",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DetailContracts_AssetId",
                 table: "DetailContracts",
                 column: "AssetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DetailContracts_ServiceId",
-                table: "DetailContracts",
-                column: "ServiceId");
+                name: "IX_IncidentRooms_RoomId",
+                table: "IncidentRooms",
+                column: "RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Details_ServiceId",
-                table: "Details",
-                column: "ServiceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Incidents_AccountId",
+                name: "IX_Incidents_UserId",
                 table: "Incidents",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Rooms_AccountId",
-                table: "Rooms",
-                column: "AccountId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rooms_HouseId",
@@ -389,28 +405,39 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 column: "HouseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Rooms_UserId",
+                table: "Rooms",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RoomsServices_ServiceId",
                 table: "RoomsServices",
                 column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_AccountId",
+                table: "Users",
+                column: "AccountId",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AssetRooms");
+                name: "DetailBills");
 
             migrationBuilder.DropTable(
                 name: "DetailContracts");
 
             migrationBuilder.DropTable(
-                name: "Details");
-
-            migrationBuilder.DropTable(
-                name: "Incidents");
+                name: "IncidentRooms");
 
             migrationBuilder.DropTable(
                 name: "RoomsServices");
+
+            migrationBuilder.DropTable(
+                name: "Bills");
 
             migrationBuilder.DropTable(
                 name: "Assets");
@@ -419,7 +446,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 name: "Contracts");
 
             migrationBuilder.DropTable(
-                name: "Bills");
+                name: "Incidents");
 
             migrationBuilder.DropTable(
                 name: "Services");
@@ -428,10 +455,13 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 name: "Rooms");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "Houses");
 
             migrationBuilder.DropTable(
-                name: "Houses");
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Roles");

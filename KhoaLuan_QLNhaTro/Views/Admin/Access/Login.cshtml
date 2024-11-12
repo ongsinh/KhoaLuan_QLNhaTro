@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAccess.cshtml";
+}
+@model Account
+<link href="~/css/login.css" rel="stylesheet" />
+<div class="login-container">
+    @using (Html.BeginForm("Login", "Access", FormMethod.Post, new { @id = "login-container" }))
+    {
+        <h2>Đăng Nhập</h2>
+        <form action="/home" method="post">
+            <div class="form-group">
+                <label for="emailOrPhone">Email hoặc SĐT</label>
+                <input type="text" id="emailOrPhone" name="emailOrPhone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <p class="register-link">Chưa có tài khoản? <a class="" asp-area="" asp-controller="Admin" asp-action="Register">Đăng Ký</a></p>
+
+            <button type="submit" class="login-btn">Đăng Nhập</button>
+        </form>
+    }
+</div>
+
+
