@@ -25,7 +25,7 @@
         <a href="#"><i class="fas fa-shopping-cart"></i> POS Bán Hàng</a>
         <a href="#"><i class="fas fa-tachometer-alt"></i> Bảng điều khiển</a>
         <a href="#"><i class="fas fa-user-tie"></i> Quản lý nhân viên</a>
-        <a href="#"><i class="fas fa-user"></i> Quản lý khách hàng</a> 
+        <a href="#"><i class="fas fa-user"></i> Quản lý khách hàng</a>
         <a href="#"><i class="fas fa-box"></i> Quản lý sản phẩm</a>
         <a href="#"><i class="fas fa-receipt"></i> Quản lý đơn hàng</a>
         <a href="#"><i class="fas fa-cogs"></i> Quản lý nội bộ</a>
@@ -112,7 +112,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-edit"><i class="fas fa-edit" onclick="showEditModalHouse()"></i></button>
                                 <button class="btn btn-select"><i class="fas fa-arrow-right"></i></button>
                             </div>
                         </div>
@@ -121,6 +121,91 @@
             </div>
         </div>
     </div>
+
+    @* modal chỉnh sửa thông tin nhà trọ *@
+    <!-- Modal Structure -->
+    <div class="modal fade edit-property-modal" id="editPropertyModal" tabindex="-1" aria-labelledby="editPropertyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPropertyModalLabel"><i class="bi bi-house-door-fill"></i> Chỉnh sửa thông tin Nha12334</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- Section: Basic Information -->
+                    <div class="form-section">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="propertyName" class="form-label">Tên nhà trọ</label>
+                                <input type="text" class="form-control" id="propertyName" value="Nha12334">
+                            </div>
+                        </div>
+                    </div>
+
+                    @* <!-- Section: Data Initialization -->
+                    <div class="form-section">
+                        <div class="form-section-title">Chọn phương thức khởi tạo dữ liệu</div>
+                        <p class="form-section-note">Ghi chú: Vui lòng chọn số tầng và nhập số phòng để hệ thống tự động tạo dữ liệu phòng cho bạn.</p>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="floorCount" class="form-label">Số tầng</label>
+                                <input type="number" class="form-control" id="floorCount" min="1">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="roomCount" class="form-label">Số phòng</label>
+                                <input type="number" class="form-control" id="roomCount" min="1">
+                            </div>
+                        </div>
+                    </div> *@
+
+                    <!-- Section: Non-editable Information -->
+                    <div class="form-section">
+                        <div class="form-section-title">Thông tin không thể chỉnh sửa:</div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Số tầng </label>
+                                <input type="text" class="form-control" value="5 tầng" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Số phòng</label>
+                                <input type="text" class="form-control" value="15" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Address -->
+                    <div class="form-section">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="detailedAddress" class="form-label">Địa chỉ chi tiết</label>
+                                <input type="text" class="form-control" id="detailedAddress" value="122 Nguyen Duy Trinh">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Basic Data -->
+                    <div class="form-section">
+                        <div class="form-section-title">Thông tin cơ bản:</div>
+                        <p class="text-danger">*Các thông tin dưới đây chỉ áp dụng cho lúc tạo nhà trọ tự động và khởi tạo đăng tin cho thuê</p>
+                        @* <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="averagePrice" class="form-label">Giá thuê trung bình (₫)</label>
+                                <input type="text" class="form-control" id="averagePrice" value="3,242,432.424">
+                            </div>
+                        </div> *@
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success">Chỉnh sửa Nhà trọ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -143,6 +228,10 @@
                 $('#houseListModal').modal('hide');
             });
         });
+
+        function showEditModalHouse() {
+            $('#editPropertyModal').modal('show');
+        }
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

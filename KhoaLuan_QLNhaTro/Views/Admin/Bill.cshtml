@@ -1,0 +1,841 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+            .header h2 {
+                font-size: 24px;
+                color: #333;
+            }
+
+            .header .navigation {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+                .header .navigation button,
+                .header .navigation select {
+                    margin: 0 5px;
+                    padding: 8px 12px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+                .header .navigation button {
+                    background-color: #007bff;
+                    color: #fff;
+                }
+
+                .header .navigation select {
+                    background-color: #fff;
+                    border: 1px solid #ddd;
+                }
+
+        /* Add Button Styling */
+        .actions .add-button-bill {
+            font-size: 20px;
+            font-weight: bold;
+            background-color: #28a745;
+            color: #fff;
+            padding: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions .add-button-bill {
+            background-color: #28a745;
+        }
+
+        /* Filter Section */
+        .filters {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+            .filters input[type="checkbox"] {
+                margin-right: 5px;
+            }
+
+            .filters .filter-item {
+                display: flex;
+                align-items: center;
+            }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: end;
+        }
+
+            .actions button {
+                background-color: #28a745;
+                color: #fff;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+        /* Table Section */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            color: #333;
+        }
+
+        th {
+            background-color: #f7f7f7;
+            font-weight: bold;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #fff;
+            text-align: center;
+        }
+
+            .badge.pending {
+                background-color: #ffc107;
+            }
+
+            .badge.unpaid {
+                background-color: #dc3545;
+            }
+
+            .badge.paid {
+                background-color: #28a745;
+            }
+
+        /* Row Group */
+        .group-header {
+            background-color: #e9f4ff;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        /* Action Icon */
+        .action-menu {
+            display: inline-block;
+            position: relative;
+        }
+
+            .action-menu .menu-content {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background-color: #fff;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                border-radius: 5px;
+                overflow: hidden;
+                z-index: 1;
+            }
+
+                .action-menu .menu-content a {
+                    display: block;
+                    padding: 8px 12px;
+                    color: #333;
+                    text-decoration: none;
+                }
+
+                    .action-menu .menu-content a:hover {
+                        background-color: #f1f1f1;
+                    }
+
+            .action-menu:hover .menu-content {
+                display: block;
+            }
+
+        .room-status {
+            font-size: 14px;
+        }
+
+        .badge-contract-ending {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .badge-contract-ended {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .badge-active {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-close-service {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+
+        .step-indicator {
+            font-size: 18px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .alert-custom {
+            font-size: 14px;
+        }
+
+        #billingModal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed positioning for modal */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Background overlay */
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Dịch vụ cần chốt - Bố cục và kiểu dáng giống modal trong ảnh */
+        .service-details-modal {
+            background-color: #e6f9e6;
+            border: 1px solid #a5d6a7;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .service-item {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+            .service-item .price {
+                font-size: 0.9rem;
+                color: #4caf50;
+            }
+
+        .input-group {
+            display: flex;
+            margin-top: 5px;
+        }
+
+            .input-group input.form-control {
+                flex: 1;
+                border: 1px solid #cccccc;
+                border-radius: 4px 0 0 4px;
+            }
+
+            .input-group .input-group-text {
+                background-color: #e0e0e0;
+                border: 1px solid #cccccc;
+                padding: 6px 10px;
+                border-radius: 0 4px 4px 0;
+                font-size: 0.8rem;
+            }
+
+        .room-list, .service-details {
+            height: 400px; /* Điều chỉnh chiều cao cố định theo yêu cầu */
+            overflow-y: auto;
+        }
+
+        /* Modal Background */
+        .invoice-edit-modal .modal-content {
+            background-color: #f8f9fa; /* Light background for the modal */
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        /* Header Styles */
+        .invoice-edit-modal .modal-header {
+            background-color: #28a745; /* Blue header background */
+            color: white;
+            border-bottom: 1px solid #28a745;
+        }
+
+        .invoice-edit-modal .modal-title {
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .invoice-edit-modal .close {
+            color: white;
+            opacity: 0.8;
+        }
+
+            .invoice-edit-modal .close:hover {
+                color: white;
+                opacity: 1;
+            }
+
+        /* Body Styles */
+        .invoice-edit-modal .modal-body {
+            padding: 1.5rem;
+            color: #333;
+        }
+
+            .invoice-edit-modal .modal-body h6 {
+                color: #28a745; /* Same blue as the header for section titles */
+                font-weight: bold;
+                margin-top: 1rem;
+            }
+
+        /* Service Item Styles */
+        .invoice-edit-modal .service-item {
+            background-color: #e9ecef;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+
+            .invoice-edit-modal .service-item p {
+                margin: 0;
+                font-size: 0.9rem;
+                color: #495057;
+            }
+
+        /* Footer Styles */
+        .invoice-edit-modal .modal-footer {
+            background-color: #f1f1f1;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .invoice-edit-modal .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .invoice-edit-modal .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            font-weight: bold;
+        }
+
+        /* Total Section Styles */
+        .invoice-edit-modal .total-section {
+            background-color: #e2e3e5;
+            padding: 0.75rem;
+            border-radius: 5px;
+        }
+
+            .invoice-edit-modal .total-section strong {
+                color: #28a745;
+                font-size: 1rem;
+            }
+
+        /* Input Styles */
+        .invoice-edit-modal .form-control {
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <div class="header">
+        <h2>Tất cả hóa đơn - 10/2024</h2>
+        <div class="navigation">
+            <button>◀ Năm trước</button>
+            <button>Năm tới ▶</button>
+            <select>
+                <option>T.1 2024</option>
+                <option>T.2 2024</option>
+                <option>T.3 2024</option>
+                <option>T.4 2024</option>
+                <option selected>T.10 2024</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filters">
+        <div class="filter-item">
+            <input type="checkbox" id="paid" />
+            <label for="paid">Hóa đơn đã thu</label>
+        </div>
+        <div class="filter-item">
+            <input type="checkbox" id="unpaid" />
+            <label for="unpaid">Hóa đơn chưa thu</label>
+        </div>
+        <div class="filter-item">
+            <input type="checkbox" id="pending" />
+            <label for="pending">Hóa đơn đang nợ</label>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions">
+        <button class="add-button-bill" data-toggle="modal" data-target="#billingModal">+</button>
+        <button>In hóa đơn</button>
+    </div>
+
+    <!-- Table Section -->
+    <table>
+        <thead>
+            <tr>
+                <th>Tên phòng</th>
+                <th>Tiền phòng</th>
+                <th>Tiền nước</th>
+                <th>Tiền rác (người)</th>
+                <th>Tiền wifi (người)</th>
+                <th>Thu/Trả cọc</th>
+                <th>Cộng thêm/Giảm trừ</th>
+                <th>Tổng cộng</th>
+                <th>Cần thu</th>
+                <th>Trạng thái</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Group Row -->
+            <tr class="group-header">
+                <td colspan="11">Tầng trệt (1 hóa đơn)</td>
+            </tr>
+
+            <!-- Invoice Row -->
+            <tr>
+                <td>Phòng 1</td>
+                <td>3,242,432.424 ₫</td>
+                <td>20,000 ₫</td>
+                <td>15,000 ₫</td>
+                <td>50,000 ₫</td>
+                <td>0 ₫</td>
+                <td>0 ₫</td>
+                <td>3,242,517.000 ₫</td>
+                <td>3,242,517.000 ₫</td>
+                <td><span class="badge unpaid">Chưa thu</span></td>
+                <td>
+                    <div class="action-menu">
+                        <i class="fas fa-ellipsis-v" onclick="showInvoiceEditModal()"></i>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    @* Bước 1 lập chọn phòng để chốt hóa đơn *@
+    <div class="modal fade" id="billingModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Lập hóa đơn nhiều phòng (Lập hóa đơn nhanh)</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="step-indicator">Bước 1: Chốt dịch vụ</div>
+                    <div class="row">
+                        <!-- Danh sách các phòng -->
+                        <div class="col-md-8 mb-6 room-list">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3">
+                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
+                                        <h6>Phòng 1</h6>
+                                        <p>3.242.432.424 đ</p>
+                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                    </div>
+                                </div>
+                                <!-- Thêm các thẻ phòng khác ở đây -->
+                            </div>
+                        </div>
+
+                        <!-- Dịch vụ cần chốt -->
+                        <div class="col-md-4 mb-3 service-details">
+                            <div id="service-details" class="service-details-modal" style="display: none;">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <button class="btn btn-secondary">Đóng chốt</button>
+                                    <button class="btn btn-success">Áp dụng dịch vụ</button>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox" checked> <span>Tiền điện</span>
+                                    <p class="price">Giá: <b>4.000 đ</b> / KWh</p>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" placeholder="0">
+                                        <span class="input-group-text">Số cũ</span>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" placeholder="0">
+                                        <span class="input-group-text">Số mới</span>
+                                    </div>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox" checked> <span>Tiền nước</span>
+                                    <p class="price">Giá: <b>20.000 đ</b> / Tháng</p>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" placeholder="0">
+                                        <span class="input-group-text">Tháng</span>
+                                    </div>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox" checked> <span>Tiền rác (người)</span>
+                                    <p class="price">Giá: <b>15.000 đ</b> / Người</p>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" placeholder="0">
+                                        <span class="input-group-text">Người</span>
+                                    </div>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox" checked> <span>Tiền wifi (người)</span>
+                                    <p class="price">Giá: <b>50.000 đ</b> / Người</p>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" placeholder="0">
+                                        <span class="input-group-text">Người</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Khu vực Thông báo -->
+                <div class="alert alert-success alert-custom mt-3" role="alert">
+                    0 phòng đã được chốt dịch vụ và sẵn sàng lập hóa đơn
+                </div>
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success " data-toggle="modal" data-target="#createInvoiceModal" data-dismiss="modal">Bước 2: Lập hóa đơn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Modal bước 2 sau khi chốt phòng -->
+    <div class="modal fade" id="createInvoiceModal" tabindex="-1" aria-labelledby="createInvoiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createInvoiceModalLabel">Lập hóa đơn nhiều phòng (Lập hóa đơn nhanh)</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- Step Indicator -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="badge bg-secondary">Bước 1: Chốt dịch vụ</span>
+                        <span class="badge bg-success">Bước 2: Lập hóa đơn</span>
+                    </div>
+
+                    <!-- Form Content -->
+                    <div class="alert alert-success">
+                        <strong>Đã chốt 1 phòng</strong><br>
+                        Nhập các thông tin bên phải để thực hiện tạo hóa đơn!
+                    </div>
+
+                    <form id="invoiceForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="month" class="form-label">Tháng lập phiếu*</label>
+                                <input type="text" class="form-control" id="month" name="month" value="11/2024" readonly>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="date" class="form-label">Ngày lập hóa đơn*</label>
+                                <input type="date" class="form-control" id="date" name="date" value="2024-11-01">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="reason" class="form-label">Lý do thu tiền*</label>
+                                <select class="form-select" id="reason" name="reason">
+                                    <option value="Thu tiền hàng tháng">Thu tiền hàng tháng</option>
+                                    <!-- Add other options if needed -->
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="dueDate" class="form-label">Hạn đóng tiền*</label>
+                                <input type="date" class="form-control" id="dueDate" name="dueDate" value="2024-12-01">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="fromDate" class="form-label">Từ ngày*</label>
+                                <input type="date" class="form-control" id="fromDate" name="fromDate" value="2024-11-01">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="toDate" class="form-label">Đến ngày*</label>
+                                <input type="date" class="form-control" id="toDate" name="toDate" value="2024-12-01">
+                            </div>
+                        </div>
+
+                        <!-- Additional Information -->
+                        <div class="alert alert-info mt-3">
+                            Thông tin: Các phòng/giường lập hóa đơn mặc định tính tròn 1 tháng
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success back_add_bill" data-toggle="modal" data-target="#billingModal">Bước 1: Chốt dịch vụ </button>
+                    <button type="submit" form="invoiceForm" class="btn btn-success">Lập hóa đơn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* chỉnh sửa hóa đơn *@
+    <!-- Popup Modal -->
+    <div id="invoiceEditModal" class="modal fade invoice-edit-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Chỉnh sửa hóa đơn cho "Phòng 2"</h5>
+                    <button type="button" class="close" onclick="closeInvoiceEditModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <!-- Thông tin lập phiếu -->
+                    <div class="form-group">
+                        <label>Tháng lập phiếu</label>
+                        <input type="text" class="form-control" value="11/2024" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày lập hóa đơn</label>
+                        <input type="date" class="form-control" value="2024-11-03">
+                    </div>
+                    <div class="form-group">
+                        <label>Hạn đóng tiền</label>
+                        <input type="date" class="form-control" value="2024-12-04">
+                    </div>
+
+                    <!-- Thu tiền hàng tháng -->
+                    <div class="billing-section mt-4">
+                        <h6>Thu tiền hàng tháng</h6>
+                        <p>Ngày vào: 10/09/2024</p>
+                        <p>Chu kỳ thu: <b>1 tháng, 1 ngày</b></p>
+                        <div class="d-flex justify-content-between">
+                            <span>1 tháng x 3.242.432.424 đ</span>
+                            <strong>3.242.432.424 đ</strong>
+                        </div>
+                    </div>
+
+                    <!-- Tiền dịch vụ -->
+                    <div class="services-section mt-4">
+                        <h6>Tiền dịch vụ</h6>
+                        <div class="service-item">
+                            <input type="checkbox" checked> Tiền điện
+                            <p>Giá: <b>4.000 đ</b> / KWh</p>
+                            <input type="number" placeholder="Số cũ"> <input type="number" placeholder="Số mới">
+                        </div>
+                        <div class="service-item">
+                            <input type="checkbox" checked> Tiền nước
+                            <p>Giá: <b>20.000 đ</b> / Tháng</p>
+                            <input type="number" value="1" placeholder="Tháng">
+                        </div>
+                        <!-- Các dịch vụ khác ở đây -->
+                    </div>
+
+                    <!-- Tổng cộng hóa đơn -->
+                    <div class="total-section mt-4">
+                        <div class="d-flex justify-content-between">
+                            <strong>Tổng cộng hóa đơn</strong>
+                            <strong>3.242.517.000 đ</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeInvoiceEditModal()">Hủy bỏ</button>
+                    <button type="button" class="btn btn-success">Chỉnh sửa hóa đơn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function openPopup() {
+            document.getElementById('billingModal').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('billingModal').style.display = 'none';
+        }
+
+        function backPopup() {
+            document.getElementById('billingModal').style.display = 'flex';
+            document.getElementById('createInvoiceModal').style.display = 'none';
+        }
+
+
+        // Add event listener for the "+" button
+        document.querySelector('.add-button-bill').addEventListener('click', openPopup);
+        document.querySelector('.back_add_bill').addEventListener('click', backPopup);
+
+        // Close the modal when the close button is clicked
+        document.querySelector('.close').addEventListener('click', closePopup);
+
+
+
+        function showServiceDetails() {
+            document.getElementById('service-details').style.display = 'block';
+        }
+
+        function CloseServiceDetails() {
+            document.getElementById('service-details').style.display = 'none';
+        }
+
+        function showInvoiceEditModal() {
+            $('#invoiceEditModal').modal('show');
+        }
+
+        function closeInvoiceEditModal() {
+            $('#invoiceEditModal').modal('hide');
+        }
+
+
+    </script>
+
+</body>
+</html>
