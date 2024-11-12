@@ -1,0 +1,80 @@
+﻿<link href="~/css/register.css" rel="stylesheet" />
+
+@{
+    Layout = "~/Views/Shared/_LayoutAccess.cshtml";
+}
+@model Account
+    <div class="registration-form">
+        @using (Html.BeginForm("Register", "Access", FormMethod.Post, new { @id = "registration-form" }))
+        {
+            <h2>Đăng Ký Tài Khoản</h2>
+            <form action="/register" method="post">
+                <div class="form-group">
+                    <label for="accountId">Mã Tài khoản</label>
+                    <input type="text" id="accountId" name="accountId" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="accountName">Tên Tài khoản</label>
+                    <input type="text" id="accountName" name="accountName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="idNumber">Số CCCD</label>
+                    <input type="text" id="idNumber" name="idNumber" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Giới tính</label>
+                    <select name="gender" id="gender" required>
+                        <option value="male">Nam</option>
+                        <option value="female">Nữ</option>
+                        <option value="other">Khác</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Ngày sinh</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">SĐT</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Địa chỉ</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Quyền</label>
+                    <select name="role" id="role" required>
+                        <option value="admin">Quản trị viên</option>
+                        <option value="user">Người dùng</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+            <div class="form-group">
+                <label for="repassword">Nhập lại mật khẩu</label>
+                <input type="password" id="repassword" name="repassword" required>
+            </div>
+            <p class="login-link">Đã có tài khoản? <a class="" asp-area="" asp-controller="Admin" asp-action="Login">Đăng Nhập</a>@* <a href="/login">Đăng nhập</a> *@</p>
+
+                <button type="submit" class="submit-btn">Đăng Ký</button>
+            </form>
+        }
+    </div>
+
+
