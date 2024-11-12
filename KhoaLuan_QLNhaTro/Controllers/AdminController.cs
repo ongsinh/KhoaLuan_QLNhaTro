@@ -8,28 +8,28 @@ namespace KhoaLuan_QLNhaTro.Controllers
         {
             return View();
         }
-        [Route("Room")]
+        [Route("RoomMain")]
         public IActionResult Room()
         {
-            return View();
+            return View("Room/RoomMain");
         }
 
-        [Route("Bill")]
+        [Route("BillMain")]
         public IActionResult Bill()
         {
-            return View(); 
+            return View("Bill/BillMain"); 
         }
 
-        [Route("Report")]
+        [Route("ReportMain")]
         public IActionResult Report()
         {
-            return View();
+            return View("Report/ReportMain");
         }
 
         [Route("DetailRoom")]
         public IActionResult DetailRoom()
         {
-            return View();
+            return View("Room/DetailRoom");
         }
 
     }

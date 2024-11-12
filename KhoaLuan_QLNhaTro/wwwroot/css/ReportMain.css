@@ -1,0 +1,10 @@
+﻿body {
+    background-color: #f8f9fa;
+}
+
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 50vh;
+    width: 80vw;
+}
