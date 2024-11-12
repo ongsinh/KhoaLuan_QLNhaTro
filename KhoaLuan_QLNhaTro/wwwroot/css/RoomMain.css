@@ -20,18 +20,15 @@
 .filter-section {
     display: flex;
     align-items: center;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    margin-bottom: 10px;
 }
-
-    .filter-section .filter-btn {
-        margin-right: 15px;
-        font-size: 20px;
-        color: #5bc0de;
-    }
+.search-bar {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 
 .room-status-buttons {
     display: flex;

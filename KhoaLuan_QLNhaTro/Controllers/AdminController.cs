@@ -8,6 +8,13 @@ namespace KhoaLuan_QLNhaTro.Controllers
         {
             return View();
         }
+
+        public IActionResult Main()
+        {
+            return View("Room/RoomMain");
+        }
+
+
         [Route("RoomMain")]
         public IActionResult Room()
         {
