@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KhoaLuan_QLNhaTro.Migrations
 {
     [DbContext(typeof(NhaTroDbContext))]
-    [Migration("20241025170506_DbNhaTro")]
-    partial class DbNhaTro
+    [Migration("20241114042834_dbQLNT")]
+    partial class dbQLNT
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,37 +31,16 @@ namespace KhoaLuan_QLNhaTro.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CCCD")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Dob")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Name")
-                        .HasColumnType("real");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -92,6 +71,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -101,28 +83,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Assets");
-                });
-
-            modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.AssetRoom", b =>
-                {
-                    b.Property<Guid>("AssetId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
-
-                    b.HasKey("AssetId", "RoomId");
-
                     b.HasIndex("RoomId");
 
-                    b.ToTable("AssetRooms");
+                    b.ToTable("Assets");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Bill", b =>
@@ -130,10 +93,10 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("RoomId")
@@ -149,11 +112,14 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
-
                     b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bills");
                 });
@@ -162,9 +128,6 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
@@ -188,12 +151,15 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("AccountId");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoomId")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Contracts");
                 });
@@ -219,7 +185,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("Details");
+                    b.ToTable("DetailBills");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.DetailContract", b =>
@@ -230,20 +196,15 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<Guid>("AssetId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
-                    b.HasKey("ContractId", "AssetId", "ServiceId");
+                    b.HasKey("ContractId", "AssetId");
 
                     b.HasIndex("AssetId");
-
-                    b.HasIndex("ServiceId");
 
                     b.ToTable("DetailContracts");
                 });
@@ -285,9 +246,6 @@ namespace KhoaLuan_QLNhaTro.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
@@ -309,18 +267,39 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Incidents");
                 });
 
+            modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.IncidentRoom", b =>
+                {
+                    b.Property<Guid>("IncidentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IncidentId", "RoomId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("IncidentRooms");
+                });
+
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Role", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -341,9 +320,6 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<float>("Acreage")
@@ -372,11 +348,14 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
-
                     b.HasIndex("HouseId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Rooms");
                 });
@@ -418,12 +397,62 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CCCD")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Dob")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId")
+                        .IsUnique();
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Account", b =>
@@ -437,61 +466,53 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.AssetRoom", b =>
+            modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Asset", b =>
                 {
-                    b.HasOne("KhoaLuan_QLNhaTro.Models.Asset", "Asset")
-                        .WithMany()
-                        .HasForeignKey("AssetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("KhoaLuan_QLNhaTro.Models.Room", "Room")
-                        .WithMany()
+                        .WithMany("Assets")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Asset");
 
                     b.Navigation("Room");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Bill", b =>
                 {
-                    b.HasOne("KhoaLuan_QLNhaTro.Models.Account", "Account")
-                        .WithMany("Bills")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("KhoaLuan_QLNhaTro.Models.Room", "Room")
                         .WithMany("Bills")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Account");
+                    b.HasOne("KhoaLuan_QLNhaTro.Models.User", "User")
+                        .WithMany("Bills")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Contract", b =>
                 {
-                    b.HasOne("KhoaLuan_QLNhaTro.Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("KhoaLuan_QLNhaTro.Models.Room", "Room")
                         .WithOne("Contract")
                         .HasForeignKey("KhoaLuan_QLNhaTro.Models.Contract", "RoomId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Account");
+                    b.HasOne("KhoaLuan_QLNhaTro.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.DetailBill", b =>
@@ -518,56 +539,67 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.HasOne("KhoaLuan_QLNhaTro.Models.Asset", "Asset")
                         .WithMany()
                         .HasForeignKey("AssetId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("KhoaLuan_QLNhaTro.Models.Contract", "Contract")
                         .WithMany()
                         .HasForeignKey("ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KhoaLuan_QLNhaTro.Models.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Asset");
 
                     b.Navigation("Contract");
-
-                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Incident", b =>
                 {
-                    b.HasOne("KhoaLuan_QLNhaTro.Models.Account", "Account")
+                    b.HasOne("KhoaLuan_QLNhaTro.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("AccountId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Account");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.IncidentRoom", b =>
+                {
+                    b.HasOne("KhoaLuan_QLNhaTro.Models.Incident", "Incident")
+                        .WithMany()
+                        .HasForeignKey("IncidentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("KhoaLuan_QLNhaTro.Models.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Incident");
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Room", b =>
                 {
-                    b.HasOne("KhoaLuan_QLNhaTro.Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("KhoaLuan_QLNhaTro.Models.House", "House")
                         .WithMany()
                         .HasForeignKey("HouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Account");
+                    b.HasOne("KhoaLuan_QLNhaTro.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("House");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.RoomService", b =>
@@ -589,17 +621,36 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.User", b =>
+                {
+                    b.HasOne("KhoaLuan_QLNhaTro.Models.Account", "Account")
+                        .WithOne("User")
+                        .HasForeignKey("KhoaLuan_QLNhaTro.Models.User", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Account", b =>
                 {
-                    b.Navigation("Bills");
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Room", b =>
                 {
+                    b.Navigation("Assets");
+
                     b.Navigation("Bills");
 
                     b.Navigation("Contract")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.User", b =>
+                {
+                    b.Navigation("Bills");
                 });
 #pragma warning restore 612, 618
         }

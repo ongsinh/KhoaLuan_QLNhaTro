@@ -35,8 +35,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -294,9 +295,8 @@ namespace KhoaLuan_QLNhaTro.Migrations
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Role", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -349,6 +349,8 @@ namespace KhoaLuan_QLNhaTro.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("HouseId");
 
@@ -404,51 +406,6 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Services");
-                });
-
-            modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CCCD")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Dob")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Name")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Account", b =>

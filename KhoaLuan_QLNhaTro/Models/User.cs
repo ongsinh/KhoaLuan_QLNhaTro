@@ -6,7 +6,7 @@ namespace KhoaLuan_QLNhaTro.Models
     {
         [Key]
         public Guid Id { get; set; }
-        public float Name { get; set; }
+        public string Name { get; set; }
         public string CCCD { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
