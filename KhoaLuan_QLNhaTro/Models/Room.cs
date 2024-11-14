@@ -10,7 +10,7 @@ namespace KhoaLuan_QLNhaTro.Models
         public string Name { get; set; }
         public float Price { get; set; }
         public string Status { get; set; }
-        public int Number { get; set; }
+        public int FLoorNumber { get; set; }
         public float Acreage { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }

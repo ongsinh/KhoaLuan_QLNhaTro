@@ -9,7 +9,6 @@ namespace KhoaLuan_QLNhaTro.Models
         public string ContractId { get; set; }
         public Guid AssetId { get; set; }
         public int Number {  get; set; }
-        public float Price { get; set; }
         public virtual Contract Contract { get; set; }
         public virtual Asset Asset { get; set; }
     }

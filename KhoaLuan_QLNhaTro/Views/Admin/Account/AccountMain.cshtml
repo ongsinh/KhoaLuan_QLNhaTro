@@ -1,298 +1,294 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý danh sách khách thuê</title>
-    @* <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> *@
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="~/css/accountmain.css" rel="stylesheet" />
-</head>
-<body>
-    <div class="container mt-4">
+﻿@model List<KhoaLuan_QLNhaTro.Models.Account>
+
+@{
+    ViewData["Title"] = "AccountMain";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="~/css/accountmain.css" rel="stylesheet" />
+
+<div class="container mt-4">
         
-        <div class="header-section">
-            <div class="title-section">
-                <h1>Quản lý danh sách khách thuê</h1>
-                <p class="subtitle">Tất cả danh sách khách thuê trong Nhà trọ của bạn</p>
-            </div>
-            <button class="add-button-account" onclick="openModal()">+</button>
+    <div class="header-section">
+        <div class="title-section">
+            <h1>Quản lý danh sách khách thuê</h1>
+            <p class="subtitle">Tất cả danh sách khách thuê trong Nhà trọ của bạn</p>
         </div>
-        <div class="filter-section">
-            <input type="text" class="search-bar" placeholder="Tìm kiếm tài khoản...">
-        </div>
+        <button class="add-button-account" onclick="openModal()">+</button>
+    </div>
+    <div class="filter-section">
+        <input type="text" class="search-bar" placeholder="Tìm kiếm tài khoản...">
+    </div>
         
 
-        <div class="table-section">
-            <table class="table table-borderless">
-                <thead>
-                    <tr>
-                        <th>Tên khách hàng</th>
-                        <th>Số điện thoại</th>
-                        <th>Ngày sinh</th>
-                        <th>Giới tính</th>
-                        <th>Địa chỉ </th>
-                        <th>Số CMND/CCCD</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="room-header">
-                        <td colspan="14">Phòng 1 (1 khách thuê)</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @* <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Image"> *@
-                            Minh Trần<br><small>Đại diện hợp đồng</small>
-                        </td>
-                        <td>0927-127-317</td>
-                        <td>Chưa ghi nhận</td>
-                        <td>Nam</td>
-                        <td>Chưa ghi nhận</td>
-                        <td>Chưa ghi nhận</td>
-                        <!-- Biểu tượng ba chấm và dropdown -->
-                        <td class="options-icon" onclick="toggleDropdown(this)">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <div class="dropdown">
-                                <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
-                                <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="room-header">
-                        <td colspan="14">Phòng 3 (1 khách thuê)</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @* <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Image"> *@
-                            Minh<br><small>Đại diện hợp đồng</small>
-                        </td>
-                        <td>0927-127-317</td>
-                        <td>Chưa ghi nhận</td>
-                        <td>Nam</td>
-                        <td>Chưa ghi nhận</td>
-                        <td>Chưa ghi nhận</td>
-                        <!-- Biểu tượng ba chấm và dropdown -->
-                        <td class="options-icon" onclick="toggleDropdown(this)">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <div class="dropdown">
-                                <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
-                                <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="table-section">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>Tên khách hàng</th>
+                    <th>Số điện thoại</th>
+                    <th>Ngày sinh</th>
+                    <th>Giới tính</th>
+                    <th>Địa chỉ </th>
+                    <th>Số CMND/CCCD</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="room-header">
+                    <td colspan="14">Phòng 1 (1 khách thuê)</td>
+                </tr>
+                <tr>
+                    <td>
+                        @* <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Image"> *@
+                        Minh Trần<br><small>Đại diện hợp đồng</small>
+                    </td>
+                    <td>0927-127-317</td>
+                    <td>Chưa ghi nhận</td>
+                    <td>Nam</td>
+                    <td>Chưa ghi nhận</td>
+                    <td>Chưa ghi nhận</td>
+                    <!-- Biểu tượng ba chấm và dropdown -->
+                    <td class="options-icon" onclick="toggleDropdown(this)">
+                        <i class="fas fa-ellipsis-v"></i>
+                        <div class="dropdown">
+                            <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
+                            <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="room-header">
+                    <td colspan="14">Phòng 3 (1 khách thuê)</td>
+                </tr>
+                <tr>
+                    <td>
+                        @* <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Image"> *@
+                        Minh<br><small>Đại diện hợp đồng</small>
+                    </td>
+                    <td>0927-127-317</td>
+                    <td>Chưa ghi nhận</td>
+                    <td>Nam</td>
+                    <td>Chưa ghi nhận</td>
+                    <td>Chưa ghi nhận</td>
+                    <!-- Biểu tượng ba chấm và dropdown -->
+                    <td class="options-icon" onclick="toggleDropdown(this)">
+                        <i class="fas fa-ellipsis-v"></i>
+                        <div class="dropdown">
+                            <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
+                            <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <!-- Popup Modal -->
-        <div class="modal fade" id="addTenantModal" tabindex="-1" aria-labelledby="addTenantModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addTenantModalLabel">Thêm thông tin khách thuê cho phòng</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <!-- Room List (7 parts) -->
-                            <div class="col-md-7">
-                                <h6>Danh sách phòng</h6>
-                                <p class="text-muted">Danh sách phòng để thêm khách thuê</p>
-                                <div class="room-list">
-                                    <div class="room-item active" onclick="selectRoom(this)">
+    <!-- Popup Modal -->
+    <div class="modal fade" id="addTenantModal" tabindex="-1" aria-labelledby="addTenantModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTenantModalLabel">Thêm thông tin khách thuê cho phòng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Room List (7 parts) -->
+                        <div class="col-md-7">
+                            <h6>Danh sách phòng</h6>
+                            <p class="text-muted">Danh sách phòng để thêm khách thuê</p>
+                            <div class="room-list">
+                                <div class="room-item active" onclick="selectRoom(this)">
                                         
-                                        <div class="room-details">
-                                            <h6>Phòng 1</h6>
-                                            <span> 3.000.000 ₫</span>
-                                            <span class="person"> 1/1 người</span>
-                                        </div>
+                                    <div class="room-details">
+                                        <h6>Phòng 1</h6>
+                                        <span> 3.000.000 ₫</span>
+                                        <span class="person"> 1/1 người</span>
                                     </div>
-                                    <div class="room-item" onclick="selectRoom(this)">
-                                        
-                                        <div class="room-details">
-                                            <h6>Phòng 3</h6>
-                                            <span> 3.000.000 ₫</span>
-                                            <span class="person"> 1/1 người</span>
-                                        </div>
-                                    </div>
-                                    <!-- Add more room items as needed -->
                                 </div>
-                            </div>
-
-                            <!-- Tenant Information Form -->
-                            <div class="col-md-5 form-section">
-                                <h6>Thông tin các nhân của khách thuê</h6>
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="tenantName">Tên khách thuê</label>
-                                        <input type="text" class="form-control" id="tenantName" required>
+                                <div class="room-item" onclick="selectRoom(this)">
+                                        
+                                    <div class="room-details">
+                                        <h6>Phòng 3</h6>
+                                        <span> 3.000.000 ₫</span>
+                                        <span class="person"> 1/1 người</span>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="tenantPhone">Số điện thoại khách thuê</label>
-                                        <input type="text" class="form-control" id="tenantPhone">
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="idNumber">CMND/CCCD</label>
-                                        <input type="text" class="form-control" id="idNumber">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="zaloContact">Zalo của khách</label>
-                                        <input type="text" class="form-control" id="zaloContact">
-                                    </div>
-                                    <div class="row">
-                                        <!-- Ngày sinh and Giới tính on the same line -->
-                                        <div class="col-md-6 padding1">
-                                            <div class="mb-3">
-                                                <label for="dob">Ngày sinh</label>
-                                                <input type="date" class="form-control" id="dob">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 padding2">
-                                            <div class="mb-3">
-                                                <label for="gender">Giới tính</label>
-                                                <select class="form-select" id="gender" required>
-                                                    <option value="Nam">Nam</option>
-                                                    <option value="Nữ">Nữ</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <!-- Tỉnh/Thành phố and Quận/Huyện on the same line -->
-                                        <div class="col-md-6 padding1">
-                                            <div class="mb-3">
-                                                <label for="province">Tỉnh/Thành phố</label>
-                                                <input type="text" class="form-control" id="province">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 padding2">
-                                            <div class="mb-3">
-                                                <label for="district">Quận/Huyện</label>
-                                                <input type="text" class="form-control" id="district">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="ward">Phường/Xã</label>
-                                        <input type="text" class="form-control" id="ward">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="DCCT">Địa chỉ chi tiết</label>
-                                        <input type="text" class="form-control" id="DCCT">
-                                    </div>
-                                </form>
+                                </div>
+                                <!-- Add more room items as needed -->
                             </div>
                         </div>
+
+                        <!-- Tenant Information Form -->
+                        <div class="col-md-5 form-section">
+                            <h6>Thông tin các nhân của khách thuê</h6>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="tenantName">Tên khách thuê</label>
+                                    <input type="text" class="form-control" id="tenantName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tenantPhone">Số điện thoại khách thuê</label>
+                                    <input type="text" class="form-control" id="tenantPhone">
+                                </div>
+                                    
+                                <div class="mb-3">
+                                    <label for="idNumber">CMND/CCCD</label>
+                                    <input type="text" class="form-control" id="idNumber">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="zaloContact">Zalo của khách</label>
+                                    <input type="text" class="form-control" id="zaloContact">
+                                </div>
+                                <div class="row">
+                                    <!-- Ngày sinh and Giới tính on the same line -->
+                                    <div class="col-md-6 padding1">
+                                        <div class="mb-3">
+                                            <label for="dob">Ngày sinh</label>
+                                            <input type="date" class="form-control" id="dob">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 padding2">
+                                        <div class="mb-3">
+                                            <label for="gender">Giới tính</label>
+                                            <select class="form-select" id="gender" required>
+                                                <option value="Nam">Nam</option>
+                                                <option value="Nữ">Nữ</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Tỉnh/Thành phố and Quận/Huyện on the same line -->
+                                    <div class="col-md-6 padding1">
+                                        <div class="mb-3">
+                                            <label for="province">Tỉnh/Thành phố</label>
+                                            <input type="text" class="form-control" id="province">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 padding2">
+                                        <div class="mb-3">
+                                            <label for="district">Quận/Huyện</label>
+                                            <input type="text" class="form-control" id="district">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ward">Phường/Xã</label>
+                                    <input type="text" class="form-control" id="ward">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="DCCT">Địa chỉ chi tiết</label>
+                                    <input type="text" class="form-control" id="DCCT">
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn btn-success">+ Thêm thông tin khách thuê</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success">+ Thêm thông tin khách thuê</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Modal Sửa Khách Thuê -->
-        <div class="modal fade" id="editTenantModal" tabindex="-1" aria-labelledby="editTenantModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editTenantModalLabel">Sửa Khách Thuê</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="tenantName">Tên khách thuê</label>
-                                <input type="text" class="form-control" id="tenantName" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="tenantPhone">Số điện thoại khách thuê</label>
-                                <input type="text" class="form-control" id="tenantPhone">
-                            </div>
-                            <div class="mb-3">
-                                <label for="idNumber">CMND/CCCD</label>
-                                <input type="text" class="form-control" id="idNumber">
-                            </div>
-                            <div class="mb-3">
-                                <label for="zaloContact">Zalo của khách</label>
-                                <input type="text" class="form-control" id="zaloContact">
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="dob">Ngày sinh</label>
-                                        <input type="date" class="form-control" id="dob">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="gender">Giới tính</label>
-                                        <select class="form-select" id="gender" required>
-                                            <option value="Nam">Nam</option>
-                                            <option value="Nữ">Nữ</option>
-                                        </select>
-                                    </div>
+    <!-- Modal Sửa Khách Thuê -->
+    <div class="modal fade" id="editTenantModal" tabindex="-1" aria-labelledby="editTenantModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTenantModalLabel">Sửa Khách Thuê</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="tenantName">Tên khách thuê</label>
+                            <input type="text" class="form-control" id="tenantName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tenantPhone">Số điện thoại khách thuê</label>
+                            <input type="text" class="form-control" id="tenantPhone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="idNumber">CMND/CCCD</label>
+                            <input type="text" class="form-control" id="idNumber">
+                        </div>
+                        <div class="mb-3">
+                            <label for="zaloContact">Zalo của khách</label>
+                            <input type="text" class="form-control" id="zaloContact">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="dob">Ngày sinh</label>
+                                    <input type="date" class="form-control" id="dob">
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="province">Tỉnh/Thành phố</label>
-                                        <input type="text" class="form-control" id="province">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="district">Quận/Huyện</label>
-                                        <input type="text" class="form-control" id="district">
-                                    </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="gender">Giới tính</label>
+                                    <select class="form-select" id="gender" required>
+                                        <option value="Nam">Nam</option>
+                                        <option value="Nữ">Nữ</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="ward">Phường/Xã</label>
-                                <input type="text" class="form-control" id="ward">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="province">Tỉnh/Thành phố</label>
+                                    <input type="text" class="form-control" id="province">
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="DCCT">Địa chỉ chi tiết</label>
-                                <input type="text" class="form-control" id="DCCT">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="district">Quận/Huyện</label>
+                                    <input type="text" class="form-control" id="district">
+                                </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn btn-primary" onclick="saveTenantChanges()">Lưu thay đổi</button>
-                    </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ward">Phường/Xã</label>
+                            <input type="text" class="form-control" id="ward">
+                        </div>
+                        <div class="mb-3">
+                            <label for="DCCT">Địa chỉ chi tiết</label>
+                            <input type="text" class="form-control" id="DCCT">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="saveTenantChanges()">Lưu thay đổi</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Modal Xóa Khách Thuê -->
-        <div class="modal fade" id="deleteTenantModal" tabindex="-1" aria-labelledby="deleteTenantModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteTenantModalLabel">Xóa Khách Thuê</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Bạn có chắc chắn muốn xóa khách thuê này?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteTenant()">Xóa</button>
-                    </div>
+    <!-- Modal Xóa Khách Thuê -->
+    <div class="modal fade" id="deleteTenantModal" tabindex="-1" aria-labelledby="deleteTenantModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTenantModalLabel">Xóa Khách Thuê</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa khách thuê này?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteTenant()">Xóa</button>
                 </div>
             </div>
         </div>
+    </div>
 
 
-   @*  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> *@
-    <script src="~/js/accountmain.js"></script>
-</body>
-</html>
+@*  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> *@
+<script src="~/js/accountmain.js"></script>

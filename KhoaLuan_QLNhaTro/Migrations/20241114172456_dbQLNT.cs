@@ -64,6 +64,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
@@ -137,7 +138,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
+                    FLoorNumber = table.Column<int>(type: "int", nullable: false),
                     Acreage = table.Column<float>(type: "real", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -220,7 +221,6 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -328,8 +328,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 {
                     ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<float>(type: "real", nullable: false)
+                    Number = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

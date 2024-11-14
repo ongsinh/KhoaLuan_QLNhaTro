@@ -35,6 +35,10 @@ namespace KhoaLuan_QLNhaTro.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RoleId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -129,9 +133,6 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
@@ -195,9 +196,6 @@ namespace KhoaLuan_QLNhaTro.Migrations
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
 
                     b.HasKey("ContractId", "AssetId");
 
@@ -325,15 +323,15 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("FLoorNumber")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("HouseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
