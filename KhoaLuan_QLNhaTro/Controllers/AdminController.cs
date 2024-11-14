@@ -8,6 +8,13 @@ namespace KhoaLuan_QLNhaTro.Controllers
         {
             return View();
         }
+
+        public IActionResult Main()
+        {
+            return View("Room/RoomMain");
+        }
+
+
         [Route("RoomMain")]
         public IActionResult Room()
         {
@@ -32,5 +39,40 @@ namespace KhoaLuan_QLNhaTro.Controllers
             return View("Room/DetailRoom");
         }
 
+        [Route("AssetMain")]
+        public IActionResult AssetMain()
+        {
+            return View("Asset/AssetMain");
+        }
+
+        [Route("ServiceMain")]
+        public IActionResult ServiceMain()
+        {
+            return View("Service/ServiceMain");
+        }
+
+        [Route("Register")]
+        public IActionResult Register()
+        {
+            return View("Access/Register");
+        }
+
+        [Route("Login")]
+        public IActionResult Login()
+        {
+            return View("Access/Login");
+        }
+
+        [Route("AccountMain")]
+        public IActionResult AccountMain()
+        {
+            return View("Account/AccountMain");
+        }
+
+        [Route("ContractMain")]
+        public IActionResult ContractMain()
+        {
+            return View("Contract/ContractMain");
+        }
     }
 }

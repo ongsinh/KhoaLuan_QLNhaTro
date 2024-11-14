@@ -13,7 +13,7 @@ namespace KhoaLuan_QLNhaTro.Models
         public DateTime Date { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
-        public Guid AccountId { get; set; }
-        public virtual Account Account { get; set; }
+        public Guid UserId { get; set; }
+        public virtual User User { get; set; }
     }
 }
