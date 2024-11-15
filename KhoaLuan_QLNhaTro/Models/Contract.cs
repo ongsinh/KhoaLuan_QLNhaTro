@@ -8,7 +8,7 @@ namespace KhoaLuan_QLNhaTro.Models
         [Key]
         public string Id { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime Time {  get; set; }
+        public int Time {  get; set; }
         public string Status { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
