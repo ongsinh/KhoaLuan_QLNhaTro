@@ -12,8 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KhoaLuan_QLNhaTro.Migrations
 {
     [DbContext(typeof(NhaTroDbContext))]
+<<<<<<<< HEAD:KhoaLuan_QLNhaTro/Migrations/20241114114839_a11.Designer.cs
     [Migration("20241114114839_a11")]
     partial class a11
+========
+    [Migration("20241114172456_dbQLNT")]
+    partial class dbQLNT
+>>>>>>>> developer:KhoaLuan_QLNhaTro/Migrations/20241114172456_dbQLNT.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +40,10 @@ namespace KhoaLuan_QLNhaTro.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -132,9 +141,6 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
@@ -198,9 +204,6 @@ namespace KhoaLuan_QLNhaTro.Migrations
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
 
                     b.HasKey("ContractId", "AssetId");
 
@@ -328,15 +331,15 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("FLoorNumber")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("HouseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
