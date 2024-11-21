@@ -7,14 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\NewFolder\**" />
-    <Content Remove="Views\NewFolder\**" />
-    <EmbeddedResource Remove="Views\NewFolder\**" />
-    <None Remove="Views\NewFolder\**" />
+    <Content Remove="wwwroot\js\add-house.js" />
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\css\layout.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\add-house.js" />
   </ItemGroup>
 
   <ItemGroup>

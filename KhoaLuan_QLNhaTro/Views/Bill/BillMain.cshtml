@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@model List<KhoaLuan_QLNhaTro.Models.BillViewModal>
+@{
+    var rooms = ViewBag.Rooms as List<KhoaLuan_QLNhaTro.Models.Room>;  // Lấy danh sách phòng từ ViewBag
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -53,9 +57,10 @@
             <tr>
                 <th>Tên phòng</th>
                 <th>Tiền phòng</th>
-                <th>Tiền nước</th>
-                <th>Tiền rác (người)</th>
-                <th>Tiền wifi (người)</th>
+                @foreach (var service in ViewBag.Services)
+                {
+                    <th>@service.Name</th> <!-- Tên dịch vụ được thêm làm cột -->
+                }
                 <th>Thu/Trả cọc</th>
                 <th>Cộng thêm/Giảm trừ</th>
                 <th>Tổng cộng</th>
@@ -65,29 +70,35 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Group Row -->
+@*             <!-- Group Row -->
             <tr class="group-header">
                 <td colspan="11">Tầng trệt (1 hóa đơn)</td>
             </tr>
-
+ *@
             <!-- Invoice Row -->
-            <tr>
-                <td>Phòng 1</td>
-                <td>3,242,432.424 ₫</td>
-                <td>20,000 ₫</td>
-                <td>15,000 ₫</td>
-                <td>50,000 ₫</td>
-                <td>0 ₫</td>
-                <td>0 ₫</td>
-                <td>3,242,517.000 ₫</td>
-                <td>3,242,517.000 ₫</td>
-                <td><span class="badge unpaid">Chưa thu</span></td>
-                <td>
-                    <div class="action-menu">
-                        <i class="fas fa-ellipsis-v" onclick="showInvoiceEditModal()"></i>
-                    </div>
-                </td>
-            </tr>
+            @foreach (var bill in Model)
+            {
+                <tr>
+                    <td>@bill.RoomName</td>
+                    <td>@bill.RoomPrice</td>
+                    @foreach (var service in bill.Services)
+                    {
+                        <td>
+                            @service.TotalPrice <!-- Hiển thị tổng tiền cho dịch vụ -->
+                        </td>
+                    }
+                    <td>0 ₫</td>
+                    <td>0 ₫</td>
+                    <td>3,242,517.000 ₫</td>
+                    <td>3,242,517.000 ₫</td>
+                    <td><span class="badge unpaid">Chưa thu</span></td>
+                    <td>
+                        <div class="action-menu">
+                            <i class="fas fa-ellipsis-v" onclick="showInvoiceEditModal()"></i>
+                        </div>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 
@@ -109,102 +120,17 @@
                         <!-- Danh sách các phòng -->
                         <div class="col-md-8 mb-6 room-list">
                             <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                @foreach(var room in rooms)
+                                {
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card p-3">
+                                            <div class="room-status badge badge-contract-ending mb-2">@room.Status</div>
+                                            <h6>@room.Name</h6>
+                                            <p>@room.Price</p>
+                                            <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card p-3">
-                                        <div class="room-status badge badge-contract-ending mb-2">Sắp kết thúc hợp đồng</div>
-                                        <h6>Phòng 1</h6>
-                                        <p>3.242.432.424 đ</p>
-                                        <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
-                                    </div>
-                                </div>
+                                }
                                 <!-- Thêm các thẻ phòng khác ở đây -->
                             </div>
                         </div>

@@ -20,14 +20,14 @@
                     <div class="property-name">Nhà trọ 123456789</div>
                 </div>
             </div>
-            <div class="add-button">+</div>
+            <div class="add-button" >+</div>
         </div>
-        <a href="~/RoomMain"><i class="fas fa-shopping-cart"></i> Quản lý phòng</a>
-        <a href="~/BillMain"><i class="fas fa-tachometer-alt"></i> Quản lý hóa đơn</a>
-        <a href="Service/ServiceMain"><i class="fas fa-user-tie"></i> Quản lý dịch vụ</a>
-        <a href="~/AssetMain"><i class="fas fa-user"></i> Quản lý tài sản</a> 
+        <a href="@Url.Action("RoomMain", "Room")"><i class="fas fa-shopping-cart"></i> Quản lý phòng</a>
+        <a href="@Url.Action("BillMain", "Bill")"><i class="fas fa-tachometer-alt"></i> Quản lý hóa đơn</a>
+        <a href="@Url.Action("ServiceMain", "Service")"><i class="fas fa-user-tie"></i> Quản lý dịch vụ</a>
+        <a href="@Url.Action("AssetMain", "Asset")"><i class="fas fa-user"></i> Quản lý tài sản</a> 
         <a href="~/ContractMain"><i class="fas fa-box"></i> Quản lý hợp đồng</a>
-        <a href="~/UserMain"><i class="fas fa-receipt"></i> Quản lý khách thuê</a>
+        <a href="@Url.Action("UserMain", "User")"><i class="fas fa-receipt"></i> Quản lý khách thuê</a>
         <a href="~/"><i class="fas fa-cogs"></i> Quản lý sự cố</a>
         <a href="~/ReportMain"><i class="fas fa-chart-line"></i> Báo cáo doanh thu</a>
     </div>
@@ -57,36 +57,37 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="addHouseForm">
+                    <form id="addHouseForm" asp-action="CreateHouse" method="post">
                         <div class="form-group">
-                            <label for="houseName">Tên Nhà Trọ</label>
-                            <input type="text" class="form-control" id="houseName" placeholder="Nhập tên nhà trọ" required>
+                            <label for="Name">Tên Nhà Trọ</label>
+                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Nhập tên nhà trọ" required />
                         </div>
                         <div class="form-group">
-                            <label for="houseAddress">Địa Chỉ</label>
-                            <input type="text" class="form-control" id="houseAddress" placeholder="Nhập địa chỉ" required>
+                            <label for="Address">Địa Chỉ</label>
+                            <input type="text" class="form-control" id="Address" name="Address" placeholder="Nhập địa chỉ" required />
                         </div>
                         <div class="form-group">
-                            <label for="floorNumber">Số tầng </label>
-                            <input type="number" class="form-control" id="floorNumber" placeholder="Nhập số tầng " required>
+                            <label for="floorNumber">Số Tầng</label>
+                            <input type="number" class="form-control" id="floorNumber" name="floorNumber" placeholder="Nhập số tầng" required onchange="generateFloorInputs()" />
                         </div>
                         <div class="form-group">
-                            <label for="roomNumber">Số phòng</label>
-                            <input type="number" class="form-control" id="roomNumber" placeholder="Nhập số phòng" required>
+                            <label for="roomNumber">Số Phòng</label>
+                            <input type="number" class="form-control" id="roomNumber" name="roomNumber" placeholder="Nhập tổng số phòng" required />
                         </div>
-                        <div class="form-group">
-                            <label for="housePrice">Giá Thuê</label>
-                            <input type="number" class="form-control" id="housePrice" placeholder="Nhập giá thuê" required>
+
+                        <!-- Nơi tạo các ô nhập số phòng cho mỗi tầng -->
+                        <div id="floorInputs"></div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-primary" id="saveHouseButton">Lưu</button>
                         </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="saveHouseButton">Lưu</button>
                 </div>
             </div>
         </div>
     </div>
+
 
     @* Hiện list *@
     <!-- House List Modal -->
@@ -214,9 +215,9 @@
 
         $(document).ready(function () {
             // Mở modal khi bấm vào dấu cộng
-            $('.add-button').click(function () {
-                $('#addHouseModal').modal('show');
-            });
+            // $('.add-button').click(function () {
+            //     window.location.href = '@Url.Action("AddHouse", "Room")';  // Chuyển hướng tới action AddHouse ở trong Controller
+            // });
             $('.close, .btn-secondary').click(function () {
                 $('#addHouseModal').modal('hide');
             });
@@ -228,11 +229,20 @@
             });
         });
 
-        function showEditModalHouse() {
-            $('#editPropertyModal').modal('show');
+        function generateFloorInputs() {
+            const totalFloors = document.getElementById("floorNumber").value;
+            const floorInputs = document.getElementById("floorInputs");
+
+            floorInputs.innerHTML = ""; // Xóa các ô nhập cũ nếu có
+            for (let i = 1; i <= totalFloors; i++) {
+                floorInputs.innerHTML += `
+                    <div class="form-group">
+                        <label for="floor${i}">Số phòng tầng ${i}:</label>
+                        <input type="number" class="form-control" name="floorRooms[${i}]" id="floor${i}" min="1" required />
+                    </div>
+                `;
+            }
         }
-
-
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
