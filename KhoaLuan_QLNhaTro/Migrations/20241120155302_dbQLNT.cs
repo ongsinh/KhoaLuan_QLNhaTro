@@ -87,7 +87,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CCCD = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -223,6 +223,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Time = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Deposit = table.Column<int>(type: "int", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -303,7 +304,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
-                    Total = table.Column<float>(type: "real", nullable: false)
+                    Total = table.Column<float>(type: "real", nullable: false),
+                    OldNumber = table.Column<float>(type: "real", nullable: true),
+                    NewNumber = table.Column<float>(type: "real", nullable: true)
                 },
                 constraints: table =>
                 {

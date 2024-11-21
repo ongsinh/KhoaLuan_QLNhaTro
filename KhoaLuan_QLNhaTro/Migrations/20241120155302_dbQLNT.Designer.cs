@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KhoaLuan_QLNhaTro.Migrations
 {
     [DbContext(typeof(NhaTroDbContext))]
-    [Migration("20241115030835_dbQLNT")]
+    [Migration("20241120155302_dbQLNT")]
     partial class dbQLNT
     {
         /// <inheritdoc />
@@ -136,6 +136,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Deposit")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
@@ -173,8 +176,14 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<Guid>("ServiceId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<float?>("NewNumber")
+                        .HasColumnType("real");
+
                     b.Property<int>("Number")
                         .HasColumnType("int");
+
+                    b.Property<float?>("OldNumber")
+                        .HasColumnType("real");
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
@@ -434,11 +443,11 @@ namespace KhoaLuan_QLNhaTro.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -522,7 +531,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                         .IsRequired();
 
                     b.HasOne("KhoaLuan_QLNhaTro.Models.Service", "Service")
-                        .WithMany()
+                        .WithMany("DetailBills")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -603,13 +612,13 @@ namespace KhoaLuan_QLNhaTro.Migrations
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.RoomService", b =>
                 {
                     b.HasOne("KhoaLuan_QLNhaTro.Models.Room", "Room")
-                        .WithMany()
+                        .WithMany("RoomServices")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("KhoaLuan_QLNhaTro.Models.Service", "Service")
-                        .WithMany()
+                        .WithMany("RoomServices")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -644,6 +653,15 @@ namespace KhoaLuan_QLNhaTro.Migrations
 
                     b.Navigation("Contract")
                         .IsRequired();
+
+                    b.Navigation("RoomServices");
+                });
+
+            modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Service", b =>
+                {
+                    b.Navigation("DetailBills");
+
+                    b.Navigation("RoomServices");
                 });
 
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.User", b =>

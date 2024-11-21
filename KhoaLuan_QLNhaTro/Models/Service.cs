@@ -11,5 +11,7 @@ namespace KhoaLuan_QLNhaTro.Models
         public string Unit { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
+        public virtual ICollection<RoomService> RoomServices { get; set; }
+        public virtual ICollection<DetailBill> DetailBills { get; set; }
     }
 }

@@ -11,6 +11,8 @@ namespace KhoaLuan_QLNhaTro.Models
         public int Number {  get; set; }
         public float Price { get; set; }
         public float Total {  get; set; }
+        public float? OldNumber { get; set; }
+        public float? NewNumber { get; set; }
         public virtual Bill Bill { get; set; }
         public virtual Service Service { get; set; }
     }

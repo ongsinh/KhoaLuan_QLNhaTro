@@ -1,0 +1,141 @@
+﻿@model List<KhoaLuan_QLNhaTro.ViewModel.ServiceMainModel>
+
+@{
+    ViewData["Title"] = "ServiceMain";
+}
+@* <link rel="stylesheet" href="styles.css"> *@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="~/css/servicemain.css" rel="stylesheet" />
+
+<div class="container">
+    <!-- Left section for managing services -->
+    <div class="services-section">
+        <div class="header-section">
+            <div class="title-section">
+                <h1>Quản lý dịch vụ</h1>
+                <p class="subtitle">Các dịch vụ khách thuê xài</p>
+            </div>
+            <!-- Add more services similarly -->
+            <button class="add-service-btn" onclick="openModal()">+</button>
+        </div>
+     
+
+    <div>
+        @foreach (var serviceMainModel in Model)
+        {
+            <div class="service-item">
+                <div class="service-info">
+                    <div>
+                        <p class="service-name">@serviceMainModel.RoomService.Service.Name</p>
+                        <p class="service-details">@serviceMainModel.RoomService.Service.Price/@serviceMainModel.RoomService.Service.Unit</p>
+                        <p class="service-details"> <span>Đang áp dụng cho:</span> @serviceMainModel.RoomService.Rooms.Count() <span>phòng</span></p>
+                        
+
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="edit-btn" onclick="openEditModal('@serviceMainModel.RoomService.Service.Id')"><i class="fas fa-edit"></i></button>
+                    <button class="delete-btn" onclick="openDeleteModal('@serviceMainModel.RoomService.Service.Id')"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            </div>
+        }
+    </div>
+    </div>
+
+    <!-- Right section for customer usage statistics -->
+    <div class="usage-section">
+        <div class="header-section">
+            <div class="title-section">
+                <h2>Khách thuê sử dụng trong tháng</h2>
+                <p class="subtitle">Thống kê mỗi tháng khách thuê xài</p>
+            </div>
+            <input type="month" class="month-picker" placeholder="Tháng lập phiếu" />
+           
+        </div>
+        <table class="utility-table">
+            <thead>
+                <tr>
+                    <th rowspan="2">Tên phòng</th>
+                    @foreach (var serviceMainModel in Model)
+                    {
+                        <th colspan="3">@serviceMainModel.RoomService.Service.Name (@serviceMainModel.RoomService.Service.Unit)</th>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var serviceMainModel in Model)
+                    {
+                        if (serviceMainModel.RoomService.Service.Unit == "kWh" || serviceMainModel.RoomService.Service.Unit == "Khối")
+                        {
+                            <th>Số cũ</th>
+                            <th>Số mới</th>
+                            <th>Thành tiền</th>
+                        }
+                        else
+                        {
+                            <th>Sử dụng</th>
+                            <th colspan="2">Thành tiền</th>
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model.SelectMany(sm => sm.RoomService.Rooms).Distinct())
+                {
+                    <tr>
+                        <!-- Hiển thị tên phòng duy nhất -->
+                        <td>@room.Name</td>
+
+                        @foreach (var serviceMainModel in Model)
+                        {
+                            var service = serviceMainModel.RoomService.Service;
+                            var usage = serviceMainModel.DetailBillList.FirstOrDefault(u => u.ServiceId == service.Id);
+
+                            if (service.Unit == "kWh" || service.Unit == "Khối")
+                            {
+                                // Hiển thị giá trị mặc định cho các dịch vụ có đơn vị "kWh" hoặc "Khối"
+                                <td>@(usage?.OldNumber ?? 0)</td>  <!-- Số cũ -->
+                                <td>@(usage?.NewNumber ?? 0)</td>  <!-- Số mới -->
+                                <td class="highlight">@((usage?.Total ?? 0).ToString("N0")) đ</td>  <!-- Thành tiền -->
+                            }
+                            else if (service.Unit == "Tháng")
+                            {
+                                // Hiển thị giá trị mặc định cho các dịch vụ có đơn vị là "Tháng"
+                                <td>1</td> <!-- Mặc định Sử dụng = 1 -->
+                                <td colspan="2" class="highlight">@((usage?.Total ?? service.Price).ToString("N0")) đ</td> <!-- Thành tiền -->
+                            }
+                            else
+                            {
+                                // Các dịch vụ khác
+                                <td>@(usage?.Number ?? 0)</td> <!-- Sử dụng -->
+                                <td colspan="2" class="highlight">@((usage?.Total ?? 0).ToString("N0")) đ</td> <!-- Thành tiền -->
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Popup for Adding New Service -->
+<div class="modal" id="addServiceModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('addServiceModal')">&times;</span>
+        <h3>Thêm Dịch Vụ Mới</h3>
+        @Html.Partial("AddService", new KhoaLuan_QLNhaTro.Models.RoomService())
+    </div>
+</div>
+
+<!-- Edit Service Popup -->
+<div class="modal" id="editServiceModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editServiceModal')">&times;</span>
+        <h3>Chỉnh sửa Dịch Vụ</h3>
+        <div id="editServiceFormContainer">
+            <!-- Form sẽ được load vào đây qua Ajax -->
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/js/servicemain.js"></script>

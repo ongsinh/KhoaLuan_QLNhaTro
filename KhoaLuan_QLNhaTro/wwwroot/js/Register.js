@@ -1,18 +1,19 @@
 ﻿$(document).ready(function () {
     $('#registration-form').submit(function (event) {
+        // Ngừng gửi form nếu không hợp lệ
         event.preventDefault();
 
         var isValid = true;
 
         // Lấy giá trị từ các trường
-        var name = $('#accountName').val().trim();
-        var phone = $('#phone').val().trim();
-        var email = $('#email').val().trim();
-        var password = $('#password').val().trim();
-        var repassword = $('#repassword').val().trim();
+        var name = $('#name').val(); // Đảm bảo trường nhập liệu có id là 'accountName'
+        var phone = $('#phone').val();
+        var email = $('#email').val();
+        var password = $('#password').val();
+        var repassword = $('#repassword').val();
 
         // Kiểm tra họ tên
-        if (name === "") {
+        if (name.trim() === "") {
             $('#error-name').show();
             isValid = false;
         } else {
@@ -54,7 +55,7 @@
 
         // Nếu tất cả đều hợp lệ, submit form
         if (isValid) {
-            this.submit();
+            this.submit(); // Gửi form khi không có lỗi
         }
     });
 });

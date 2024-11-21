@@ -5,7 +5,9 @@ body {
     margin: 0;
     padding: 0;
 }
-
+.main {
+    width: 100%;
+}
 .container {
     display: flex;
     gap: 20px;
@@ -25,7 +27,7 @@ body {
     background: #f2f2f2;
     padding: 20px;
     border-radius: 8px;
-    width: 60%;
+    width: 70%;
     position: relative;
 }
 
@@ -228,7 +230,7 @@ body {
     .modal-content form {
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        /*gap: 15px;*/
     }
 
 /* Two Column Layout for Room Checkboxes */
@@ -245,7 +247,7 @@ body {
     }
 
 /* Style for Submit Button */
-.submit-btn {
+/*.btn-add {
     background-color: #65b565;
     color: white;
     border: none;
@@ -254,17 +256,17 @@ body {
     font-size: 16px;
     cursor: pointer;
     margin-top: 15px;
-}
+}*/
 
-    .submit-btn:hover {
+    .btn-add:hover {
         background-color: #58a656;
     }
 
-input{
+input {
     margin-right: 10px;
 }
 
-.submit-btn, .confirm-delete-btn, .cancel-btn {
+.btn-add, .confirm-delete-btn, .cancel-btn {
     background-color: #65b565;
     color: white;
     border: none;
@@ -279,7 +281,53 @@ input{
     background-color: #d9534f; /* Red for cancel button */
 }
 
-    .submit-btn:hover, .confirm-delete-btn:hover, .cancel-btn:hover {
+    .btn-add:hover, .confirm-delete-btn:hover, .cancel-btn:hover {
         opacity: 0.8;
     }
+
+    /* Định dạng cho mỗi label */
+    form div {
+        margin-bottom: 10px;
+    }
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Định dạng cho các input, select, button */
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+/*.usage-section {
+    width: 100%;*/ /* Đảm bảo div cha chiếm toàn bộ chiều rộng của container cha */
+    /*overflow-x: auto;*/ /* Thêm cuộn ngang nếu nội dung bảng quá rộng */
+/*}
+
+.utility-table {
+    width: 100%;*/ /* Bảng chiếm toàn bộ chiều rộng của div cha */
+    /*border-collapse: collapse;*/ /* Loại bỏ khoảng cách giữa các ô */
+/*}
+
+    .utility-table th,
+    .utility-table td {
+        border: 1px solid #ddd;*/ /* Viền giữa các ô */
+        /*padding: 8px;*/ /* Khoảng cách bên trong ô */
+        /*text-align: left;*/ /* Canh trái nội dung */
+    /*}
+
+    .utility-table th {
+        background-color: #f4f4f4;*/ /* Màu nền cho header */
+        /*font-weight: bold;*/ /* Chữ đậm */
+    /*}*/
+
 

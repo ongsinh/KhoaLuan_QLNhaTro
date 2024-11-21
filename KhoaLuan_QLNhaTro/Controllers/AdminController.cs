@@ -1,9 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using KhoaLuan_QLNhaTro.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace KhoaLuan_QLNhaTro.Controllers
 {
     public class AdminController : Controller
     {
+        public readonly NhaTroDbContext _context;
+        public AdminController (NhaTroDbContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
             return View();
@@ -30,49 +37,40 @@ namespace KhoaLuan_QLNhaTro.Controllers
         [Route("ReportMain")]
         public IActionResult Report()
         {
-            return View("Report/ReportMain");
+            return View();
         }
 
         [Route("DetailRoom")]
         public IActionResult DetailRoom()
         {
-            return View("Room/DetailRoom");
+            return View();
         }
 
         [Route("AssetMain")]
         public IActionResult AssetMain()
         {
-            return View("Asset/AssetMain");
+            return View();
         }
 
-        [Route("ServiceMain")]
-        public IActionResult ServiceMain()
-        {
-            return View("Service/ServiceMain");
-        }
+        
 
         [Route("Register")]
         public IActionResult Register()
         {
-            return View("Access/Register");
+            return View();
         }
 
         [Route("Login")]
         public IActionResult Login()
         {
-            return View("Access/Login");
+            return View();
         }
 
-        [Route("AccountMain")]
-        public IActionResult AccountMain()
-        {
-            return View("Account/AccountMain");
-        }
 
         [Route("ContractMain")]
         public IActionResult ContractMain()
         {
-            return View("Contract/ContractMain");
+            return View();
         }
     }
 }

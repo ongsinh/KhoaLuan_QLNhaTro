@@ -21,5 +21,6 @@ namespace KhoaLuan_QLNhaTro.Models
         public virtual ICollection<Bill> Bills { get; set; }
         public virtual Contract Contract { get; set; }
         public virtual ICollection<Asset> Assets { get; set; }
+        public virtual ICollection<RoomService> RoomServices { get; set; }
     }
 }
