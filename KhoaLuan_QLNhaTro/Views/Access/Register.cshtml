@@ -11,8 +11,8 @@
             <form action="/register" method="post">
 
                 <div class="form-group">
-                    <label for="accountName">Họ tên</label>
-                    <input type="text" id="accountName" name="accountName" required>
+                    <label for="name">Họ tên</label>
+                <input type="text" id="name" name="User.Name" required>
                     <span class="error-message" id="error-name" style="display:none;color:red;">Vui lòng nhập họ tên</span>
                 </div>
 
@@ -24,7 +24,7 @@
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="User.Email" required>
                 <span class="error-message" id="error-email" style="display:none;color:red;">Email không hợp lệ</span>
                 </div>
 
@@ -40,12 +40,12 @@
                     <span class="error-message" id="error-repassword" style="display:none;color:red;">Mật khẩu không khớp</span>
                 </div>
 
-                <p class="login-link">Đã có tài khoản? <a class="" asp-area="" asp-controller="Admin" asp-action="Login">Đăng Nhập</a></p>
+                <p class="login-link">Đã có tài khoản? <a class="" asp-area="" asp-controller="Access" asp-action="Login">Đăng Nhập</a></p>
 
                 <button type="submit" class="submit-btn">Đăng Ký</button>
             </form>
         }
     </div>
 
-@* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="~/js/register.js"></script>

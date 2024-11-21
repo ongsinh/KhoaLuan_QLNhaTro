@@ -1,0 +1,35 @@
+﻿<form asp-action="EditService" method="post" id="editServiceForm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="form-group">
+        <label for="Name">Tên Dịch Vụ</label>
+        <input type="text" id="Name" name="Name" value="@Model.Name" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Price">Giá Dịch Vụ</label>
+        <input type="number" id="Price" name="Price" value="@Model.Price" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Unit">Đơn Vị</label>
+        <input type="text" id="Unit" name="Unit" value="@Model.Unit" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Danh Sách Phòng Áp Dụng</label>
+        <div class="room-checkboxes">
+            @foreach (var room in Model.AllRooms)
+            {
+                <label>
+                    <input type="checkbox" name="SelectedRooms" value="@room.Id"
+                    @(Model.SelectedRooms.Contains(room.Id) ? "checked" : "") />
+                    @room.Name
+                </label>
+            }
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+</form>

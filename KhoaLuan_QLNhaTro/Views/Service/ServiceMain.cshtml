@@ -1,201 +1,141 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Management</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="~/css/servicemain.css" rel="stylesheet" />
-</head>
-<body>
+﻿@model List<KhoaLuan_QLNhaTro.ViewModel.ServiceMainModel>
 
-    <div class="container">
-        <!-- Left section for managing services -->
-        <div class="services-section">
-            <div class="header-section">
-                <div class="title-section">
-                    <h1>Quản lý dịch vụ</h1>
-                    <p class="subtitle">Các dịch vụ khách thuê xài</p>
-                </div>
-                <!-- Add more services similarly -->
-                <button class="add-service-btn" onclick="openModal()">+</button>
+@{
+    ViewData["Title"] = "ServiceMain";
+}
+@* <link rel="stylesheet" href="styles.css"> *@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="~/css/servicemain.css" rel="stylesheet" />
+
+<div class="container">
+    <!-- Left section for managing services -->
+    <div class="services-section">
+        <div class="header-section">
+            <div class="title-section">
+                <h1>Quản lý dịch vụ</h1>
+                <p class="subtitle">Các dịch vụ khách thuê xài</p>
             </div>
-                <div class="service-item">
-                    <div class="service-info">
-                        @* <span class="icon">🏷️</span> *@
-                        <div>
-                            <p class="service-name">Tiền điện</p>
-                            <p class="service-details">1.700đ/ KWh</p>
-                            <p class="applied-rooms">Đang áp dụng cho 10 phòng</p>
-                        </div>
-                    </div>
-                    <div class="actions">
-                    
-                        <button class="edit-btn" onclick="openEditModal()"><i class="fas fa-edit"></i></button>
-                        <button class="delete-btn" onclick="openDeleteModal()"><i class="fas fa-trash-alt"></i></button>
-                    
-                    </div>
-                </div>
-
-
-
-                <div class="service-item">
-                    <div class="service-info">
-                        @* <span class="icon">🏷️</span> *@
-                        <div>
-                            <p class="service-name">Tiền điện</p>
-                            <p class="service-details">1.700đ/ KWh</p>
-                            <p class="applied-rooms">Đang áp dụng cho 10 phòng</p>
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <button class="edit-btn" onclick="openEditModal()"><i class="fas fa-edit"></i></button>
-                        <button class="delete-btn" onclick="openDeleteModal()"><i class="fas fa-trash-alt"></i></button>
-                    </div>
-                </div>
-
+            <!-- Add more services similarly -->
+            <button class="add-service-btn" onclick="openModal()">+</button>
         </div>
+     
 
-        <!-- Right section for customer usage statistics -->
-        <div class="usage-section">
-            <div class="header-section">
-                <div class="title-section">
-                    <h2>Khách thuê sử dụng trong tháng</h2>
-                    <p class="subtitle">Thống kê mỗi tháng khách thuê xài</p>
+    <div>
+        @foreach (var serviceMainModel in Model)
+        {
+            <div class="service-item">
+                <div class="service-info">
+                    <div>
+                        <p class="service-name">@serviceMainModel.RoomService.Service.Name</p>
+                        <p class="service-details">@serviceMainModel.RoomService.Service.Price/@serviceMainModel.RoomService.Service.Unit</p>
+                        <p class="service-details"> <span>Đang áp dụng cho:</span> @serviceMainModel.RoomService.Rooms.Count() <span>phòng</span></p>
+                        
+
+                    </div>
                 </div>
-                <input type="month" class="month-picker" placeholder="Tháng lập phiếu" />
-                @* <div class="thanglapphieu">
-                    <input type="text" placeholder="Tháng lập phiếu" class="month-input" /> 
-                    <input type="month" class="month-picker" placeholder="Tháng lập phiếu" />
-                </div> *@
+                <div class="actions">
+                    <button class="edit-btn" onclick="openEditModal('@serviceMainModel.RoomService.Service.Id')"><i class="fas fa-edit"></i></button>
+                    <button class="delete-btn" onclick="openDeleteModal('@serviceMainModel.RoomService.Service.Id')"><i class="fas fa-trash-alt"></i></button>
+                </div>
             </div>
-            
-            @* <button class="export-btn">📄 Xuất excel</button> *@
-
-            <table class="utility-table">
-                <thead>
-                    <tr>
-                        <th rowspan="2">Tên phòng</th>
-                        <th colspan="3">Tiền điện (KWh)</th>
-                        <th colspan="3">Tiền nước (Khối)</th>
-                        <th colspan="2">Tiền rác (người)</th>
-                        <th colspan="2">Tiền wifi (tháng)</th>
-                    </tr>
-                    <tr>
-                        <th>Số cũ</th>
-                        <th>Số mới</th>
-                        <th>Thành tiền</th>
-                        <th>Số cũ</th>
-                        <th>Số mới</th>
-                        <th>Thành tiền</th>
-                        <th>Sử dụng</th>
-                        <th>Thành tiền</th>
-                        <th>Sử dụng</th>
-                        <th>Thành tiền</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Phòng 3</td>
-                        <td>25</td>
-                        <td>100</td>
-                        <td><strong class="highlight">226.100đ</strong></td>
-                        <td>33</td>
-                        <td>45</td>
-                        <td><strong class="highlight">558.000đ</strong></td>
-                        <td>2</td>
-                        <td>30.000 đ</td>
-                        <td>2</td>
-                        <td>100.000 đ</td>
-                    </tr>
-                    <tr>
-                        <td>Phòng 1</td>
-                        <td>12</td>
-                        <td>70</td>
-                        <td class="highlight">127.500đ</td>
-                        <td>11</td>
-                        <td>30</td>
-                        <td class="highlight">216.000đ</td>
-                        <td>1</td>
-                        <td>15.000 đ</td>
-                        <td>1</td>
-                        <td class="highlight">50.000đ</td>
-                    </tr>
-                    <!-- More rows can be added here as needed -->
-                </tbody>
-            </table>
-        </div>
+        }
+    </div>
     </div>
 
-    <!-- Popup for Adding New Service -->
+    <!-- Right section for customer usage statistics -->
+    <div class="usage-section">
+        <div class="header-section">
+            <div class="title-section">
+                <h2>Khách thuê sử dụng trong tháng</h2>
+                <p class="subtitle">Thống kê mỗi tháng khách thuê xài</p>
+            </div>
+            <input type="month" class="month-picker" placeholder="Tháng lập phiếu" />
+           
+        </div>
+        <table class="utility-table">
+            <thead>
+                <tr>
+                    <th rowspan="2">Tên phòng</th>
+                    @foreach (var serviceMainModel in Model)
+                    {
+                        <th colspan="3">@serviceMainModel.RoomService.Service.Name (@serviceMainModel.RoomService.Service.Unit)</th>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var serviceMainModel in Model)
+                    {
+                        if (serviceMainModel.RoomService.Service.Unit == "kWh" || serviceMainModel.RoomService.Service.Unit == "Khối")
+                        {
+                            <th>Số cũ</th>
+                            <th>Số mới</th>
+                            <th>Thành tiền</th>
+                        }
+                        else
+                        {
+                            <th>Sử dụng</th>
+                            <th colspan="2">Thành tiền</th>
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model.SelectMany(sm => sm.RoomService.Rooms).Distinct())
+                {
+                    <tr>
+                        <!-- Hiển thị tên phòng duy nhất -->
+                        <td>@room.Name</td>
 
-    <div class="modal" id="addServiceModal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('addServiceModal')">&times;</span>
-            <h3>Thêm Dịch Vụ Mới</h3>
-            <form>
-                <label for="serviceName">Tên dịch vụ</label>
-                <input type="text" id="serviceName" name="serviceName" required>
+                        @foreach (var serviceMainModel in Model)
+                        {
+                            var service = serviceMainModel.RoomService.Service;
+                            var usage = serviceMainModel.DetailBillList.FirstOrDefault(u => u.ServiceId == service.Id);
 
-                <label for="servicePrice">Giá dịch vụ</label>
-                <input type="number" id="servicePrice" name="servicePrice" required>
+                            if (service.Unit == "kWh" || service.Unit == "Khối")
+                            {
+                                // Hiển thị giá trị mặc định cho các dịch vụ có đơn vị "kWh" hoặc "Khối"
+                                <td>@(usage?.OldNumber ?? 0)</td>  <!-- Số cũ -->
+                                <td>@(usage?.NewNumber ?? 0)</td>  <!-- Số mới -->
+                                <td class="highlight">@((usage?.Total ?? 0).ToString("N0")) đ</td>  <!-- Thành tiền -->
+                            }
+                            else if (service.Unit == "Tháng")
+                            {
+                                // Hiển thị giá trị mặc định cho các dịch vụ có đơn vị là "Tháng"
+                                <td>1</td> <!-- Mặc định Sử dụng = 1 -->
+                                <td colspan="2" class="highlight">@((usage?.Total ?? service.Price).ToString("N0")) đ</td> <!-- Thành tiền -->
+                            }
+                            else
+                            {
+                                // Các dịch vụ khác
+                                <td>@(usage?.Number ?? 0)</td> <!-- Sử dụng -->
+                                <td colspan="2" class="highlight">@((usage?.Total ?? 0).ToString("N0")) đ</td> <!-- Thành tiền -->
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
-                <label>Danh sách phòng muốn áp dụng</label>
-                <div class="room-checkboxes">
-                    <!-- Replace these room names with dynamic data if necessary -->
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 1"> Phòng 1</label>
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 2"> Phòng 2</label>
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 3"> Phòng 3</label>
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 4"> Phòng 4</label>
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 5"> Phòng 5</label>
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 6"> Phòng 6</label>
-                </div>
+<!-- Popup for Adding New Service -->
+<div class="modal" id="addServiceModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('addServiceModal')">&times;</span>
+        <h3>Thêm Dịch Vụ Mới</h3>
+        @Html.Partial("AddService", new KhoaLuan_QLNhaTro.Models.RoomService())
+    </div>
+</div>
 
-                <button type="submit" class="submit-btn">Thêm</button>
-            </form>
+<!-- Edit Service Popup -->
+<div class="modal" id="editServiceModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editServiceModal')">&times;</span>
+        <h3>Chỉnh sửa Dịch Vụ</h3>
+        <div id="editServiceFormContainer">
+            <!-- Form sẽ được load vào đây qua Ajax -->
         </div>
     </div>
+</div>
 
-    <!-- Edit Service Popup -->
-    <div class="modal" id="editServiceModal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('editServiceModal')">&times;</span>
-            <h3>Chỉnh sửa Dịch Vụ</h3>
-            <form>
-                <label for="editServiceName">Tên dịch vụ</label>
-                <input type="text" id="editServiceName" name="serviceName" required>
-
-                <label for="editServicePrice">Giá dịch vụ</label>
-                <input type="number" id="editServicePrice" name="servicePrice" required>
-
-                <label>Danh sách phòng muốn áp dụng</label>
-                <div class="room-checkboxes">
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 1"> Phòng 1</label>
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 2"> Phòng 2</label>
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 3"> Phòng 3</label>
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 4"> Phòng 4</label>
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 5"> Phòng 5</label>
-                    <label><input type="checkbox" name="applicableRooms" value="Phòng 6"> Phòng 6</label>
-                </div>
-
-                <button type="submit" class="submit-btn">Lưu Thay Đổi</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Delete Confirmation Popup -->
-    <div class="modal" id="deleteConfirmationModal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('deleteConfirmationModal')">&times;</span>
-            <h3>Xác nhận xóa</h3>
-            <p>Bạn có chắc chắn muốn xóa dịch vụ này không?</p>
-            <button class="confirm-delete-btn" onclick="confirmDelete()">Xóa</button>
-            <button class="cancel-btn" onclick="closeModal('deleteConfirmationModal')">Hủy</button>
-        </div>
-    </div>
-    @* <script src="scripts.js"></script> *@
-</body>
-</html>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="~/js/servicemain.js"></script>

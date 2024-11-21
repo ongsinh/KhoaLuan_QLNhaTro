@@ -10,6 +10,7 @@ namespace KhoaLuan_QLNhaTro.Models
         public DateTime StartDate { get; set; }
         public int Time {  get; set; }
         public string Status { get; set; }
+        public int Deposit { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
         public Guid RoomId { get; set; }

@@ -22,12 +22,12 @@
             </div>
             <div class="add-button" >+</div>
         </div>
-        <a href="Room/RoomMain"><i class="fas fa-shopping-cart"></i> Quản lý phòng</a>
-        <a href="Bill/BillMain"><i class="fas fa-tachometer-alt"></i> Quản lý hóa đơn</a>
-        <a href="~/ServiceMain"><i class="fas fa-user-tie"></i> Quản lý dịch vụ</a>
-        <a href="~/AssetMain"><i class="fas fa-user"></i> Quản lý tài sản</a> 
+        <a href="@Url.Action("RoomMain", "Room")"><i class="fas fa-shopping-cart"></i> Quản lý phòng</a>
+        <a href="@Url.Action("BillMain", "Bill")"><i class="fas fa-tachometer-alt"></i> Quản lý hóa đơn</a>
+        <a href="@Url.Action("ServiceMain", "Service")"><i class="fas fa-user-tie"></i> Quản lý dịch vụ</a>
+        <a href="@Url.Action("AssetMain", "Asset")"><i class="fas fa-user"></i> Quản lý tài sản</a> 
         <a href="~/ContractMain"><i class="fas fa-box"></i> Quản lý hợp đồng</a>
-        <a href="~/AccountMain"><i class="fas fa-receipt"></i> Quản lý khách thuê</a>
+        <a href="@Url.Action("UserMain", "User")"><i class="fas fa-receipt"></i> Quản lý khách thuê</a>
         <a href="~/"><i class="fas fa-cogs"></i> Quản lý sự cố</a>
         <a href="~/ReportMain"><i class="fas fa-chart-line"></i> Báo cáo doanh thu</a>
     </div>

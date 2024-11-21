@@ -1,0 +1,35 @@
+﻿
+<form asp-action="AddService" method="post">
+    @Html.AntiForgeryToken()
+    <div>
+        <label>Tên dịch vụ:</label>
+        <input type="text" name="Name" required />
+    </div>
+    <div>
+        <label>Giá:</label>
+        <input type="number" name="Price" required />
+    </div>
+    <div>
+        <label>Đơn vị:</label>
+        <select name="Unit" required>
+            <option value="kWh">kWh</option>
+            <option value="Tháng">Tháng</option>
+            <option value="Khối">Khối</option>
+        </select>
+    </div>
+    <div>
+        <label>Chọn phòng áp dụng:</label>
+        <div class="room-checkboxes">
+            @foreach (var room in ViewBag.Rooms as List<Room>)
+            {
+                <label>
+                    <input type="checkbox" name="SelectedRooms" value="@room.Id" />
+                    @room.Name
+                </label>
+            }
+        </div>
+    </div>
+    <button class="btn-add" type="submit">Thêm dịch vụ</button>
+</form>
+
+
