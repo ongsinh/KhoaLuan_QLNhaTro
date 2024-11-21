@@ -1,0 +1,223 @@
+﻿@model List<KhoaLuan_QLNhaTro.Models.Room>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý danh sách phòng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/custom.css" />
+    <link rel="stylesheet" href="~/css/RoomMain.css" />
+</head>
+<body>
+    <div class="container-fluid">
+        @* <div class="header-buttons">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addRoomModal"><i class="fas fa-plus"></i></button>
+            <button class="btn btn-outline-secondary">Ẩn/Hiện cột</button>
+            <button class="btn btn-outline-secondary">Xuất excel</button>
+        </div>  *@
+        <h2>Thông tin phòng trọ</h2>
+        <div class="filter-section">
+            <form asp-action="GetByName" asp-controller="Room" method="get">
+                <input type="text"  name="Name" class="search-bar" placeholder="Tìm kiếm phòng..." />
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </form>
+        </div>
+
+        <div class="room-table">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Tên phòng</th>
+                        <th>Nhóm</th>
+                        <th>Giá thuê</th>
+                        <th>Tiền cọc</th>
+                        <th>Khách thuê</th>
+                        <th>Ngày vào ở </th>
+                        <th>Thời hạn hợp đồng</th>
+                        <th>Tình trạng</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var room in Model)
+                        {
+                            <tr>
+                                <td>@room.Name</td>
+                                <td>@room.FLoorNumber</td>
+                                <td>@room.Price</td>
+                                <td>1,500,000</td>
+                                <td>2 người</td>
+                                <td>@room.Contract.StartDate.ToString("dd/MM/yyyy")</td>
+                                <td>@room.Contract.Time Tháng</td>
+                                <td><span class="status-badge status-success">@room.Status</span></td>
+                                <td>
+                                    <!-- Thêm lớp edit-room-btn vào icon để dễ dàng thao tác -->
+                                    <i class="fas fa-ellipsis-v action-icon edit-room-btn" data-room-id="@room.Id"></i>
+                                    <div class="popup-menu">
+                                        <a href="@Url.Action("DetailRoom", "Room", new { id = room.Id })"><i class="fas fa-info-circle"></i> Chi tiết phòng</a>
+                                        <a href="#" class="edit-room-btn" data-toggle="modal" data-target="#editRoomModal" data-room-id="@room.Id">
+                                            <i class="fas fa-dollar-sign"></i> Sửa thông tin phòng
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center">Không tìm thấy phòng nào khớp với từ khóa.</td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <!-- Sửa thông tin phòng trọ -->
+    <div class="modal fade" id="editRoomModal" tabindex="-1" role="dialog" aria-labelledby="editRoomModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editRoomModalLabel">Sửa thông tin phòng trọ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editRoomForm" asp-action="EditRoom" asp-controller="Room" method="post">
+                        <div class="form-group">
+                            <label for="Name">Tên phòng</label>
+                            <input type="text" class="form-control" id="Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="FloorNumber">Tầng</label>
+                            <input type="text" class="form-control" id="FloorNumber" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="Price">Giá thuê</label>
+                                <input type="number" class="form-control" id="Price" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Acreage">Diện tích phòng</label>
+                                <input type="number" class="form-control" id="Acreage" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="closeModalButton" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary" id="saveEditRoomButton">Lưu</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+
+            $('.popup-menu .edit-room-btn').click(function (e) {
+                e.preventDefault(); 
+                e.stopPropagation(); 
+                var roomId = $(this).data('room-id'); 
+
+                
+                $.ajax({
+                    url: '/Room/GetRoomData',
+                    method: 'GET',
+                    data: { id: roomId },
+                    success: function (response) {
+                        if (response.success) {
+                            $('#editRoomModal').data('room-id', roomId);
+                            $('#Name').val(response.name);
+                            $('#FloorNumber').val(response.floorNumber);
+                            $('#Price').val(response.price);
+                            $('#Acreage').val(response.acreage);
+
+                            $('#editRoomModal').modal('show');
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Có lỗi xảy ra khi lấy thông tin phòng.');
+                    }
+                });
+            });
+
+            // Xử lý sự kiện click vào nút "Lưu" để gửi thông tin đã sửa
+            $('#saveEditRoomButton').click(function () {
+                var roomData = {
+                    id: $('#editRoomModal').data('room-id'), // ID từ modal
+                    name: $('#Name').val(),
+                    floorNumber: $('#FloorNumber').val(),
+                    price: $('#Price').val(),
+                    acreage: $('#Acreage').val()
+                };
+
+                console.log("Dữ liệu phòng gửi đi:", roomData);
+
+                // Gửi thông tin đã sửa đến server
+                $.ajax({
+                    url: '/Room/EditRoom', 
+                    method: 'POST',
+                    data: roomData,
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Cập nhật phòng thành công!');
+                            $('#editRoomModal').modal('hide'); // Đóng modal
+                            location.reload(); // Tải lại trang để hiển thị thay đổi
+                        } else {
+                            alert('Xảy ra khi lưu thông tin phòng.');
+                        }
+                    },
+                    error: function () {
+                        alert('Có lỗi xảy ra khi lưu thông tin phòng.');
+                    }
+                });
+            });
+
+            $(document).on('click', '.action-icon', function (e) {
+                e.stopPropagation();
+                $('.popup-menu').hide();
+
+                const popupMenu = $(this).next('.popup-menu');
+                const iconPosition = $(this).position();
+                popupMenu.css({
+                    top: iconPosition.top + $(this).outerHeight() + 5,
+                    left: iconPosition.left - 200
+                }).toggle();
+            });
+
+            $('#closeModalButton').click(function () {
+                $('#editRoomModal').modal('hide'); // Close the modal
+            });
+
+
+            $(document).click(function (e) {
+                if (!$(e.target).closest('.popup-menu, .action-icon').length) {
+                    $('.popup-menu').hide(); // Close all popup menus
+                }
+            });
+
+        });
+
+
+
+    </script>
+</body>
+</html>

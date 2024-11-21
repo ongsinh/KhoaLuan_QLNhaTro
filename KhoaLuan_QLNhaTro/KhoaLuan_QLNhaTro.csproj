@@ -7,14 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\NewFolder\**" />
-    <Content Remove="Views\NewFolder\**" />
-    <EmbeddedResource Remove="Views\NewFolder\**" />
-    <None Remove="Views\NewFolder\**" />
+    <Content Remove="wwwroot\js\add-house.js" />
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\css\layout.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\add-house.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +27,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Admin\" />
+    <Folder Include="Views\House\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\add-house.js" />
   </ItemGroup>
 
 </Project>

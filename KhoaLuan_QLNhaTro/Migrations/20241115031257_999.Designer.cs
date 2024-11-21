@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KhoaLuan_QLNhaTro.Migrations
 {
     [DbContext(typeof(NhaTroDbContext))]
-<<<<<<<< HEAD:KhoaLuan_QLNhaTro/Migrations/20241114114839_a11.Designer.cs
-    [Migration("20241114114839_a11")]
-    partial class a11
-========
-    [Migration("20241114172456_dbQLNT")]
-    partial class dbQLNT
->>>>>>>> developer:KhoaLuan_QLNhaTro/Migrations/20241114172456_dbQLNT.Designer.cs
+    [Migration("20241115031257_999")]
+    partial class _999
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -151,8 +146,8 @@ namespace KhoaLuan_QLNhaTro.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Time")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Time")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
