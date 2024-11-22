@@ -28,8 +28,8 @@
         <a href="@Url.Action("AssetMain", "Asset")"><i class="fas fa-user"></i> Quản lý tài sản</a> 
         <a href="~/ContractMain"><i class="fas fa-box"></i> Quản lý hợp đồng</a>
         <a href="@Url.Action("UserMain", "User")"><i class="fas fa-receipt"></i> Quản lý khách thuê</a>
-        <a href="~/"><i class="fas fa-cogs"></i> Quản lý sự cố</a>
-        <a href="~/ReportMain"><i class="fas fa-chart-line"></i> Báo cáo doanh thu</a>
+        <a href="@Url.Action("ReportMain", "Report")"><i class="fas fa-cogs"></i> Quản lý sự cố</a>
+        <a href="@Url.Action("ReportMain", "Report")"><i class="fas fa-chart-line"></i> Báo cáo doanh thu</a>
     </div>
 
     <div class="content">
@@ -215,9 +215,9 @@
 
         $(document).ready(function () {
             // Mở modal khi bấm vào dấu cộng
-            // $('.add-button').click(function () {
-            //     window.location.href = '@Url.Action("AddHouse", "Room")';  // Chuyển hướng tới action AddHouse ở trong Controller
-            // });
+             $('.add-button').click(function () {
+                 window.location.href = '@Url.Action("AddHouse", "Room")';  // Chuyển hướng tới action AddHouse ở trong Controller
+             });
             $('.close, .btn-secondary').click(function () {
                 $('#addHouseModal').modal('hide');
             });
