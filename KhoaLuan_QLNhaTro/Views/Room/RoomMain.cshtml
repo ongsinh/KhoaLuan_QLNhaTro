@@ -46,77 +46,37 @@
                     {
                         @foreach (var room in Model)
                         {
-                            <tr>
+                    <tr>
                                 <td>@room.Name</td>
                                 <td>@room.FLoorNumber</td>
                                 <td>@room.Price</td>
-                                <td>1,500,000</td>
+                                <td>@room.Contract.Deposit</td>
                                 <td>2 người</td>
                                 <td>@room.Contract.StartDate.ToString("dd/MM/yyyy")</td>
                                 <td>@room.Contract.Time Tháng</td>
                                 <td><span class="status-badge status-success">@room.Status</span></td>
-                                <td>
+                        <td>
                                     <!-- Thêm lớp edit-room-btn vào icon để dễ dàng thao tác -->
                                     <i class="fas fa-ellipsis-v action-icon edit-room-btn" data-room-id="@room.Id"></i>
-                                    <div class="popup-menu">
+                            <div class="popup-menu">
                                         <a href="@Url.Action("DetailRoom", "Room", new { id = room.Id })"><i class="fas fa-info-circle"></i> Chi tiết phòng</a>
                                         <a href="#" class="edit-room-btn" data-toggle="modal" data-target="#editRoomModal" data-room-id="@room.Id">
-                                            <i class="fas fa-dollar-sign"></i> Sửa thông tin phòng
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                                    <i class="fas fa-dollar-sign"></i> Sửa thông tin phòng
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
                         }
                     }
                     else
                     {
-                        <tr>
+                    <tr>
                             <td colspan="8" class="text-center">Không tìm thấy phòng nào khớp với từ khóa.</td>
-                        </tr>
+                    </tr>
                     }
                 </tbody>
 
             </table>
-        </div>
-    </div>
-
-    <!-- Thêm phòng trọ -->
-    <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addRoomModalLabel">Thêm thông tin phòng trọ</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="addRoomForm">
-                        <div class="form-group">
-                            <label for="addRoomName">Tên phòng</label>
-                            <input type="text" class="form-control" id="addRoomName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="addRoomFloor">Tầng</label>
-                            <input type="text" class="form-control" id="addRoomFloor" required>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="addRoomPrice">Giá thuê</label>
-                                <input type="number" class="form-control" id="addRoomPrice" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="addRoomArea">Diện tích phòng</label>
-                                <input type="number" class="form-control" id="addRoomArea" required>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="saveAddRoomButton">Lưu</button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -149,8 +109,7 @@
                                 <label for="Acreage">Diện tích phòng</label>
                                 <input type="number" class="form-control" id="Acreage" required>
                             </div>
-                    </form>
-                        </div>
+                            </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" id="closeModalButton" data-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-primary" id="saveEditRoomButton">Lưu</button>
@@ -163,10 +122,9 @@
     </div>
 
 
-
-    <!-- jQuery and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <!-- jQuery and Bootstrap JS -->
+            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
     <script>

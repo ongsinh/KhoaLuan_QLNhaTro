@@ -4,93 +4,81 @@
     ViewData["Title"] = "ServiceMain";
 }
 @* <link rel="stylesheet" href="styles.css"> *@
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="~/css/servicemain.css" rel="stylesheet" />
-</head>
-<body>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="~/css/servicemain.css" rel="stylesheet" />
 
-    <div class="container">
-        <!-- Left section for managing services -->
-        <div class="services-section">
-            <div class="header-section">
-                <div class="title-section">
-                    <h1>Quản lý dịch vụ</h1>
-                    <p class="subtitle">Các dịch vụ khách thuê xài</p>
-                </div>
-                <!-- Add more services similarly -->
-                <button class="add-service-btn" onclick="openModal()">+</button>
+<div class="container">
+    <!-- Left section for managing services -->
+    <div class="services-section">
+        <div class="header-section">
+            <div class="title-section">
+                <h1>Quản lý dịch vụ</h1>
+                <p class="subtitle">Các dịch vụ khách thuê xài</p>
             </div>
+            <!-- Add more services similarly -->
+            <button class="add-service-btn" onclick="openModal()">+</button>
+        </div>
      
 
     <div>
         @foreach (var serviceMainModel in Model)
         {
-                <div class="service-item">
-                    <div class="service-info">
-                        @* <span class="icon">🏷️</span> *@
-                        <div>
+            <div class="service-item">
+                <div class="service-info">
+                    <div>
                         <p class="service-name">@serviceMainModel.RoomService.Service.Name</p>
                         <p class="service-details">@serviceMainModel.RoomService.Service.Price/@serviceMainModel.RoomService.Service.Unit</p>
                         <p class="service-details"> <span>Đang áp dụng cho:</span> @serviceMainModel.RoomService.Rooms.Count() <span>phòng</span></p>
-                    
-                        <button class="edit-btn" onclick="openEditModal()"><i class="fas fa-edit"></i></button>
-                        <button class="delete-btn" onclick="openDeleteModal()"><i class="fas fa-trash-alt"></i></button>
-                    
+                        
+
                     </div>
                 </div>
                 <div class="actions">
                     <button class="edit-btn" onclick="openEditModal('@serviceMainModel.RoomService.Service.Id')"><i class="fas fa-edit"></i></button>
                     <button class="delete-btn" onclick="openDeleteModal('@serviceMainModel.RoomService.Service.Id')"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </div>
-        }
-                    </div>
                 </div>
-
-        </div>
-
-        <!-- Right section for customer usage statistics -->
-        <div class="usage-section">
-            <div class="header-section">
-                <div class="title-section">
-                    <h2>Khách thuê sử dụng trong tháng</h2>
-                    <p class="subtitle">Thống kê mỗi tháng khách thuê xài</p>
-                </div>
-                <input type="month" class="month-picker" placeholder="Tháng lập phiếu" />
-                @* <div class="thanglapphieu">
-                    <input type="text" placeholder="Tháng lập phiếu" class="month-input" /> 
-                    <input type="month" class="month-picker" placeholder="Tháng lập phiếu" />
-                </div> *@
             </div>
-            
+        }
+    </div>
+    </div>
+
+    <!-- Right section for customer usage statistics -->
+    <div class="usage-section">
+        <div class="header-section">
+            <div class="title-section">
+                <h2>Khách thuê sử dụng trong tháng</h2>
+                <p class="subtitle">Thống kê mỗi tháng khách thuê xài</p>
+            </div>
+            <input type="month" class="month-picker" placeholder="Tháng lập phiếu" />
+           
         </div>
-            <table class="utility-table">
-                <thead>
-                    <tr>
-                        <th rowspan="2">Tên phòng</th>
+        <table class="utility-table">
+            <thead>
+                <tr>
+                    <th rowspan="2">Tên phòng</th>
                     @foreach (var serviceMainModel in Model)
                     {
                         <th colspan="3">@serviceMainModel.RoomService.Service.Name (@serviceMainModel.RoomService.Service.Unit)</th>
                     }
-                    </tr>
-                    <tr>
+                </tr>
+                <tr>
                     @foreach (var serviceMainModel in Model)
                     {
                         if (serviceMainModel.RoomService.Service.Unit == "kWh" || serviceMainModel.RoomService.Service.Unit == "Khối")
                         {
-                        <th>Số cũ</th>
-                        <th>Số mới</th>
-                        <th>Thành tiền</th>
+                            <th>Số cũ</th>
+                            <th>Số mới</th>
+                            <th>Thành tiền</th>
                         }
                         else
                         {
-                        <th>Sử dụng</th>
+                            <th>Sử dụng</th>
                             <th colspan="2">Thành tiền</th>
                         }
                     }
-                    </tr>
-                </thead>
-                <tbody>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach (var room in Model.SelectMany(sm => sm.RoomService.Rooms).Distinct())
                 {
                     <tr>
@@ -124,43 +112,30 @@
                         }
                     </tr>
                 }
-                </tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
     </div>
+</div>
 
-    <!-- Popup for Adding New Service -->
-
-    <div class="modal" id="addServiceModal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('addServiceModal')">&times;</span>
-            <h3>Thêm Dịch Vụ Mới</h3>
+<!-- Popup for Adding New Service -->
+<div class="modal" id="addServiceModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('addServiceModal')">&times;</span>
+        <h3>Thêm Dịch Vụ Mới</h3>
         @Html.Partial("AddService", new KhoaLuan_QLNhaTro.Models.RoomService())
-        </div>
     </div>
+</div>
 
-    <!-- Edit Service Popup -->
-    <div class="modal" id="editServiceModal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('editServiceModal')">&times;</span>
-            <h3>Chỉnh sửa Dịch Vụ</h3>
+<!-- Edit Service Popup -->
+<div class="modal" id="editServiceModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editServiceModal')">&times;</span>
+        <h3>Chỉnh sửa Dịch Vụ</h3>
         <div id="editServiceFormContainer">
             <!-- Form sẽ được load vào đây qua Ajax -->
-    </div>
-
-    <!-- Delete Confirmation Popup -->
-    <div class="modal" id="deleteConfirmationModal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('deleteConfirmationModal')">&times;</span>
-            <h3>Xác nhận xóa</h3>
-            <p>Bạn có chắc chắn muốn xóa dịch vụ này không?</p>
-            <button class="confirm-delete-btn" onclick="confirmDelete()">Xóa</button>
-            <button class="cancel-btn" onclick="closeModal('deleteConfirmationModal')">Hủy</button>
         </div>
     </div>
-    @* <script src="scripts.js"></script> *@
-</body>
-</html>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="~/js/servicemain.js"></script>

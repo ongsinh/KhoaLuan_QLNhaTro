@@ -30,7 +30,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="Views\Admin\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Admin\" />
+    <Folder Include="Views\House\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\add-house.js" />
   </ItemGroup>
 
 </Project>

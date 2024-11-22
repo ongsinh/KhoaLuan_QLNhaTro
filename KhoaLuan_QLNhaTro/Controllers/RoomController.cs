@@ -42,6 +42,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
             // Tải dữ liệu từ database vào bộ nhớ
             var rooms = _context.Rooms
                 .Include(r => r.Contract)
+                .Include(r => r.User)
                 .ToList();
 
             // Thực hiện sắp xếp trong bộ nhớ

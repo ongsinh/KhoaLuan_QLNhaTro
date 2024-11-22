@@ -335,7 +335,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<int>("FLoorNumber")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("HouseId")
+                    b.Property<Guid?>("HouseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -352,7 +352,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -591,15 +591,11 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 {
                     b.HasOne("KhoaLuan_QLNhaTro.Models.House", "House")
                         .WithMany()
-                        .HasForeignKey("HouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HouseId");
 
                     b.HasOne("KhoaLuan_QLNhaTro.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("House");
 

@@ -2,14 +2,14 @@
 
 namespace KhoaLuan_QLNhaTro.Controllers
 {
-    public class AssetController : Controller
+    public class ReportController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult AssetMain()
+        public IActionResult ReportMain()
         {
             return View();
         }
