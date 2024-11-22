@@ -1,9 +1,115 @@
-﻿<!DOCTYPE html>
+﻿@model List<KhoaLuan_QLNhaTro.Models.Asset>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @* <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="~/css/assetmain.css" rel="stylesheet" />
+    <title>Asset List</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header-section">
+            <div class="title-section">
+                <h1>Tất cả tài sản</h1>
+                <p class="subtitle">Danh sách tài sản đang có</p>
+            </div>
+            <button class="add-button-asset" onclick="openModal()">+</button>
+        </div>
+
+        <div class="filter-section">
+            <input type="text" class="search-bar" placeholder="Tìm kiếm tài sản...">
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tên phòng</th>
+                    <th>Tên tài sản</th>
+                    <th>Giá trị tài sản</th>
+                    <th>Số lượng</th>
+                    <th>Tình trạng</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var asset in Model)
+                {
+                    <tr>
+                        <td>@asset.Room.Name</td>
+                        <td>@asset.Name</td>
+                        <td>@asset.Price</td>
+                        <td>@asset.Number</td>
+                        <td>@asset.Status</td>
+                        <td class="options-icon" onclick="toggleDropdown(this)">
+                            <i class="fas fa-ellipsis-v"></i>
+                            <div class="dropdown">
+                                <a href="#" onclick="openEditModal()">Sửa tài sản</a>
+                                <a href="#" onclick="openDeleteModal()">Xóa tài sản</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for Adding New Asset -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addModal')">&times;</span>
+            <h2>Thêm tài sản mới</h2>
+            @Html.Partial("AddAsset", new KhoaLuan_QLNhaTro.Models.Asset())
+        </div>
+    </div>
+
+    <!-- Modal for Editing Asset -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editModal')">&times;</span>
+            <h2>Sửa tài sản</h2>
+
+            <label for="editAssetRoom">Tên phòng</label>
+            <input type="text" id="editAssetRoom">
+
+            <label for="editAssetName">Tên tài sản</label>
+            <input type="text" id="editAssetName">
+
+            <label for="editAssetValue">Giá trị tài sản</label>
+            <input type="text" id="editAssetValue">
+
+            <label for="editQuantity">Số lượng</label>
+            <input type="text" id="editQuantity">
+
+            <button class="submit-modal" onclick="saveAssetChanges()">Lưu thay đổi</button>
+            <button class="close-modal" onclick="closeModal('editModal')">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Modal for Delete Confirmation -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('deleteModal')">&times;</span>
+            <h2>Xóa tài sản</h2>
+            <p id="deleteMessage"></p>
+            <button class="submit-modal" onclick="confirmDelete()">Xóa</button>
+            <button class="close-modal" onclick="closeModal('deleteModal')">Hủy</button>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="~/js/assetmain.js"></script>
+
+
+@* <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @* <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="~/css/assetmain.css" rel="stylesheet" />
     <title>Asset List</title>
@@ -39,7 +145,7 @@
                     <td>Tủ lạnh</td>
                     <td>1.000.000 đ</td>
                     <td>2</td>
-                    <td>@* <span class="status-active">Đang hoạt động</span> *@ 100% </td>
+                    <td> <span class="status-active">Đang hoạt động</span>  100% </td>
                     <td class="options-icon" onclick="toggleDropdown(this)">
                         <i class="fas fa-ellipsis-v"></i>
                         <div class="dropdown">
@@ -120,4 +226,4 @@
     </div>
 </body>
 </html>
-<script src="~/js/assetmain.js"></script>
+<script src="~/js/assetmain.js"></script> *@

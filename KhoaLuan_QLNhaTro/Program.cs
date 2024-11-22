@@ -37,6 +37,6 @@ app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=UserMain}/{id?}");
+    pattern: "{controller=Asset}/{action=AssetMain}/{id?}");
 
 app.Run();

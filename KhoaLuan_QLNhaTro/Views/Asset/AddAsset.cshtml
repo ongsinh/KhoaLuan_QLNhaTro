@@ -1,0 +1,27 @@
+﻿@model KhoaLuan_QLNhaTro.Models.Asset
+@{
+    var rooms = ViewData["Rooms"] as List<KhoaLuan_QLNhaTro.Models.Room>;
+}
+
+<form method="post" asp-action="AddAsset">
+    <label for="assetName">Tên tài sản</label>
+    <input type="text" id="assetName" name="Name" placeholder="Nhập tên tài sản" value="@Model.Name" required>
+
+    <label for="assetValue">Giá trị tài sản</label>
+    <input type="number" id="assetValue" name="Price" placeholder="Nhập giá trị tài sản" value="@Model.Price" required>
+
+    <label for="quantity">Số lượng</label>
+    <input type="number" id="quantity" name="Number" placeholder="Nhập số lượng" value="@Model.Number" required>
+
+    <label for="roomId">Chọn phòng</label>
+    <select id="roomId" name="RoomId" required>
+        <option value="">Chọn phòng</option>
+        @foreach (var room in rooms)
+        {
+            <option value="@room.Id">@room.Name</option>
+        }
+    </select>
+
+    <button type="submit" class="submit-modal">Thêm tài sản</button>
+    <button type="button" class="close-modal" onclick="closeModal('addModal')">Đóng</button>
+</form>
