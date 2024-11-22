@@ -8,5 +8,10 @@ namespace KhoaLuan_QLNhaTro.Controllers
         {
             return View();
         }
+
+        public IActionResult AssetMain()
+        {
+            return View();
+        }
     }
 }

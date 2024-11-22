@@ -50,8 +50,8 @@
                                 <td>@room.Name</td>
                                 <td>@room.FLoorNumber</td>
                                 <td>@room.Price</td>
-                        <td>1,500,000</td>
-                        <td>2 người</td>
+                                <td>@room.Contract?.Deposit</td>
+                                <td>2 người</td>
                                 <td>@room.Contract.StartDate.ToString("dd/MM/yyyy")</td>
                                 <td>@room.Contract.Time Tháng</td>
                                 <td><span class="status-badge status-success">@room.Status</span></td>
