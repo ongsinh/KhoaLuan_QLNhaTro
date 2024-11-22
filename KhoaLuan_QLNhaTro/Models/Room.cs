@@ -14,8 +14,8 @@ namespace KhoaLuan_QLNhaTro.Models
         public float Acreage { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
-        public Guid HouseId { get; set; }
-        public Guid UserId { get; set; }
+        public Guid? HouseId { get; set; }
+        public Guid? UserId { get; set; }
         public virtual House House { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }

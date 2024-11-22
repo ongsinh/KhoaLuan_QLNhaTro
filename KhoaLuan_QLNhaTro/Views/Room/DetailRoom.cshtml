@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model KhoaLuan_QLNhaTro.Models.Room
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,46 +19,38 @@
                     <p class="text-muted">Thông tin chi tiết của phòng</p>
                     <table class="table table-borderless">
                         <tbody>
-                            <tr>
-                                <th>Tên phòng</th>
-                                <td>Phòng 1</td>
-                            </tr>
-                            <tr>
-                                <th>Nhóm phòng</th>
-                                <td>Tầng trệt</td>
-                            </tr>
-                            <tr>
-                                <th>Giá thuê</th>
-                                <td>1.222.000đ</td>
-                            </tr>
-                            <tr>
-                                <th>Diện tích</th>
-                                <td>15 m2</td>
-                            </tr>
-                            <tr>
-                                <th>Ưu tiên</th>
-                                <td>Tất cả</td>
-                            </tr>
-                            <tr>
-                                <th>Ngày lập hóa đơn</th>
-                                <td>Chưa cài đặt</td>
-                            </tr>
-                            <tr>
-                                <th>Ngày vào ở</th>
-                                <td>20/09/2024</td>
-                            </tr>
-                            <tr>
-                                <th>Thời hạn hợp đồng</th>
-                                <td>04/10/2024</td>
-                            </tr>
-                            <tr>
-                                <th>Trạng thái</th>
-                                <td><span class="badge badge-status incomplete">Đã hết hạn hợp đồng</span></td>
-                            </tr>
-                            <tr>
-                                <th>Trạng thái tài chính</th>
-                                <td><span class="badge badge-status complete">Chưa ký thu tiền</span></td>
-                            </tr>
+                                <tr>
+                                    <th>Tên phòng</th>
+                                    <td>@Model.Name</td>
+                                </tr>
+                                <tr>
+                                    <th>Nhóm phòng</th>
+                                <td>@Model.FLoorNumber</td>
+                                </tr>
+                                <tr>
+                                    <th>Giá thuê</th>
+                                <td>@Model.Price</td>
+                                </tr>
+                                <tr>
+                                    <th>Diện tích</th>
+                                <td>@Model.Acreage</td>
+                                </tr>
+                                <tr>
+                                    <th>Ngày vào ở</th>
+                                <td>@Model.Contract.StartDate.ToString("dd/MM/yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <th>Thời hạn hợp đồng</th>
+                                <td>@Model.Contract.Time Tháng</td>
+                                </tr>
+                                <tr>
+                                    <th>Trạng thái</th>
+                                <td><span class="badge badge-status incomplete">@Model.Contract.Status</span></td>
+                                </tr>
+                                @* <tr>
+                                    <th>Trạng thái tài chính</th>
+                                    <td><span class="badge badge-status complete">Chưa ký thu tiền</span></td>
+                                </tr> *@
                         </tbody>
                     </table>
                 </div>
@@ -77,19 +70,19 @@
                                 <th>Đơn giá</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Tiền điện</td>
-                                <td>Chỉ số hiện tại: 0</td>
-                                <td>Cố định</td>
-                                <td>1.700đ/KWh</td>
-                            </tr>
-                            <tr>
-                                <td>Tiền nước</td>
-                                <td>Chỉ số hiện tại: 0</td>
-                                <td>Cố định</td>
-                                <td>18.000đ/Khối</td>
-                            </tr>
+                        <tbody
+                        @if (ViewBag.Services != null)
+                        {
+                            @foreach (var service in ViewBag.Services)
+                            {
+                                <tr>
+                                    <td>@service.Service.Name </td>
+                                    <td>Chỉ số hiện tại: 0</td>
+                                    <td>Cố định</td>
+                                    <td>@service.Service.Price</td>
+                                </tr>
+                            }
+                        }
                         </tbody>
                     </table>
                 </div>
@@ -100,16 +93,16 @@
                 <div class="card p-3">
                     <div class="section-title">Danh sách khách thuê</div>
                     <p class="text-muted">Thông tin khách thuê của phòng</p>
-                    <div class="d-flex align-items-center border rounded p-2">
-                        <div>
-                            <strong>Khương</strong><br>
-                            <span class="text-muted">0868043731</span>
+                        <div class="d-flex align-items-center border rounded p-2">
+                            <div>
+                                <strong>@Model.User.Name</strong><br>
+                            <span class="text-muted">@Model.User.Phone</span>
+                            </div>
+                            <div class="ms-auto">
+                                <button class="btn btn-success btn-sm">Người liên hệ</button>
+                                <button class="btn btn-primary btn-sm">Đại diện hợp đồng</button>
+                            </div>
                         </div>
-                        <div class="ms-auto">
-                            <button class="btn btn-success btn-sm">Người liên hệ</button>
-                            <button class="btn btn-primary btn-sm">Đại diện hợp đồng</button>
-                        </div>
-                    </div>
                 </div>
             </div>
 

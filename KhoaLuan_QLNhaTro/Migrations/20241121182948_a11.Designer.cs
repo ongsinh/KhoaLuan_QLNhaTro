@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KhoaLuan_QLNhaTro.Migrations
 {
     [DbContext(typeof(NhaTroDbContext))]
-    [Migration("20241120155302_dbQLNT")]
-    partial class dbQLNT
+    [Migration("20241121182948_a11")]
+    partial class a11
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
