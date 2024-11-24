@@ -8,7 +8,7 @@ namespace KhoaLuan_QLNhaTro.Models
         [Key]
         public string Id { get; set; }
         public string Status { get; set; }
-        public float Total { get; set; }
+        public decimal Total { get; set; }
         public DateTime PaymentDate { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }

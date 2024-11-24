@@ -86,16 +86,12 @@ function openDeleteModal(serviceId) {
         fetch(`/Service/DeleteService/${serviceId}`, { method: 'DELETE' })
             .then(response => {
                 if (response.ok) {
-                    alert("Xóa thành công!");
                     location.reload(); // Làm mới trang sau khi xóa thành công
                 } else {
                     alert("Xóa thất bại!");
                 }
             })
             .catch(() => alert("Có lỗi xảy ra!"));
-    } else {
-        // Nếu người dùng hủy, không làm gì cả
-        alert("Hủy xóa dịch vụ.");
     }
 }
 

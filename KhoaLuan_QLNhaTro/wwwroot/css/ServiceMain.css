@@ -19,7 +19,7 @@ body {
     margin-top: 35px;
     padding: 20px;
     border-radius: 8px;
-    width: 40%;
+    width: 70%;
 }
 
 .usage-section {
@@ -87,7 +87,7 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    margin-right: 20px;
+    margin-right: 5px;
 }
 
 .delete-btn {
@@ -102,7 +102,7 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    margin-right: 20px;
+/*    margin-right: 10px;*/
 }
 
 
@@ -208,6 +208,7 @@ body {
 }
 
 .modal-content {
+    margin: auto;
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -308,26 +309,26 @@ select {
     font-size: 14px;
 }
 
-/*.usage-section {
-    width: 100%;*/ /* Đảm bảo div cha chiếm toàn bộ chiều rộng của container cha */
-    /*overflow-x: auto;*/ /* Thêm cuộn ngang nếu nội dung bảng quá rộng */
-/*}
+.usage-section {
+    width: 100%;  
+    overflow-x: auto; 
+}
 
 .utility-table {
-    width: 100%;*/ /* Bảng chiếm toàn bộ chiều rộng của div cha */
-    /*border-collapse: collapse;*/ /* Loại bỏ khoảng cách giữa các ô */
-/*}
+    width: 100%;  
+    border-collapse: collapse;  
+}
 
     .utility-table th,
     .utility-table td {
-        border: 1px solid #ddd;*/ /* Viền giữa các ô */
-        /*padding: 8px;*/ /* Khoảng cách bên trong ô */
-        /*text-align: left;*/ /* Canh trái nội dung */
-    /*}
+        border: 1px solid #ddd;  
+        padding: 8px;  
+        text-align: left; 
+    }
 
     .utility-table th {
-        background-color: #f4f4f4;*/ /* Màu nền cho header */
-        /*font-weight: bold;*/ /* Chữ đậm */
-    /*}*/
+        background-color: #f4f4f4;  
+        font-weight: bold;  
+    }
 
 

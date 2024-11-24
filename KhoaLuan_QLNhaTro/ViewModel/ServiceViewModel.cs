@@ -7,7 +7,7 @@ namespace KhoaLuan_QLNhaTro.ViewModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         public string Unit { get; set; }
         public int Number { get; set; }
         public List<Guid> SelectedRooms { get; set; } // Danh sách phòng được chọn

@@ -9,7 +9,7 @@ namespace KhoaLuan_QLNhaTro.Models
         public Guid RoomId { get; set; }
         public Guid ServiceId { get; set; }
         public int Number {  get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         public virtual Room Room { get; set; }
         public virtual Service Service { get; set; }
     }

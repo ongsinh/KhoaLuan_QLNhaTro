@@ -38,48 +38,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-                    <tr>
-                        <td>
-                            @* <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Image"> *@
-                            Phòng 1<br><small>Đại diện: Minh Trần</small>
-                        </td>
-                        <td>1 người</td>
-                        <td>3000000 đ</td>
-                        <td>06/11/2024</td>
-                        <td>07/11/2024</td>
-                        <td>6 tháng</td>
-                        <td><span class="status-active">Trong thời hạn</span></td>
-                        <!-- Biểu tượng ba chấm và dropdown -->
-                        <td class="options-icon" onclick="toggleDropdown(this)">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <div class="dropdown">
-                                <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
-                                <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
-                            </div>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td>
-                            @* <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Image"> *@
-                            Phòng 2<br><small>Đại diện: Minh Ánh</small>
-                        </td>
-                        <td>2 người</td>
-                        <td>3500000 đ</td>
-                        <td>08/11/2024</td>
-                        <td>09/11/2024</td>
-                        <td>6 tháng</td>
-                        <td><span class="status-active">Trong thời hạn</span></td>
-                        <!-- Biểu tượng ba chấm và dropdown -->
-                        <td class="options-icon" onclick="toggleDropdown(this)">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <div class="dropdown">
-                                <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
-                                <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach (var contract in Model)
+                    {
+                        <tr>
+                            <td>
+                                @contract.RoomName<br>
+                                <small>Đại diện: @contract.Representative</small>
+                            </td>
+                            <td>@contract.NumberOfMembers người</td>
+                            <td>@String.Format("{0:N0} đ", contract.RentPrice)</td>
+                            <td>@contract.CreatedDate.ToString("dd/MM/yyyy")</td>
+                            <td>@contract.MoveInDate.ToString("dd/MM/yyyy")</td>
+                            <td>@contract.Duration</td>
+                            <td>
+                                <span class="status-active">@contract.Status</span>
+                            </td>
+                            <td class="options-icon" onclick="toggleDropdown(this)">
+                                <i class="fas fa-ellipsis-v"></i>
+                                <div class="dropdown">
+                                    <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
+                                    <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>

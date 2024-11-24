@@ -7,7 +7,7 @@ namespace KhoaLuan_QLNhaTro.Models
         [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         public int Number {  get; set; }
         public string Status { get; set; }
         public DateTime CreateAt { get; set; }
