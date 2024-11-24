@@ -82,5 +82,60 @@ namespace KhoaLuan_QLNhaTro.Controllers
             return View(bills);
         }
 
+        [HttpGet]
+        public JsonResult GetRoomServices(Guid roomId)
+        {
+            var services = _context.RoomsServices
+                .Where(rs => rs.RoomId == roomId)
+                .Select(rs => new
+                {
+                    id = rs.Service.Id,
+                    name = rs.Service.Name,
+                    price = rs.Service.Price,
+                    unit = rs.Service.Unit
+                })
+                .ToList();
+
+            return Json(services);
+        }
+
+        [HttpPost]
+        public IActionResult CreateInvoice(string roomId, DateTime CreateAt, DateTime PaymentDate, List<DetailBill> services)
+        {
+            var userId = _context.Users.Select(u => u.Id).FirstOrDefault();
+            var bill = new Bill
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    RoomId = Guid.Parse(roomId),
+                    CreateAt = CreateAt,
+                    PaymentDate = PaymentDate,
+                    UserId = userId,
+                    Status = "False",
+                };
+
+                _context.Bills.Add(bill);
+                _context.SaveChanges();
+
+                foreach (var service in services)
+                {
+                    var billService = new DetailBill
+                    {
+                        BillId = bill.Id,
+                        ServiceId = service.ServiceId,
+                        OldNumber = service.OldNumber ?? 0,
+                        NewNumber = service.NewNumber ?? 0,
+                        Number = service.Number
+                    };
+                    _context.DetailBills.Add(billService);
+                }
+
+                _context.SaveChanges();
+
+                return Json(bill);
+            }
+
+
+
     }
+
 }
