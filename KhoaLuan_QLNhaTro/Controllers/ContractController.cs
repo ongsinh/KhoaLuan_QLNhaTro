@@ -12,24 +12,27 @@ namespace KhoaLuan_QLNhaTro.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult ContractMain()
         {
-            // Lấy danh sách hợp đồng cùng thông tin phòng và người dùng
+            // Lấy danh sách hợp đồng từ database
             var contracts = _context.Contracts
-                .Select(c => new
+                .Select(c => new Contract
                 {
-                    RoomName = c.Room.Name,
-                    Representative = c.User.Name,
-                    //NumberOfMembers = c.Room.NumberOfMembers,
-                    RentPrice = c.Room.Price,
-                    Deposite = c.Deposit,
-                    CreatedDate = c.CreateAt,
-                    MoveInDate = c.StartDate,
-                    Duration = $"{c.Time} tháng",
-                    Status = c.Status
-                }).ToList();
+                    Id = c.Id,
+                    StartDate = c.StartDate,
+                    Time = c.Time,
+                    Status = c.Status,
+                    Deposit = c.Deposit,
+                    CreateAt = DateTime.Now, // Ngày lập là ngày hiện tại
+                    UpdateAt = c.UpdateAt,
+                    RoomId = c.RoomId,
+                    UserId = c.UserId,
+                    Room = c.Room,  // Bao gồm thông tin phòng
+                    User = c.User   // Bao gồm thông tin người thuê
+                })
+                .ToList();
 
-            return View(contracts); // Gửi danh sách đến View
+            return View(contracts); // Truyền danh sách hợp đồng vào View
         }
     }
 }

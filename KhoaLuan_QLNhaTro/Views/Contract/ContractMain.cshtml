@@ -1,4 +1,6 @@
 ﻿<!DOCTYPE html>
+@model List<KhoaLuan_QLNhaTro.Models.Contract>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,8 +30,9 @@
                 <thead>
                     <tr>
                         <th>Tên phòng</th>
-                        <th>Thành viên</th>
+                        @* <th>Thành viên</th> *@
                         <th>Giá thuê</th>
+                        <th>Tiền cọc</th>
                         <th>Ngày lập</th>
                         <th>Ngày vào ở </th>
                         <th>Thời hạn hợp đồng</th>
@@ -42,22 +45,23 @@
                     {
                         <tr>
                             <td>
-                                @contract.RoomName<br>
-                                <small>Đại diện: @contract.Representative</small>
+                                @contract.Room.Name<br>
+                                <small>Đại diện: @contract.User.Name</small>
                             </td>
-                            <td>@contract.NumberOfMembers người</td>
-                            <td>@String.Format("{0:N0} đ", contract.RentPrice)</td>
-                            <td>@contract.CreatedDate.ToString("dd/MM/yyyy")</td>
-                            <td>@contract.MoveInDate.ToString("dd/MM/yyyy")</td>
-                            <td>@contract.Duration</td>
+                            @* <td>@contract.User người</td> *@
+                            <td>@contract.Room.Price</td>
+                            <td>@contract.Deposit</td>
+                            <td>@DateTime.Now.ToString("dd/MM/yyyy")</td>
+                            <td>@contract.StartDate.ToString("dd/MM/yyyy")</td>
+                            <td>@contract.Time tháng</td>
                             <td>
                                 <span class="status-active">@contract.Status</span>
                             </td>
                             <td class="options-icon" onclick="toggleDropdown(this)">
                                 <i class="fas fa-ellipsis-v"></i>
                                 <div class="dropdown">
-                                    <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
-                                    <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
+                                    <a href="javascript:void(0)" onclick="openEditModal(event)">Sửa khách thuê</a>
+                                    <a href="javascript:void(0)" onclick="openDeleteModal(event)">Xóa khách thuê</a>
                                 </div>
                             </td>
                         </tr>
