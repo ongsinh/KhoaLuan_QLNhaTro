@@ -100,13 +100,13 @@ namespace KhoaLuan_QLNhaTro.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateInvoice(string roomId, DateTime CreateAt, DateTime PaymentDate, List<DetailBill> services)
+        public IActionResult CreateInvoice(string RoomId, DateTime CreateAt, DateTime PaymentDate, List<DetailBill> services)
         {
             var userId = _context.Users.Select(u => u.Id).FirstOrDefault();
             var bill = new Bill
                 {
                     Id = Guid.NewGuid().ToString(),
-                    RoomId = Guid.Parse(roomId),
+                    RoomId = Guid.Parse(RoomId),
                     CreateAt = CreateAt,
                     PaymentDate = PaymentDate,
                     UserId = userId,
