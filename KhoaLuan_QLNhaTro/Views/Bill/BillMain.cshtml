@@ -102,7 +102,7 @@
     </table>
 
     @* Bước 1 lập chọn phòng để chốt hóa đơn *@
-    <div class="modal fade" id="billingModal">
+    <div class="modal fade" id="billingModal">    
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- Modal Header -->
@@ -126,7 +126,7 @@
                                             <div class="room-status badge badge-contract-ending mb-2">@room.Status</div>
                                             <h6>@room.Name</h6>
                                             <p>@room.Price</p>
-                                            <button class="btn btn-close-service btn-block" onclick="showServiceDetails()">Chốt</button>
+                                            <button class="btn btn-close-service btn-block room-item" data-room-id="@room.Id" >Chốt</button>
                                         </div>
                                     </div>
                                 }
@@ -137,46 +137,8 @@
                         <!-- Dịch vụ cần chốt -->
                         <div class="col-md-4 mb-3 service-details">
                             <div id="service-details" class="service-details-modal" style="display: none;">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <button class="btn btn-secondary">Đóng chốt</button>
-                                    <button class="btn btn-success">Áp dụng dịch vụ</button>
-                                </div>
-                                <div class="service-item">
-                                    <input type="checkbox" checked> <span>Tiền điện</span>
-                                    <p class="price">Giá: <b>4.000 đ</b> / KWh</p>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" placeholder="0">
-                                        <span class="input-group-text">Số cũ</span>
-                                    </div>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" placeholder="0">
-                                        <span class="input-group-text">Số mới</span>
-                                    </div>
-                                </div>
-                                <div class="service-item">
-                                    <input type="checkbox" checked> <span>Tiền nước</span>
-                                    <p class="price">Giá: <b>20.000 đ</b> / Tháng</p>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" placeholder="0">
-                                        <span class="input-group-text">Tháng</span>
-                                    </div>
-                                </div>
-                                <div class="service-item">
-                                    <input type="checkbox" checked> <span>Tiền rác (người)</span>
-                                    <p class="price">Giá: <b>15.000 đ</b> / Người</p>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" placeholder="0">
-                                        <span class="input-group-text">Người</span>
-                                    </div>
-                                </div>
-                                <div class="service-item">
-                                    <input type="checkbox" checked> <span>Tiền wifi (người)</span>
-                                    <p class="price">Giá: <b>50.000 đ</b> / Người</p>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" placeholder="0">
-                                        <span class="input-group-text">Người</span>
-                                    </div>
-                                </div>
+                                <h5>Dịch vụ của phòng: <span id="selected-room-name"></span></h5>
+                                <div id="services"></div>
                             </div>
                         </div>
                     </div>
@@ -190,7 +152,7 @@
                 <!-- Modal Footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-success " data-toggle="modal" data-target="#createInvoiceModal" data-dismiss="modal">Bước 2: Lập hóa đơn</button>
+                    <button type="button" class="btn btn-success goToStep2" data-toggle="modal" data-target="#createInvoiceModal" data-dismiss="modal">Bước 2: Lập hóa đơn</button>
                 </div>
             </div>
         </div>
@@ -199,7 +161,7 @@
 
 
     <!-- Modal bước 2 sau khi chốt phòng -->
-    <div class="modal fade" id="createInvoiceModal" tabindex="-1" aria-labelledby="createInvoiceModalLabel" aria-hidden="true">
+    <div class="modal fade" id="createInvoiceModal" tabindex="-1" aria-labelledby="createInvoiceModalLabel" >
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -209,6 +171,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    @* <div id="services-data" style="border: 1px solid #000; padding: 10px; margin-top: 20px;">
+                        <h3>Dữ liệu dịch vụ:</h3>
+                        <pre id="services-output"></pre>
+                    </div> *@
 
                     <!-- Step Indicator -->
                     <div class="d-flex justify-content-between mb-3">
@@ -222,7 +188,7 @@
                         Nhập các thông tin bên phải để thực hiện tạo hóa đơn!
                     </div>
 
-                    <form id="invoiceForm">
+                    <form id="invoiceForm" asp-action="CreateInvoice" asp-controller="Bill" method="post">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="month" class="form-label">Tháng lập phiếu*</label>
@@ -230,8 +196,8 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="date" class="form-label">Ngày lập hóa đơn*</label>
-                                <input type="date" class="form-control" id="date" name="date" value="2024-11-01">
+                                <label for="CreateAt" class="form-label">Ngày lập hóa đơn*</label>
+                                <input type="date" class="form-control" id="CreateAt" name="CreateAt" value="2024-11-01">
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -243,19 +209,14 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="dueDate" class="form-label">Hạn đóng tiền*</label>
-                                <input type="date" class="form-control" id="dueDate" name="dueDate" value="2024-12-01">
+                                <label for="PaymentDate" class="form-label">Hạn đóng tiền*</label>
+                                <input type="date" class="form-control" id="PaymentDate" name="PaymentDate" value="2024-12-01">
                             </div>
+                            <div style="display: none;">
+                                <input type="hidden" id="RoomId" name="RoomId" value="">
+                            </div>
+                            <input type="hidden" id="ServicesData" name="ServicesData" value="">
 
-                            <div class="col-md-6 mb-3">
-                                <label for="fromDate" class="form-label">Từ ngày*</label>
-                                <input type="date" class="form-control" id="fromDate" name="fromDate" value="2024-11-01">
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="toDate" class="form-label">Đến ngày*</label>
-                                <input type="date" class="form-control" id="toDate" name="toDate" value="2024-12-01">
-                            </div>
                         </div>
 
                         <!-- Additional Information -->
@@ -390,6 +351,144 @@
             $('#invoiceEditModal').modal('hide');
         }
 
+        let tempInvoiceData = {
+            roomId: null,
+            services: []
+        };
+
+        $(document).ready(function () {
+            // When a room is selected
+            $(".room-item").on("click", function () {
+                const roomId = $(this).data("room-id");
+                if (tempInvoiceData.roomId && tempInvoiceData.roomId === roomId) {
+                    // Nếu đã chọn phòng này rồi thì không làm gì thêm
+                    return;
+                }
+                tempInvoiceData.roomId = roomId;
+                $("#RoomId").val(roomId);
+                // AJAX to fetch room services
+                $.ajax({
+                    url: '/Bill/GetRoomServices', // Controller endpoint to get services
+                    type: 'GET',
+                    data: { roomId: roomId },
+                    success: function (services) {
+                        // Clear existing services
+                        $("#services").empty();
+
+                        // Display the fetched services
+                        services.forEach(service => {
+                            const serviceHtml = `
+                                            <div class="service-item" ">
+                                                <input type="checkbox" class="service-checkbox" data-service-id="${service.id}" checked> <span>${service.name}</span>
+                                        <p class="price">Giá: <b>${service.price}</b> / ${service.unit}</p>
+                                        ${service.unit === "kWh" || service.unit === "m3" ? `
+                                            <div class="input-group">
+                                                <input type="number" class="form-control old-value" placeholder="Số cũ">
+                                                <span class="input-group-text">Số cũ</span>
+                                            </div>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control new-value" placeholder="Số mới">
+                                                <span class="input-group-text">Số mới</span>
+                                            </div>` : `
+                                            <div class="input-group">
+                                                <input type="number" class="form-control quantity" placeholder="Số lượng">
+                                                <span class="input-group-text">Số lượng</span>
+                                            </div>`}
+                                    </div>`;
+                            $("#services").append(serviceHtml);
+                        });
+
+                        // Show the service details
+                        $("#service-details").show();
+
+                        // Save room data temporarily
+                        tempInvoiceData = {
+                            roomId: roomId,
+                            services: [] // Services will be added after user enters values
+                        };
+                    },
+                    error: function () {
+                        alert("Không thể tải dịch vụ.");
+                    }
+                });
+            });
+
+            // Transition to Step 2 (create invoice)
+            $(".goToStep2").on("click", function () {
+
+                tempInvoiceData.services = [];
+
+                // Gather selected services
+                $(".service-item").each(function () {
+                    const serviceCheckbox = $(this).find('.service-checkbox');  // Tìm checkbox của mỗi dịch vụ
+                    const serviceId = serviceCheckbox.data('service-id');  // Lấy data-service-id từ checkbox
+                    const checked = serviceCheckbox.is(":checked");
+
+                    if (checked) {
+                        const oldValue = $(this).find('.old-value').val();
+                        const newValue = $(this).find('.new-value').val();
+                        const quantity = $(this).find('.quantity').val();
+                        const service = {
+                            serviceId:serviceId,
+                            oldValue: oldValue || null,
+                            newValue: newValue || null,
+                            quantity: quantity || null
+                        };
+
+                        tempInvoiceData.services.push(service);
+                    }
+                });
+                //$("#services-output").text(`RoomId: ${tempInvoiceData.roomId.toUpperCase()}`);
+                $("#ServicesData").val(JSON.stringify(tempInvoiceData.services));
+                alert("Dịch vụ đã được cập nhật, sẵn sàng tạo hóa đơn.");
+            });
+
+            $(".create-invoice-btn").on("click", function () {
+
+                const createAt = $('#CreateAt').val();  // Ngày lập hóa đơn (kiểu string từ input)
+                const paymentDate = $('#PaymentDate').val(); // Hạn đóng tiền (kiểu string từ input)
+                const id_room = $('#RoomId').val();
+                const servicesData = $("#ServicesData").val();
+
+                // Chuyển đổi sang định dạng Date nếu cần thiết
+                const formattedCreateAt = new Datetime(createAt).toISOString();  // Định dạng ISO 8601
+                const formattedPaymentDate = new Date(paymentDate).toISOString();  // Định dạng ISO 8601
+
+                const invoiceData = {
+                    RoomId: id_room,  // ID phòng
+                    CreateAt: formattedCreateAt,  // Ngày lập hóa đơn dưới dạng ISO
+                    PaymentDate: formattedPaymentDate,  // Hạn đóng tiền dưới dạng ISO
+                    //services: tempInvoiceData.services  // Danh sách dịch vụ
+                    Services: JSON.parse(servicesData)
+                };
+
+                $.ajax({
+                    url: '/Bill/CreateInvoice',  // URL action method
+                    type: 'POST',
+                    //data: invoiceData,  // Gửi dữ liệu trực tiếp từ form
+                    contentType: 'application/json',
+                    data: JSON.stringify(invoiceData),
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Hóa đơn đã được tạo thành công!");
+                            $("#createInvoiceModal").modal('hide');  // Đóng modal
+                            location.reload();  // Làm mới trang
+                        } else {
+                            alert("Lỗi: " + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Lỗi AJAX:", error);
+                        alert("Lỗi khi tạo hóa đơn.");
+                    }
+                });
+            });
+
+
+
+
+
+        });
 
     </script>
 

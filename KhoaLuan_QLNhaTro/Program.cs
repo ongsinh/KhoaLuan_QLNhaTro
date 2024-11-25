@@ -1,7 +1,13 @@
 ﻿using KhoaLuan_QLNhaTro.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 
 builder.Services.AddDbContext<NhaTroDbContext>( option => option.UseSqlServer(builder.Configuration.GetConnectionString("QLNTconnection")));
 // Add services to the container.
@@ -40,3 +46,4 @@ app.MapControllerRoute(
     pattern: "{controller=Asset}/{action=AssetMain}/{id?}");
 
 app.Run();
+

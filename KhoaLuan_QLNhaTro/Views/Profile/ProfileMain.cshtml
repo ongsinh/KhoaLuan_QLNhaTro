@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Interface</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-header {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-weight: normal;
+        }
+
+        .save-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Thông tin đại diện chủ tòa nhà</h2>
+
+        <form>
+            <!-- Personal Info Section -->
+            <!-- Identification Info Section -->
+            <div class="form-section">
+                <h4 class="form-header">Thông tin cá nhân</h4>
+                <div class="form-row ">
+                    <div class="form-group col-md-6">
+                        <label for="idName" class="form-label">Họ tên </label>
+                        <input type="text" class="form-control" id="idName" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="idContact" class="form-label">Giới tính</label>
+                        <input type="text" class="form-control" id="idContact" required>
+                    </div>
+                </div>
+                <div class="form-row ">
+                    <div class="form-group col-md-6">
+                        <label for="dob" class="form-label">Nhập ngày/tháng/năm sinh</label>
+                        <input type="date" class="form-control" id="dob" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="idContact" class="form-label">Địa chỉ</label>
+                        <input type="text" class="form-control" id="idContact" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="idName" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="idName" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="idContact" class="form-label">Căn cước công dân</label>
+                        <input type="text" class="form-control" id="idContact" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Info Section -->
+            <div class="form-section">
+                <h4 class="form-header">Thông tin tài khoản</h4>
+                <div class="form-group">
+                    <label for="idName" class="form-label">Số điện thoại</label>
+                    <input type="text" class="form-control" id="idName" required>
+                </div>
+            </div>
+
+            <!-- Change Password Section -->
+            <div class="form-section">
+                <h4 class="form-header">Thay đổi mật khẩu</h4>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update Button Section (Centered) -->
+            <div class="form-section d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary save-btn">Cập nhật thông tin và mật khẩu</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
