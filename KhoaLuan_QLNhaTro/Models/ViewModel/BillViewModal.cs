@@ -10,6 +10,6 @@ namespace KhoaLuan_QLNhaTro.Models
         public string Status { get; set; }
         public List<DetailBillViewModel> Services { get; set; }
         public List<Room> Rooms { get; set; }
-        public decimal TotalBill { get; set; }
+        public decimal? TotalBill { get; set; }
     }
 }

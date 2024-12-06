@@ -12,6 +12,7 @@ namespace KhoaLuan_QLNhaTro.Models
         public DateTime PaymentDate { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
+        public DateTime? SettlementDate { get; set; }
         public Guid RoomId { get; set; }
         public Guid UserId { get; set; }
         public virtual Room Room { get; set; }

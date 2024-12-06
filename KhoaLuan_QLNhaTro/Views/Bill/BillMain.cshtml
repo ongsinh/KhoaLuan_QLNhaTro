@@ -61,8 +61,6 @@
                 {
                     <th>@service.Name</th> <!-- Tên dịch vụ được thêm làm cột -->
                 }
-                <th>Thu/Trả cọc</th>
-                <th>Cộng thêm/Giảm trừ</th>
                 <th>Tổng cộng</th>
                 <th>Trạng thái</th>
                 <th>Actions</th>
@@ -86,9 +84,6 @@
                             @service.TotalPrice <!-- Hiển thị tổng tiền cho dịch vụ -->
                         </td>
                     }
-                    <td>0 ₫</td>
-                    <td>0 ₫</td>
-                    <td>1000000 đ</td>
                     <td>@bill.TotalBill</td>
                     <td><span class="badge unpaid">Chưa thu</span></td>
                     <td>
@@ -138,6 +133,10 @@
                         <div class="col-md-4 mb-3 service-details">
                             <div id="service-details" class="service-details-modal" style="display: none;">
                                 <h5>Dịch vụ của phòng: <span id="selected-room-name"></span></h5>
+                                <div class="input-group">
+                                    <input type="date" class="form-control settlementdate" name="SettlementdDate" placeholder="Ngày chốt">
+                                    <span class="input-group-text">Ngày chốt</span>
+                                </div>
                                 <div id="services"></div>
                             </div>
                         </div>
@@ -215,7 +214,14 @@
                             <div style="display: none;">
                                 <input type="hidden" id="RoomId" name="RoomId" value="">
                             </div>
-                            <input type="hidden" id="ServicesData" name="ServicesData" value="">
+                            <div class="col-md-6 mb-3">
+                                <input type="date" id="SettlementDate" name="SettlementDate" value="">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Danh sách dịch vụ</label>
+                                <input  id="ServicesData" name="ServicesData" value="">
+                            </div>
+                            
 
                         </div>
 
@@ -360,12 +366,14 @@
             // When a room is selected
             $(".room-item").on("click", function () {
                 const roomId = $(this).data("room-id");
+                const settlementDate = $('.settlementdate').val();
                 if (tempInvoiceData.roomId && tempInvoiceData.roomId === roomId) {
                     // Nếu đã chọn phòng này rồi thì không làm gì thêm
                     return;
                 }
                 tempInvoiceData.roomId = roomId;
                 $("#RoomId").val(roomId);
+                $('#SettlementDate').val(settlementDate);
                 // AJAX to fetch room services
                 $.ajax({
                     url: '/Bill/GetRoomServices', // Controller endpoint to get services
@@ -376,29 +384,42 @@
                         $("#services").empty();
 
                         // Display the fetched services
-                        services.forEach(service => {
+                        services.forEach((service, index) => {
                             const serviceHtml = `
-                                            <div class="service-item" ">
-                                                <input type="checkbox" class="service-checkbox" data-service-id="${service.id}" checked> <span>${service.name}</span>
-                                        <p class="price">Giá: <b>${service.price}</b> / ${service.unit}</p>
-                                        ${service.unit === "kWh" || service.unit === "m3" ? `
-                                            <div class="input-group">
-                                                <input type="number" class="form-control old-value" placeholder="Số cũ">
-                                                <span class="input-group-text">Số cũ</span>
-                                            </div>
-                                            <div class="input-group">
-                                                <input type="number" class="form-control new-value" placeholder="Số mới">
-                                                <span class="input-group-text">Số mới</span>
-                                            </div>` : `
-                                            <div class="input-group">
-                                                <input type="number" class="form-control quantity" placeholder="Số lượng">
-                                                <span class="input-group-text">Số lượng</span>
-                                            </div>`}
-                                    </div>`;
+                <div class="service-item">
+                    <input type="checkbox" class="service-checkbox"
+                           name="DetailBill[${index}].ServiceId"
+                           value="${service.id}" checked>
+                    <span>${service.name}</span>
+                    <p class="price">Giá: <b>${service.price}</b> / ${service.unit}</p>
+                    ${service.unit === "kWh" || service.unit === "m3" ? `
+                        <div class="input-group">
+                            <input type="number" class="form-control old-value"
+                                   name="DetailBill[${index}].OldNumber"
+                                           value="${service.OldNumber || 0}"
+                                   placeholder="Số cũ">
+                            <span class="input-group-text">Số cũ</span>
+                        </div>
+                        <div class="input-group">
+                            <input type="number" class="form-control new-value"
+                                   name="DetailBill[${index}].NewNumber"
+                                                   value="${service.Number || 0}"
+                                   placeholder="Số mới">
+                            <span class="input-group-text">Số mới</span>
+                        </div>
+                    ` : `
+                        <div class="input-group">
+                            <input type="number" class="form-control quantity"
+                                   name="DetailBill[${index}].Number"
+                                   placeholder="Số lượng">
+                            <span class="input-group-text">Số lượng</span>
+                        </div>
+                    `}
+                </div>`;
                             $("#services").append(serviceHtml);
                         });
 
-                        // Show the service details
+                       
                         $("#service-details").show();
 
                         // Save room data temporarily
@@ -415,32 +436,44 @@
 
             // Transition to Step 2 (create invoice)
             $(".goToStep2").on("click", function () {
-
+                const settlementDate = $('.settlementdate').val(); // Lấy giá trị ngày chốt
+                // Gán ngày chốt vào trường ẩn trong form
+                $("#SettlementDate").val(settlementDate);
                 tempInvoiceData.services = [];
-
+                let isValid = true;
                 // Gather selected services
                 $(".service-item").each(function () {
                     const serviceCheckbox = $(this).find('.service-checkbox');  // Tìm checkbox của mỗi dịch vụ
-                    const serviceId = serviceCheckbox.data('service-id');  // Lấy data-service-id từ checkbox
+                    //const serviceId = serviceCheckbox.data('service-id');  // Lấy data-service-id từ checkbox
                     const checked = serviceCheckbox.is(":checked");
 
                     if (checked) {
+                        const serviceId = serviceCheckbox.val();
                         const oldValue = $(this).find('.old-value').val();
                         const newValue = $(this).find('.new-value').val();
                         const quantity = $(this).find('.quantity').val();
+                        const price = parseFloat($(this).find('.price b').text().trim());
+
+
                         const service = {
-                            serviceId:serviceId,
-                            oldValue: oldValue || null,
-                            newValue: newValue || null,
-                            quantity: quantity || null
+                            ServiceId:serviceId,
+                            Price: price || null,
+                            OldNumber: oldValue || null,
+                            NewNumber: newValue || null,
+                            Number: quantity || null
                         };
 
                         tempInvoiceData.services.push(service);
                     }
                 });
-                //$("#services-output").text(`RoomId: ${tempInvoiceData.roomId.toUpperCase()}`);
+                if (!isValid) {
+                    return;
+                }
+
+                //$("#services-output").text(JSON.stringify(tempInvoiceData.services, null, 2));
                 $("#ServicesData").val(JSON.stringify(tempInvoiceData.services));
-                alert("Dịch vụ đã được cập nhật, sẵn sàng tạo hóa đơn.");
+                //$("#SettlementDate").val(tempInvoiceData.settlementDate);
+                
             });
 
             $(".create-invoice-btn").on("click", function () {
@@ -449,17 +482,20 @@
                 const paymentDate = $('#PaymentDate').val(); // Hạn đóng tiền (kiểu string từ input)
                 const id_room = $('#RoomId').val();
                 const servicesData = $("#ServicesData").val();
+                const settlementDate = $('#SettlementDate').val()
 
                 // Chuyển đổi sang định dạng Date nếu cần thiết
                 const formattedCreateAt = new Datetime(createAt).toISOString();  // Định dạng ISO 8601
                 const formattedPaymentDate = new Date(paymentDate).toISOString();  // Định dạng ISO 8601
+                const formattedSettlementDate = new Date(settlementDate).toISOString();
+                const services = JSON.parse(servicesData);
 
                 const invoiceData = {
                     RoomId: id_room,  // ID phòng
+                    SettlementDate: formattedSettlementDate,
                     CreateAt: formattedCreateAt,  // Ngày lập hóa đơn dưới dạng ISO
                     PaymentDate: formattedPaymentDate,  // Hạn đóng tiền dưới dạng ISO
-                    //services: tempInvoiceData.services  // Danh sách dịch vụ
-                    Services: JSON.parse(servicesData)
+                    Services: services
                 };
 
                 $.ajax({
@@ -467,6 +503,7 @@
                     type: 'POST',
                     //data: invoiceData,  // Gửi dữ liệu trực tiếp từ form
                     contentType: 'application/json',
+                    dataType: 'json',
                     data: JSON.stringify(invoiceData),
                     success: function (response) {
                         if (response.success) {
@@ -483,12 +520,23 @@
                     }
                 });
             });
-
-
-
-
-
         });
+        $(document).on("input", ".service-item .new-value", function () {
+            const serviceItem = $(this).closest(".service-item");
+            const oldValue = parseFloat(serviceItem.find(".old-value").val()) || 0;
+            const newValue = parseFloat($(this).val()) || 0;
+
+            // Kiểm tra nếu số cuối nhỏ hơn số đầu
+            if (newValue < oldValue) {
+                $(this).addClass("is-invalid"); // Đánh dấu input không hợp lệ
+                serviceItem.find(".error-message").remove(); // Xóa lỗi cũ
+                serviceItem.append(`<div class="error-message" style="color: red;">Số mới phải lớn hơn hoặc bằng số cũ!</div>`);
+            } else {
+                $(this).removeClass("is-invalid"); // Xóa đánh dấu không hợp lệ
+                serviceItem.find(".error-message").remove(); // Xóa thông báo lỗi
+            }
+        });
+
 
     </script>
 

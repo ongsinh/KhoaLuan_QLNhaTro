@@ -67,7 +67,12 @@ namespace KhoaLuan_QLNhaTro.Models
                 .WithMany()  // Không cần ICollection trong Incident
                 .HasForeignKey(ir => ir.ContractId)
                 .OnDelete(DeleteBehavior.Restrict); // Hoặc DeleteBehavior.NoAction
-        }
+            modelBuilder.Entity<DetailBill>()
+                .HasOne(c => c.Service)
+                .WithMany(d => d.DetailBills)
+                .HasForeignKey(c => c.ServiceId)
+                .OnDelete(DeleteBehavior.SetNull);
 
+        }
     }
 }
