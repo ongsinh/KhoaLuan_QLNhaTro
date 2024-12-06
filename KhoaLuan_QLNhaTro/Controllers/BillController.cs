@@ -3,21 +3,25 @@ using KhoaLuan_QLNhaTro.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Security.Policy;
+using VnPayIntegration.Models;
 
 namespace KhoaLuan_QLNhaTro.Controllers
 {
     public class BillController : Controller
     {
         private readonly NhaTroDbContext _context;
+        private readonly IVnPayService _vnPayService;
 
         public IActionResult Index()
         {
             return View();
         }
 
-        public BillController(NhaTroDbContext context)
+        public BillController(NhaTroDbContext context, IVnPayService vnPayService)
         {
             _context = context;
+            _vnPayService = vnPayService;
         }
 
         //public IActionResult InvoiceList()
@@ -252,6 +256,58 @@ namespace KhoaLuan_QLNhaTro.Controllers
             return RedirectToAction("BillMain");
         }
 
+
+        //public IActionResult CreatePaymentUrlVnpay(PaymentInformationModel model)
+        //{
+        //    var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
+        //    return Redirect(url);
+        //}
+
+        [HttpGet]
+        public IActionResult PaymentCallbackVnpay()
+        {
+            var response = _vnPayService.PaymentExecute(Request.Query);
+            var billid = response.BillId;
+            var total = response.Total;
+            if (response.Success)
+            {
+                var bill = _context.Bills.FirstOrDefault(b => b.Id == billid);
+                if (bill != null)
+                {
+                    bill.Status = "Đã thanh toán";
+                    bill.Total = total;
+
+                    // Lưu thay đổi vào cơ sở dữ liệu
+                    _context.SaveChanges();
+                }
+            }
+            return View(response); // Trả về view với model PaymentResponseModel
+        }
+
+        [HttpPost]
+        public IActionResult CreatePaymentUrlVnpay([FromBody] PaymentInformationModel model)
+        {
+            try
+            {
+                var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
+
+                // Trả về URL thanh toán để frontend xử lý
+                return Json(new { success = true, paymentUrl = url });
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi nếu có
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+
+
+        public IActionResult Create()
+        {
+            return View();
+        }
 
     }
 

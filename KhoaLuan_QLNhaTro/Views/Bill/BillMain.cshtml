@@ -80,16 +80,20 @@
                     <td>@bill.RoomPrice</td>
                     @foreach (var service in bill.Services)
                     {
+                        var matchingService = bill.Services.FirstOrDefault(s => s.ServiceName == service.ServiceName);
                         <td>
-                            @service.TotalPrice <!-- Hiển thị tổng tiền cho dịch vụ -->
+                            @((matchingService != null) ? matchingService.TotalPrice : 0) <!-- Hiển thị giá trị 0 nếu không có dịch vụ -->
                         </td>
                     }
                     <td>@bill.TotalBill</td>
-                    <td><span class="badge unpaid">Chưa thu</span></td>
+                    <td><span class="badge unpaid">@bill.Status</span></td>
                     <td>
                         <div class="action-menu">
                             <i class="fas fa-ellipsis-v" onclick="showInvoiceEditModal()"></i>
                         </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" onclick="payBill('@bill.BillId', '@bill.TotalBill','@bill.RoomName')">Thanh toán</button>
                     </td>
                 </tr>
             }
@@ -536,6 +540,39 @@
                 serviceItem.find(".error-message").remove(); // Xóa thông báo lỗi
             }
         });
+
+        function payBill(billId, totalBill ,roomName) {
+            totalBill = parseFloat(totalBill);
+            // Xác nhận thông tin thanh toán
+            if (confirm(`Bạn có chắc chắn muốn thanh toán hóa đơn cho phòng: ${roomName} với tổng tiền: ${totalBill} VND?`)) {
+                // Gửi dữ liệu thanh toán lên server
+                const data = {
+                    BillId: billId,
+                    Total: totalBill,
+                    RoomName: roomName
+                };
+
+                // AJAX gửi dữ liệu lên controller
+                $.ajax({
+                    url: '/Bill/CreatePaymentUrlVnpay', // Đường dẫn tới action xử lý
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Thanh toán thành công!");
+                            window.location.href = response.paymentUrl;
+                        } else {
+                            alert("Thanh toán thất bại: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Đã xảy ra lỗi khi thanh toán!");
+                    }
+                });
+            }
+        }
+
 
 
     </script>
