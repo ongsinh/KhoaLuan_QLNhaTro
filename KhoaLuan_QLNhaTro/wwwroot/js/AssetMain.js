@@ -15,15 +15,40 @@ document.addEventListener('click', function (event) {
     });
 });
 
-// Function to open modal
-function openModal() {
-    document.getElementById('addModal').style.display = 'flex';
+function openModal(idHouse) {
+    if (idHouse) {
+        // Mở modal và xử lý với idHouse
+        console.log('ID Nhà Trọ:', idHouse);
+        // Code mở modal ở đây...
+    } else {
+        console.error('Không có idHouse');
+    }
+    const modal = $('#addModal');
+    if (!modal.length) {
+        alert("Không tìm thấy modal.");
+        return;
+    }
+
+    $.ajax({
+        url: '/Asset/AddAsset',
+        type: 'GET',
+        data: { idHouse: idHouse },
+        success: function (data) {
+            $('#addAssetFormContainer').html(data); // Load nội dung form vào modal
+            modal.show(); // Hiển thị modal
+        },
+        error: function () {
+            alert("Không thể tải form thêm tài sản.");
+        }
+    });
 }
 
-// Function to close modal
-function closeModal() {
-    document.getElementById('addModal').style.display = 'none';
+// Hàm đóng modal
+function closeModal(modalId) {
+    $("#" + modalId).hide();
 }
+
+
 
 function closeModal(modalId) {
     document.getElementById(modalId).style.display = "none";
@@ -42,6 +67,7 @@ function openEditModal(assetId) {
             } else {
                 $('#editAssetFormContainer').html(response);
                 $('#editModal').show();
+                //location.reload();
             }
         },
         error: function () {
@@ -94,3 +120,28 @@ function openDeleteModal(AssetId) {
             .catch(() => alert("Có lỗi xảy ra!"));
     }
 }
+
+//Nhà trọ
+$('#addHouseForm').submit(function (e) {
+    e.preventDefault();
+
+    const formData = $(this).serialize();
+
+    $.ajax({
+        url: $(this).attr('action'),
+        method: $(this).attr('method'),
+        data: formData,
+        success: function (response) {
+            if (response.success) {
+                alert('Thêm nhà trọ thành công!');
+                window.location.href = response.redirectUrl; // Chuyển hướng đến giao diện RoomMain
+            } else {
+                alert('Thêm nhà trọ thất bại. Vui lòng kiểm tra lại.');
+            }
+        },
+        error: function () {
+            alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+        }
+    });
+});
+

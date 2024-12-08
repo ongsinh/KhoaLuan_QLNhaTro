@@ -1,6 +1,8 @@
 ﻿
 <form asp-action="AddService" method="post">
     @Html.AntiForgeryToken()
+    <!-- Input ẩn lưu idHouse -->
+    <input type="hidden" name="IdHouse" value="@ViewBag.IdHouse" />
     <div>
         <label>Tên dịch vụ:</label>
         <input type="text" name="Name" required />
@@ -15,17 +17,38 @@
             <option value="kWh">kWh</option>
             <option value="Tháng">Tháng</option>
             <option value="Khối">Khối</option>
+            @* <option value="Người">Người</option> *@
         </select>
     </div>
     <div>
         <label>Chọn phòng áp dụng:</label>
-        <div class="room-checkboxes">
+        @* <div class="room-checkboxes">
             @foreach (var room in ViewBag.Rooms as List<Room>)
             {
                 <label>
                     <input type="checkbox" name="SelectedRooms" value="@room.Id" />
                     @room.Name
                 </label>
+            }
+        </div> *@
+        <div class="room-checkboxes">
+            @if (ViewBag.Rooms != null && ViewBag.Rooms.Count > 0)
+            {
+                foreach (var room in ViewBag.Rooms)
+                {
+                    <label>
+                        <input type="checkbox" name="SelectedRooms" value="@room.Id" id="room-@room.Id" />
+                        @room.Name
+                    </label>
+                    @* <div>
+                        <input type="checkbox" name="SelectedRooms" value="@room.Id" id="room-@room.Id" />
+                        <label for="room-@room.Id">@room.Name</label>
+                    </div> *@
+                }
+            }
+            else
+            {
+                <p>Không có phòng nào thuộc nhà trọ này.</p>
             }
         </div>
     </div>

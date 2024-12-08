@@ -17,5 +17,6 @@ namespace KhoaLuan_QLNhaTro.Models
         public Guid AccountId { get; set; }
         public virtual Account Account { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }
+        public virtual Room Room { get; set; }
     }
 }

@@ -1,0 +1,51 @@
+﻿.container {
+    margin-top: 30px;
+}
+.content .container {
+    padding: 0;
+    width: 100%;
+}
+.info-container {
+    display: flex; /* Sử dụng flexbox để bố trí */
+    justify-content: space-between; /* Giãn cách đều giữa các phần */
+    align-items: flex-start; /* Căn trên cùng */
+    gap: 20px; /* Khoảng cách giữa hai phần */
+    margin-bottom: 30px;
+}
+
+.user-info, .room-info, .service-info {
+    flex: 1; /* Chia đều không gian */
+    padding: 15px;
+    border: 1px solid #ddd; /* Viền mỏng để tách biệt */
+    border-radius: 8px; /* Bo góc */
+    background-color: #f9f9f9; /* Màu nền nhẹ */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+}
+
+.user-info {
+    margin-right: 10px; /* Khoảng cách bên phải */
+}
+
+.room-info {
+    margin-left: 10px; /* Khoảng cách bên trái */
+}
+
+h4 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.table {
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+}
+
+    .table th {
+        text-align: left; /* Căn trái tiêu đề */
+        background-color: #eaeaea; /* Màu nền cho tiêu đề */
+        padding: 10px;
+    }
+
+    .table td {
+        padding: 10px;
+        color: #555;
+    }

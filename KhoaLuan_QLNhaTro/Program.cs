@@ -37,6 +37,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -47,6 +48,6 @@ app.UseSession();  // Enable session middleware
 // Define default route
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Asset}/{action=AssetMain}/{id?}");
+    pattern: "{controller=Access}/{action=Login}/{id?}");
 
 app.Run();

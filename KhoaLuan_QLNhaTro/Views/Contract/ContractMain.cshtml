@@ -19,7 +19,8 @@
                 <h1>Tất cả hợp đồng</h1>
                 <p class="subtitle">Danh sách hợp đồng được tạo khi thêm phiên ở mới</p>
             </div>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contractModal">+</button>
+            <button class="add-button-contract" id="addContractButton" data-id-house="@ViewBag.HouseId">+</button>
+            @* <button class="add-button-contract" onclick="openModal()">+</button> *@
         </div>
         <div class="filter-section">
             <input type="text" class="search-bar" placeholder="Tìm kiếm hợp đồng...">
@@ -71,93 +72,24 @@
             </table>
         </div>
 
-        <div class="modal fade" id="contractModal" tabindex="-1" aria-labelledby="contractModalLabel" aria-hidden="true">
+        <!-- Modal -->
+        <div class="modal fade" id="contractModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <!-- Modal Header -->
                     <div class="modal-header">
-                        <h5 class="modal-title" id="contractModalLabel">Thêm hợp đồng mới</h5>
+                        <h5 class="modal-title">Thêm hợp đồng mới</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-
-                    <!-- Modal Body -->
-                    <div class="modal-body">
-                        <div class="row">
-                            <!-- Danh sách phòng -->
-                            <div class="col-md-4">
-                                <h6>Danh sách phòng</h6>
-                                <div class="list-group">
-                                    <label class="list-group-item">
-                                        <input class="form-check-input room-checkbox" type="radio" name="room" value="3" />
-                                        Phòng 3
-                                        <span class="badge bg-success float-end">Đang trống</span>
-                                        <div class="small text-muted">1.500.000 ₫</div>
-                                    </label>
-                                    <label class="list-group-item">
-                                        <input class="form-check-input room-checkbox" type="radio" name="room" value="5" />
-                                        Phòng 5
-                                        <span class="badge bg-success float-end">Đang trống</span>
-                                        <div class="small text-muted">1.500.000 ₫</div>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Thông tin khách thuê -->
-                            <div class="col-md-8">
-                                <form id="contractForm">
-                                    <h6>Thông tin khách thuê</h6>
-                                    <input type="hidden" id="roomId" name="roomId">
-                                    <div class="mb-3">
-                                        <label for="tenantName" class="form-label">Tên người</label>
-                                        <input type="text" id="tenantName" name="tenantName" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="tenantPhone" class="form-label">Số điện thoại</label>
-                                        <input type="text" id="tenantPhone" name="tenantPhone" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="idNumber" class="form-label">Số căn cước</label>
-                                        <input type="text" id="idNumber" name="idNumber" class="form-control" required>
-                                    </div>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="startDate" class="form-label">Ngày vào</label>
-                                            <input type="date" id="startDate" name="startDate" class="form-control" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="endDate" class="form-label">Ngày kết thúc</label>
-                                            <input type="date" id="endDate" name="endDate" class="form-control">
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Modal Footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn btn-success" id="submitContract">Thêm hợp đồng</button>
+                    <div class="modal-body" id="modalBody">
+                        <!-- Nội dung được load qua AJAX -->
                     </div>
                 </div>
             </div>
         </div>
-
-
+    </div>
 </body>
 </html>
-<script>
-    // function openPopup() {
-    //     document.getElementById('contractModal').style.display = 'flex';
-    //     }
-
-    //     function closePopup() {
-    //     document.getElementById('contractModal').style.display = 'none';
-    //     }
-
-    //     // Add event listener for the "+" button
-    //     document.querySelector('.add-button-contract').addEventListener('click', openPopup);
-
-    //     // Close the modal when the close button is clicked
-    //     document.querySelector('.close').addEventListener('click', closePopup);
-</script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="~/js/add-house.js"></script>
+<script src="~/js/contracmain.js"></script>

@@ -1,4 +1,5 @@
-﻿@model List<KhoaLuan_QLNhaTro.Models.Room>
+﻿@* @model List<KhoaLuan_QLNhaTro.Models.Room> *@
+    @model KhoaLuan_QLNhaTro.ViewModel.RoomMainViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,17 +32,18 @@
                 <thead class="thead-light">
                     <tr>
                         <th>Tên phòng</th>
-                        <th>Nhóm</th>
+                        @* <th>Nhóm</th> *@
                         <th>Giá thuê</th>
                         <th>Tiền cọc</th>
-                        <th>Khách thuê</th>
+                        @* <th>Diện tích</th> *@
+                        @* <th>Khách thuê</th> *@
                         <th>Ngày vào ở </th>
                         <th>Thời hạn hợp đồng</th>
                         <th>Tình trạng</th>
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                @*tbody>
                     @if (Model != null && Model.Any())
                     {
                         @foreach (var room in Model)
@@ -54,26 +56,56 @@
                                 <td>2 người</td>
                                 <td>@room.Contract.StartDate.ToString("dd/MM/yyyy")</td>
                                 <td>@room.Contract.Time Tháng</td>
-                                <td><span class="status-badge status-success">@room.Status</span></td>
-                        <td>
-                                    <!-- Thêm lớp edit-room-btn vào icon để dễ dàng thao tác -->
-                                    <i class="fas fa-ellipsis-v action-icon edit-room-btn" data-room-id="@room.Id"></i>
-                            <div class="popup-menu">
-                                        <a href="@Url.Action("DetailRoom", "Room", new { id = room.Id })"><i class="fas fa-info-circle"></i> Chi tiết phòng</a>
-                                        <a href="#" class="edit-room-btn" data-toggle="modal" data-target="#editRoomModal" data-room-id="@room.Id">
-                                    <i class="fas fa-dollar-sign"></i> Sửa thông tin phòng
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                                <td><span class="status-badge status-success">@room.Status</span></td> *@
+                <tbody>
+                    @if (Model.Rooms != null && Model.Rooms.Any())
+                    {
+                        foreach (var floorGroup in Model.Rooms.GroupBy(r => r.FLoorNumber))
+                        {
+                            <!-- Hiển thị tiêu đề tầng -->
+                            <tr class="table-secondary">
+                                <td colspan="8"><strong>Tầng @floorGroup.Key</strong></td>
+                            </tr>
+
+                            <!-- Danh sách phòng trong tầng -->
+                            @foreach (var room in floorGroup.OrderBy(r => r.Name))
+                            {
+                                <tr>
+                                    <td>@room.Name</td> <!-- Tên phòng tự động: Phòng 1, Phòng 2... -->
+                                    @* <td>@room.FLoorNumber</td> *@
+                                    <td>@room.Price.ToString("C0")</td> <!-- Giá phòng -->
+                                    <td>@(room.Contract?.Deposit != null ? $"{room.Contract.Deposit}đ" : "0đ")</td> <!-- Tiền cọc -->
+                                    @* <td>@room.Acreage</td> *@
+                                    
+                                    <td>@(room.Contract?.StartDate != null ? room.Contract.StartDate.ToString("dd/MM/yyyy") : "Không xác định")</td> <!-- Ngày bắt đầu -->
+                                    <td>@(room.Contract?.Time != null ? $"{room.Contract.Time} Tháng" : "Không xác định")</td> <!-- Thời hạn hợp đồng -->
+
+                                    <td>
+                                        <span class="badge @(room.Status == "Available" ? "badge-success" : "badge-danger")">
+                                            @room.Status
+                                        </span>
+                                    </td>
+                                    
+                            <td>
+                                        <!-- Thêm lớp edit-room-btn vào icon để dễ dàng thao tác -->
+                                        <i class="fas fa-ellipsis-v action-icon edit-room-btn" data-room-id="@room.Id"></i>
+                                <div class="popup-menu">
+                                            <a href="@Url.Action("DetailRoom", "Room", new { id = room.Id })"><i class="fas fa-info-circle"></i> Chi tiết phòng</a>
+                                            <a href="#" class="edit-room-btn" data-toggle="modal" data-target="#editRoomModal" data-room-id="@room.Id">
+                                        <i class="fas fa-dollar-sign"></i> Sửa thông tin phòng
+                                    </a>
+                                </div>
+                            </td>
+                            </tr>
                         }
                     }
-                    else
-                    {
-                    <tr>
-                            <td colspan="8" class="text-center">Không tìm thấy phòng nào khớp với từ khóa.</td>
-                    </tr>
-                    }
+                }
+                else
+                {
+                <tr>
+                    <td colspan="8" class="text-center">Không tìm thấy phòng nào khớp với từ khóa.</td>
+                </tr>
+                }
                 </tbody>
 
             </table>
@@ -125,7 +157,7 @@
             <!-- jQuery and Bootstrap JS -->
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="~/js/add-house.js"></script>
 
     <script>
         $(document).ready(function () {

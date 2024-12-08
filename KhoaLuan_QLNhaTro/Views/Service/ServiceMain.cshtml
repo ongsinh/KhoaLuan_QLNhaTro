@@ -15,8 +15,11 @@
                 <h1>Quản lý dịch vụ</h1>
                 <p class="subtitle">Các dịch vụ khách thuê xài</p>
             </div>
-            <!-- Add more services similarly -->
-            <button class="add-service-btn" onclick="openModal()">+</button>
+            <!-- Nút Thêm Dịch Vụ -->
+            <button class="add-service-btn" onclick="openAddServiceModal('@ViewBag.IdHouse')">+</button>
+            
+            @* <!-- Add more services similarly -->
+            <button class="add-service-btn" onclick="openModal()">+</button> *@
         </div>
      
 
@@ -117,17 +120,41 @@
     </div>
 </div>
 
-<!-- Popup for Adding New Service -->
-<div class="modal" id="addServiceModal">
+
+<div class="modal" id="addServiceModal" style="display: none;">
     <div class="modal-content">
         <span class="close" onclick="closeModal('addServiceModal')">&times;</span>
-        <h3>Thêm Dịch Vụ Mới</h3>
-        @Html.Partial("AddService", new KhoaLuan_QLNhaTro.Models.RoomService())
+        <h3>Thêm Dịch Vụ</h3>
+        <div id="addServiceFormContainer">
+            <!-- Nội dung form sẽ được load qua Ajax -->
+        </div>
     </div>
 </div>
 
+<!-- Popup for Adding New Service -->
+@* <div class="modal" id="addServiceModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('addServiceModal')">&times;</span>
+        <h3>Thêm Dịch Vụ Mới</h3>
+        @* @Html.Partial("AddService", new KhoaLuan_QLNhaTro.Models.RoomService()) 
+        <div id="addServiceFormContainer">
+            <!-- Nội dung form sẽ được tải qua Ajax -->
+        </div>
+    </div>
+</div> *@
+
 <!-- Edit Service Popup -->
 <div class="modal" id="editServiceModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editServiceModal')">&times;</span>
+        <h3>Chỉnh sửa Dịch Vụ</h3>
+        <div class="modal-body" id="editServiceFormContainer">
+            <!-- Nội dung AJAX sẽ load vào đây -->
+        </div>
+    </div>
+</div>
+
+@* <div class="modal" id="editServiceModal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('editServiceModal')">&times;</span>
         <h3>Chỉnh sửa Dịch Vụ</h3>
@@ -135,7 +162,8 @@
             <!-- Form sẽ được load vào đây qua Ajax -->
         </div>
     </div>
-</div>
+</div> *@
 
+<script src="~/js/add-house.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="~/js/servicemain.js"></script>

@@ -1,0 +1,66 @@
+﻿@model KhoaLuan_QLNhaTro.ViewModel.ContractViewModel
+
+<form asp-action="AddContract" id="addContractForm" method="post">
+    <input type="hidden" name="idHouse" value="@ViewBag.IdHouse" />
+    <div class="row">
+        <!-- Danh sách phòng -->
+        <div class="col-md-4">
+            <h6>Danh sách phòng</h6>
+            <select class="form-select" id="roomId" name="Contract.RoomId" required>
+                @foreach (var room in Model.Rooms)
+                {
+                    <option value="@room.Id">@room.Name - @room.Price VNĐ</option>
+                }
+            </select>
+        </div>
+
+        <!-- Thông tin khách thuê -->
+        <div class="col-md-8">
+            <h6>Thời hạn hợp đồng</h6>
+            <div class="mb-3">
+                <label for="startDate" class="form-label">Ngày vào</label>
+                <input type="date" id="startDate" name="Contract.StartDate" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="time" class="form-label">Thời hạn thuê (tháng)</label>
+                <input type="number" id="time" name="Contract.Time" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="deposit" class="form-label">Tiền cọc</label>
+                <input type="number" id="deposit" name="Contract.Deposit" class="form-control" required>
+            </div>
+            <h6>Thông tin khách thuê</h6>
+            <div class="mb-3">
+                <label for="tenantName" class="form-label">Tên khách thuê</label>
+                <input type="text" id="tenantName" name="Contract.User.Name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Số điện thoại</label>
+                <input type="number" id="phone" name="Contract.User.Account.Phone" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="cccd" class="form-label">Số căn cước</label>
+                <input type="number" id="cccd" name="Contract.User.CCCD" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="gender" class="form-label">Giới tính</label>
+                <select id="gender" name="Contract.User.Gender" class="form-control" required>
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="dob" class="form-label">Ngày sinh</label>
+                <input type="date" id="dob" name="Contract.User.Dob" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Địa chỉ</label>
+                <input type="text" id="address" name="Contract.User.Address" class="form-control" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">Thêm hợp đồng</button>
+    </div>
+</form>
