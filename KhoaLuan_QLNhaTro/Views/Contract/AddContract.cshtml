@@ -1,7 +1,8 @@
-﻿@model KhoaLuan_QLNhaTro.ViewModel.ContractViewModel
+﻿
+@model KhoaLuan_QLNhaTro.ViewModel.ContractViewModel
 
-<form asp-action="AddContract" method="post">
-    @Html.AntiForgeryToken()
+<form id="addContractForm" method="post" action="/Contract/AddContract">
+    @Html.AntiForgeryToken() <!-- Xác nhận có token anti-forgery -->
     <input type="hidden" name="HouseId" value="@Model.HouseId" />
     <div class="row">
         <!-- Danh sách phòng -->
