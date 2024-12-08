@@ -78,9 +78,9 @@
                 <tr>
                     <td>@bill.RoomName</td>
                     <td>@bill.RoomPrice</td>
-                    @foreach (var service in bill.Services)
+                    @foreach (var service in ViewBag.Services)
                     {
-                        var matchingService = bill.Services.FirstOrDefault(s => s.ServiceName == service.ServiceName);
+                        var matchingService = bill.Services.FirstOrDefault(s => s.ServiceName == service.Name);
                         <td>
                             @((matchingService != null) ? matchingService.TotalPrice : 0) <!-- Hiển thị giá trị 0 nếu không có dịch vụ -->
                         </td>
@@ -89,11 +89,11 @@
                     <td><span class="badge unpaid">@bill.Status</span></td>
                     <td>
                         <div class="action-menu">
-                            <i class="fas fa-ellipsis-v" onclick="showInvoiceEditModal()"></i>
+                            <i class="fas fa-ellipsis-v" onclick="showInvoiceEditModal('@bill.BillId')"></i>
                         </div>
                     </td>
                     <td>
-                        <button class="btn btn-primary" onclick="payBill('@bill.BillId', '@bill.TotalBill','@bill.RoomName')">Thanh toán</button>
+                        <button class="btn btn-primary" onclick="payBill('@bill.BillId', '@bill.TotalBill','@bill.RoomName')" >Thanh toán</button>
                     </td>
                 </tr>
             }
@@ -251,69 +251,66 @@
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h5 class="modal-title">Chỉnh sửa hóa đơn cho "Phòng 2"</h5>
+                    <h5 class="modal-title">Chỉnh sửa hóa đơn</h5>
                     <button type="button" class="close" onclick="closeInvoiceEditModal()" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
+                <form id="invoiceEditForm" asp-action="UpdateBill" asp-controller="Bill" method="post">
                 <!-- Modal Body -->
-                <div class="modal-body">
-                    <!-- Thông tin lập phiếu -->
-                    <div class="form-group">
-                        <label>Tháng lập phiếu</label>
-                        <input type="text" class="form-control" value="11/2024" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label>Ngày lập hóa đơn</label>
-                        <input type="date" class="form-control" value="2024-11-03">
-                    </div>
-                    <div class="form-group">
-                        <label>Hạn đóng tiền</label>
-                        <input type="date" class="form-control" value="2024-12-04">
-                    </div>
+                    <div class="modal-body">
+                        <!-- Thông tin lập phiếu -->
+                            <div class="form-group">
+                                <label>Tháng lập phiếu</label>
+                                <input type="text" class="form-control" value="11/2024" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày lập hóa đơn</label>
+                                <input type="date" id="DateCreate" name="CreateAt" class="form-control" value="2024-11-03">
+                            </div>
+                            <div class="form-group">
+                                <label>Hạn đóng tiền</label>
+                                <input type="date" id="DatePay" name="PaymentDate" class="form-control" value="2024-12-04">
+                            </div>
+                            <div class="form-group">
+                                <label>Tiền phòng: <p id="roomPrice"></p></label>
+                            </div>
+                            <div class="form-group">
+                                <input id="billId" name="BillId">
+                                <input id="servicesData" name="servicesData" value="">
+                            </div>
 
-                    <!-- Thu tiền hàng tháng -->
-                    <div class="billing-section mt-4">
-                        <h6>Thu tiền hàng tháng</h6>
-                        <p>Ngày vào: 10/09/2024</p>
-                        <p>Chu kỳ thu: <b>1 tháng, 1 ngày</b></p>
-                        <div class="d-flex justify-content-between">
-                            <span>1 tháng x 3.242.432.424 đ</span>
-                            <strong>3.242.432.424 đ</strong>
+                        <!-- Tiền dịch vụ -->
+                        <div class="services-section mt-4">
+                            @* <h6>Tiền dịch vụ</h6>
+                            <div class="service-item">
+                                <input type="checkbox" checked> Tiền điện
+                                <p>Giá: <b>4.000 đ</b> / KWh</p>
+                                <input type="number" placeholder="Số cũ"> <input type="number" placeholder="Số mới">
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox" checked> Tiền nước
+                                <p>Giá: <b>20.000 đ</b> / Tháng</p>
+                                <input type="number" value="1" placeholder="Tháng">
+                            </div> *@
+                            <!-- Các dịch vụ khác ở đây -->
+                        </div>
+
+                        <!-- Tổng cộng hóa đơn -->
+                        <div class="total-section mt-4">
+                            <div class="d-flex justify-content-between">
+                                <strong>Tổng cộng hóa đơn</strong>
+                                <strong id="totalBill">3.242.517.000 đ</strong>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Tiền dịch vụ -->
-                    <div class="services-section mt-4">
-                        <h6>Tiền dịch vụ</h6>
-                        <div class="service-item">
-                            <input type="checkbox" checked> Tiền điện
-                            <p>Giá: <b>4.000 đ</b> / KWh</p>
-                            <input type="number" placeholder="Số cũ"> <input type="number" placeholder="Số mới">
-                        </div>
-                        <div class="service-item">
-                            <input type="checkbox" checked> Tiền nước
-                            <p>Giá: <b>20.000 đ</b> / Tháng</p>
-                            <input type="number" value="1" placeholder="Tháng">
-                        </div>
-                        <!-- Các dịch vụ khác ở đây -->
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeInvoiceEditModal()">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-success" onclick="updateBill()">Chỉnh sửa hóa đơn</button>
                     </div>
-
-                    <!-- Tổng cộng hóa đơn -->
-                    <div class="total-section mt-4">
-                        <div class="d-flex justify-content-between">
-                            <strong>Tổng cộng hóa đơn</strong>
-                            <strong>3.242.517.000 đ</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="closeInvoiceEditModal()">Hủy bỏ</button>
-                    <button type="button" class="btn btn-success">Chỉnh sửa hóa đơn</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -351,10 +348,6 @@
 
         function CloseServiceDetails() {
             document.getElementById('service-details').style.display = 'none';
-        }
-
-        function showInvoiceEditModal() {
-            $('#invoiceEditModal').modal('show');
         }
 
         function closeInvoiceEditModal() {
@@ -560,7 +553,6 @@
                     data: JSON.stringify(data),
                     success: function (response) {
                         if (response.success) {
-                            alert("Thanh toán thành công!");
                             window.location.href = response.paymentUrl;
                         } else {
                             alert("Thanh toán thất bại: " + response.message);
@@ -572,8 +564,183 @@
                 });
             }
         }
+        //chỉnh sửa hóa đơn
+        function showInvoiceEditModal(billId) {
+            $('#invoiceEditModal').modal('show');
+            $('#invoiceEditModal').data('bill-id', billId);
+            // Gọi AJAX để lấy dữ liệu chi tiết hóa đơn
+            $.ajax({
+                url: '/Bill/GetBillDetails', // URL đến Action GetInvoiceDetails
+                type: 'GET',
+                data: { billId: billId },
+                success: function (data) {
+                    if (data.success) {
+                        // Điền dữ liệu vào modal
+                        $('#invoiceEditModal .modal-title').text(`Chỉnh sửa hóa đơn cho "${data.bill.RoomName}"`);
+                        $('#DateCreate').val(data.bill.CreateAt.split('T')[0]);
+                        $('#DatePay').val(data.bill.PaymentDate.split('T')[0]);
+                        $('#roomPrice').text(data.roomPrice.toLocaleString());
+                        $('#totalBill').text(data.totalBill.toLocaleString());
+                        $('#billId').val(billId);
 
+                        // Hiển thị danh sách dịch vụ
+                        const servicesContainer = $('#invoiceEditModal .services-section');
+                        servicesContainer.empty(); // Xóa dữ liệu cũ
 
+                        data.bill.Services.forEach(service => {
+                            // Kiểm tra nếu dịch vụ có StartNumber và EndNumber
+                            if (service.OldNumber != null && service.NewNumber != null) {
+                                // Dịch vụ có số đầu và số cuối (Ví dụ: Điện, Nước)
+                                servicesContainer.append(`
+                                            <div class="service-item" data-id="${service.ServiceId}">
+                                        <input type="checkbox" checked> ${service.ServiceName}
+                                        <p>Giá: <b>${service.Price}</b></p>
+                                        <label>Số đầu:</label>
+                                                <input type="number" class="old-number" value="${service.OldNumber}" placeholder="Số đầu"></br>
+                                        <label>Số cuối:</label>
+                                                <input type="number" class="new-number" value="${service.NewNumber}" placeholder="Số cuối">
+                                    </div>
+                                `);
+                            } else if (service.Number != null) {
+                                // Dịch vụ chỉ có số lượng (Ví dụ: Nước)
+                                servicesContainer.append(`
+                                            <div class="service-item" data-id="${service.ServiceId}">
+                                        <input type="checkbox" checked> ${service.ServiceName}
+                                        <p>Giá: <b>${service.Price}</b></p>
+                                        <label>Số lượng:</label>
+                                                <input type="number" class="quantity" value="${service.Number}" placeholder="Số lượng">
+                                    </div>
+                                `);
+                            }
+                        });
+
+                        // Hiển thị modal
+                        $('#invoiceEditModal').modal('show');
+                    } else {
+                        alert(data.message); // Nếu không có hóa đơn
+                    }
+                },
+                error: function (err) {
+                    console.error('Không thể lấy thông tin hóa đơn:', err);
+                }
+            });
+        }
+
+        // function updateBill() {
+        //     const services = [];
+        //     $('#invoiceEditModal .service-item').each(function () {
+        //         const serviceId = $(this).data('id');
+        //         const isChecked = $(this).find('input[type="checkbox"]').is(':checked');
+        //         const oldNumber = $(this).find('.old-number').val();
+        //         const newNumber = $(this).find('.new-number').val();
+        //         const quantity = $(this).find('.quantity').val();
+
+        //         if (isChecked) {
+        //             const service = ({
+        //                 ServiceId: serviceId,
+        //                 OldNumber: oldNumber || null,
+        //                 NewNumber: newNumber || null,
+        //                 Number: quantity || null
+        //             });
+        //             services.push(service);
+        //         }
+        //     });
+        //     $("#servicesData").val(JSON.stringify(services));
+
+        //     const createAt = $('#DateCreate').val();  // Ngày lập hóa đơn (kiểu string từ input)
+        //     const paymentDate = $('#DatePay').val(); // Hạn đóng tiền (kiểu string từ input)
+        //     const formattedCreateAt = new Date(createAt).toISOString();;  // Định dạng ISO 8601
+        //     const formattedPaymentDate = new Date(paymentDate).toISOString();  // Định dạng ISO 8601
+        //     const billId = $('#billId').text;
+        //     const servicesData = $("#servicesData").val();
+        //     const services = JSON.parse(servicesData);
+
+        //     const data = {
+        //         billId: billId,
+        //         createAt: formattedCreateAt,
+        //         paymentDate: formattedPaymentDate,
+        //         servicesData: services
+        //     };
+
+        //     // Gửi yêu cầu AJAX để cập nhật
+        //     $.ajax({
+        //         url: '/Bill/UpdateBill',
+        //         type: 'POST',
+        //         dataType: 'json',
+        //         contentType: 'application/json',
+        //         data: JSON.stringify(data),
+        //         success: function (response) {
+        //             if (response.success) {
+        //                 alert('Cập nhật hóa đơn thành công!');
+        //                 $('#invoiceEditModal').modal('hide');
+        //             } else {
+        //                 alert(response.message);
+        //             }
+        //         },
+        //         error: function (error) {
+        //             console.error('Không thể cập nhật hóa đơn:', error);
+        //         }
+        //     });
+        // }
+
+        function updateBill() {
+            const services = [];
+
+            // Thu thập dữ liệu từ các dịch vụ trong modal
+            $('#invoiceEditModal .service-item').each(function () {
+                const serviceId = $(this).data('id');
+                const isChecked = $(this).find('input[type="checkbox"]').is(':checked');
+                const oldNumber = $(this).find('.old-number').val();
+                const newNumber = $(this).find('.new-number').val();
+                const quantity = $(this).find('.quantity').val();
+
+                if (isChecked) {
+                    services.push({
+                        ServiceId: serviceId,
+                        OldNumber: oldNumber || null,
+                        NewNumber: newNumber || null,
+                        Number: quantity || null
+                    });
+                }
+            });
+
+            // Gán JSON dữ liệu dịch vụ vào input ẩn
+            $("#servicesData").val(JSON.stringify(services));
+
+            // Thu thập dữ liệu hóa đơn
+            const createAt = $('#DateCreate').val();  // Ngày lập hóa đơn
+            const paymentDate = $('#DatePay').val(); // Hạn đóng tiền
+            const billId = $('#billId').val();       // ID hóa đơn
+            const servicesData = $("#servicesData").val(); // JSON dịch vụ
+
+            // Dữ liệu gửi đến server
+            const data = {
+                billId: billId,
+                createAt: createAt,
+                paymentDate: paymentDate,
+                servicesData: JSON.parse(servicesData) // Chuyển đổi lại từ JSON string
+            };
+
+            // Gửi yêu cầu AJAX để cập nhật hóa đơn
+            $.ajax({
+                url: '/Bill/UpdateBill', // Endpoint trên server
+                type: 'POST',
+                contentType: 'application/json', // Kiểu dữ liệu gửi
+                data: JSON.stringify(data), // Chuyển đổi dữ liệu sang JSON string
+                success: function (response) {
+                    if (response.success) {
+                        alert('Cập nhật hóa đơn thành công!');
+                        $('#invoiceEditModal').modal('hide'); // Đóng modal
+                    } else {
+                        alert(response.message); // Hiển thị thông báo lỗi từ server
+                    }
+                },
+                error: function (error) {
+                    console.error('Không thể cập nhật hóa đơn:', error);
+                    alert('Đã xảy ra lỗi khi cập nhật hóa đơn.');
+                }
+            });
+        }
 
     </script>
 

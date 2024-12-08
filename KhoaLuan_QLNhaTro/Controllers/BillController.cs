@@ -309,6 +309,103 @@ namespace KhoaLuan_QLNhaTro.Controllers
             return View();
         }
 
+        [HttpGet]
+        public JsonResult GetBillDetails(string billId)
+        {
+            var bill = _context.Bills
+                .Where(b => b.Id == billId)
+                .Select(b => new
+                {
+                    b.Id,
+                    RoomName = b.Room.Name, // Get Room Name
+                    RoomPrice =b.Room.Price, // Get Room Price
+                    b.Status,
+                    //b.TotalBill,
+                    b.CreateAt,
+                    b.PaymentDate,
+                    Services = _context.DetailBills
+                        .Where(dbill => dbill.BillId == b.Id)
+                        .Select(dbill => new
+                        {
+                            dbill.ServiceId,
+                            dbill.BillId,
+                            ServiceName = dbill.Service.Name,
+                            dbill.Number,
+                            dbill.Price,
+                            dbill.OldNumber, // Số đầu nếu có
+                            dbill.NewNumber,   // Số cuối nếu có
+                            //TotalPrice = dbill.Quantity * dbill.UnitPrice,
+                            //dbill.UsageDetail
+                        })
+                        .ToList()
+                })
+                .FirstOrDefault();
+
+            if (bill == null)
+            {
+                return Json(new { success = false, message = "Hóa đơn không tồn tại!" });
+            }
+
+            // Tính tổng tiền của hóa đơn
+            decimal totalBill = bill.RoomPrice; // Tiền phòng
+            decimal roomPrice = bill.RoomPrice;
+            foreach (var service in bill.Services)
+            {
+                if (service.OldNumber != null && service.NewNumber != null)
+                {
+                    // Tính tiền nếu có số đầu và số cuối
+                    totalBill += (service.NewNumber.Value - service.OldNumber.Value) * service.Price;
+                }
+                else if (service.Number != null)
+                {
+                    // Tính tiền nếu có số lượng
+                    totalBill += service.Number.Value * service.Price;
+                }
+            }
+
+            return Json(new { success = true, bill, totalBill , roomPrice });
+        }
+
+        public IActionResult UpdateBill(string billId, DateTime createAt, DateTime paymentDate, string servicesData)
+        {
+
+
+            var bill = _context.Bills.Where(b => b.Id == billId).FirstOrDefault();
+
+            // Cập nhật thông tin hóa đơn
+            bill.CreateAt = createAt;
+            bill.PaymentDate = paymentDate;
+            var services = JsonConvert.DeserializeObject<List<DetailBill>>(servicesData);
+            foreach (var service in services)
+            {
+                // Tìm dịch vụ trong cơ sở dữ liệu
+                var detailBills = _context.DetailBills
+                    .Where(db => db.BillId == billId && db.ServiceId == service.ServiceId)
+                    .ToList();
+
+                if (detailBills.Any())
+                {
+                    // Cập nhật thông tin dịch vụ
+                    foreach (var detailBill in detailBills)
+                    {
+                        detailBill.OldNumber = service.OldNumber;
+                        detailBill.NewNumber = service.NewNumber;
+                        detailBill.Number = service.Number;
+                    }
+                }
+                else
+                {
+                    // Nếu không tìm thấy dịch vụ, trả về lỗi
+                    return Json(new { success = false, message = $"Dịch vụ với ID {service.ServiceId} không tồn tại trong hóa đơn!" });
+                }
+            }
+
+            // Lưu thay đổi vào cơ sở dữ liệu
+            _context.SaveChanges();
+
+            return Json(new { success = true, message = "Cập nhật hóa đơn và dịch vụ thành công!" });
+        }
+
     }
 
 }
