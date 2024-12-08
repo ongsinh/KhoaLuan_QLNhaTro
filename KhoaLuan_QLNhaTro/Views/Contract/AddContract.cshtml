@@ -1,15 +1,23 @@
 ﻿@model KhoaLuan_QLNhaTro.ViewModel.ContractViewModel
 
-<form asp-action="AddContract" id="addContractForm" method="post">
-    <input type="hidden" name="idHouse" value="@ViewBag.IdHouse" />
+<form asp-action="AddContract" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="HouseId" value="@Model.HouseId" />
     <div class="row">
         <!-- Danh sách phòng -->
         <div class="col-md-4">
             <h6>Danh sách phòng</h6>
             <select class="form-select" id="roomId" name="Contract.RoomId" required>
-                @foreach (var room in Model.Rooms)
+                @if (Model.Rooms != null && Model.Rooms.Any())
                 {
-                    <option value="@room.Id">@room.Name - @room.Price VNĐ</option>
+                    @foreach (var room in Model.Rooms)
+                    {
+                        <option value="@room.Id">@room.Name - @room.Price VNĐ</option>
+                    }
+                }
+                else
+                {
+                    <option value="">Không có phòng nào</option>
                 }
             </select>
         </div>

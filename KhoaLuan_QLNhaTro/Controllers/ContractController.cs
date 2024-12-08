@@ -34,44 +34,73 @@ namespace KhoaLuan_QLNhaTro.Controllers
         }
 
         // GET: Hiển thị form thêm hợp đồng
+        //public IActionResult AddContract(Guid idHouse)
+        //{
+        //    if (!_context.Houses.Any(h => h.Id == idHouse))
+        //    {
+        //        return NotFound("Không tìm thấy nhà với ID được cung cấp.");
+        //    }
+
+        //    var rooms = _context.Rooms
+        //        .Where(r => r.HouseId == idHouse && r.Status == "Còn Trống") // Lọc theo idHouse và trạng thái phòng
+        //        .ToList();
+
+        //    if (!rooms.Any())
+        //    {
+        //        return PartialView("AddContract", new ContractViewModel { Rooms = new List<Room>() });
+        //    }
+
+        //    var viewModel = new ContractViewModel
+        //    {
+        //        Rooms = rooms
+        //    };
+
+        //    return PartialView("AddContract", new ContractViewModel { Rooms = new List<Room>() });
+        //}
+
         public IActionResult AddContract(Guid idHouse)
         {
+            // Kiểm tra nhà có tồn tại không
             if (!_context.Houses.Any(h => h.Id == idHouse))
             {
                 return NotFound("Không tìm thấy nhà với ID được cung cấp.");
             }
 
+            // Lấy các phòng còn trống cho nhà với idHouse
             var rooms = _context.Rooms
-                .Where(r => r.HouseId == idHouse && r.Status == "Còn Trống") // Lọc theo idHouse và trạng thái phòng
+                .Where(r => r.HouseId == idHouse && r.Status == "Còn Trống")
                 .ToList();
 
             if (!rooms.Any())
             {
-                return PartialView("AddContract", new ContractViewModel { Rooms = new List<Room>() });
+                Console.WriteLine($"Không có phòng nào cho nhà với ID: {idHouse}");
             }
 
+            // Tạo ViewModel để truyền dữ liệu cho view
             var viewModel = new ContractViewModel
             {
-                Rooms = rooms
+                Rooms = rooms,
+                HouseId = idHouse
             };
 
+            ViewBag.IdHouse = idHouse; // Truyền HouseId vào ViewBag
+
+            // Trả về PartialView chứa form
             return PartialView("AddContract", viewModel);
         }
+
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AddContract(ContractViewModel viewModel, Guid houseId)
         {
+            houseId = viewModel.HouseId; // Lấy HouseId từ ViewModel
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                    // In hoặc log lỗi để xem chi tiết
-                    foreach (var error in errors)
-                    {
-                        Console.WriteLine(error);
-                    }
-                    return View(viewModel);
-                }
+                //if (!ModelState.IsValid)
+                //{
+                //    return View(viewModel);
+                //}
 
                 // Kiểm tra nếu khách thuê đã tồn tại dựa trên số căn cước công dân (CCCD)
                 var existingUser = _context.Users

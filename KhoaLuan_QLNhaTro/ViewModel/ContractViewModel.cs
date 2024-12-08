@@ -4,6 +4,7 @@ namespace KhoaLuan_QLNhaTro.ViewModel
 {
     public class ContractViewModel
     {
+        public Guid HouseId { get; set; }
         public Contract Contract { get; set; }
 
         // Danh sách phòng có sẵn để chọn
