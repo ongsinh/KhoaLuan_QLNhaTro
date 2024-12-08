@@ -5,20 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KhoaLuan_QLNhaTro.Controllers
 {
-    public class BillController : Controller
+    public class BillController : BaseController
     {
-        private readonly NhaTroDbContext _context;
+        //private readonly NhaTroDbContext _context;
 
-        public IActionResult Index()
+        //public BillController(NhaTroDbContext context)
+        //{
+        //    _context = context;
+        //}
+
+        public BillController(NhaTroDbContext context) : base(context)
         {
-            return View();
         }
-
-        public BillController(NhaTroDbContext context)
-        {
-            _context = context;
-        }
-
         //public IActionResult InvoiceList()
         //{
         //    var services = _context.Services.ToList();
@@ -50,6 +48,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
         //    // Truyền danh sách hóa đơn vào View
         //    return View(bills);
         //}
+
 
         public IActionResult BillMain()
         {

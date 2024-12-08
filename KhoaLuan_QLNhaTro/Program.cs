@@ -8,12 +8,12 @@ builder.Services.AddDbContext<NhaTroDbContext>( option => option.UseSqlServer(bu
 builder.Services.AddControllersWithViews();
 
 //Cấu jinhf sd Session
-builder.Services.AddDistributedMemoryCache(); // Use a memory cache to store session data
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set the timeout period for the session
-    options.Cookie.HttpOnly = true; // Make the session cookie HTTP-only
-    options.Cookie.IsEssential = true; // Make the session cookie essential
+builder.Services.AddDistributedMemoryCache(); // Cấu hình bộ nhớ đệm cho session
+
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian session sống
+    options.Cookie.HttpOnly = true; // Đảm bảo bảo mật cho cookie
+    options.Cookie.IsEssential = true; // Đảm bảo cookie cần thiết
 });
 
 var app = builder.Build();
@@ -26,17 +26,16 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
-
 app.UseSession();
-
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Asset}/{action=AssetMain}/{id?}");
+    pattern: "{controller=Access}/{action=Login}/{id?}");
 
 app.Run();

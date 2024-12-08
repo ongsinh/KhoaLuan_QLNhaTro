@@ -1,6 +1,70 @@
-﻿@model KhoaLuan_QLNhaTro.Models.Asset
+﻿@* @model KhoaLuan_QLNhaTro.Models.Asset
+<h2>Cập nhật tài sản</h2>
+
+<form method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="Name">Tên tài sản</label>
+        <input type="text" id="Name" name="Asset.Name" class="form-control" value="@Model.Asset.Name" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Price">Giá</label>
+        <input type="number" id="Price" name="Asset.Price" class="form-control" value="@Model.Asset.Price" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Status">Trạng thái</label>
+        <input type="text" id="Status" name="Asset.Status" class="form-control" value="@Model.Asset.Status" required />
+    </div>
+
+    <div class="form-group">
+        <label for="RoomId">Chọn phòng</label>
+        <select id="editRoom" name="RoomId" class="form-control" required>
+            @if (ViewBag.Rooms != null)
+            {
+                var rooms = ViewBag.Rooms as List<KhoaLuan_QLNhaTro.Models.Room>;
+                if (rooms != null && rooms.Any())
+                {
+                    @foreach (var room in rooms)
+                    {
+                        // Kiểm tra xem RoomId có phải là Room.Id hiện tại không
+                        if (room.Id == Model.Asset.RoomId)
+                        {
+                            <option value="@room.Id" selected>@room.Name</option>
+                            // Nếu là phòng đã chọn, thêm 'selected'
+                        }
+                        else
+                        {
+                            <option value="@room.Id">@room.Name</option>
+                            // Các phòng còn lại
+                        }
+                    }
+                }
+                else
+                {
+                    <option disabled>Không có phòng nào.</option>
+                }
+            }
+            else
+            {
+                <option disabled>Không có phòng nào.</option>
+            }
+        </select>
+    </div>
+
+    <!-- Trường ẩn để gửi HouseId -->
+    <input type="hidden" name="HouseId" value="@ViewBag.IdHouse" />
+
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <button type="button" class="close-modal" onclick="closeModal('editModal')">Đóng</button>
+</form> *@
+
+@model KhoaLuan_QLNhaTro.Models.Asset
 
 <form method="post" asp-action="EditAsset" id="editAssetForm">
+    <input type="hidden" name="HouseId" value="@ViewBag.HouseId" />
     <!-- Tên tài sản -->
     <label for="editAssetName">Tên tài sản</label>
     <input type="text" id="editAssetName" name="Name" value="@Model.Name" required>
@@ -9,45 +73,45 @@
     <label for="editAssetValue">Giá trị tài sản</label>
     <input type="text" id="editAssetValue" name="Price" value="@Model.Price" required>
 
-    <!-- Số lượng -->
-    <label for="editQuantity">Số lượng</label>
-    <input type="number" id="editQuantity" name="Number" value="@Model.Number" required>
-
     <!-- Trạng thái -->
     <label for="editStatus">Trạng thái</label>
     <input type="text" id="editStatus" name="Status" value="@Model.Status" required>
 
     <!-- Chọn phòng -->
     <label for="editRoom">Chọn phòng</label>
-    <select id="editRoom" name="RoomId" required>
-        @{
-            var rooms = ViewBag.Rooms as List<KhoaLuan_QLNhaTro.Models.Room>; // Ép kiểu ViewBag.Rooms
-            if (rooms != null && Model.RoomId != Guid.Empty) // Kiểm tra danh sách phòng và RoomId
+    
+    <select id="editRoom" name="RoomId" class="form-control" required>
+        @if (ViewBag.Rooms != null)
+        {
+            var rooms = ViewBag.Rooms as List<KhoaLuan_QLNhaTro.Models.Room>;
+            if (rooms != null && rooms.Any())
             {
-                var selectedRoom = rooms.FirstOrDefault(r => r.Id == Model.RoomId);
-                if (selectedRoom != null)
+                @foreach (var room in rooms)
                 {
-                    <option value="@selectedRoom.Id" selected>@selectedRoom.Name</option>
-                }
-
-                foreach (var room in rooms)
-                {
-                    if (room.Id != Model.RoomId) // Đưa các phòng còn lại vào danh sách
+                    // Kiểm tra xem RoomId có phải là Room.Id hiện tại không
+                    if (room.Id == Model.RoomId)
+                    {
+                        <option value="@room.Id" selected>@room.Name</option>
+                        // Nếu là phòng đã chọn, thêm 'selected'
+                    }
+                    else
                     {
                         <option value="@room.Id">@room.Name</option>
+                        // Các phòng còn lại
                     }
                 }
             }
+            else
+            {
+                <option disabled>Không có phòng nào.</option>
+            }
+        }
+        else
+        {
+            <option disabled>Không có phòng nào.</option>
         }
     </select>
 
-
-    @* <select id="editRoom" name="RoomId" required>
-        @foreach (var room in ViewBag.Rooms as List<KhoaLuan_QLNhaTro.Models.Room>)
-        {
-            <option value="@room.Id" selected="@((room.Id == Model.RoomId) ? "selected" : "")">@room.Name</option>
-        }
-    </select> *@
 
     <!-- Trường AssetId ẩn -->
     <input type="hidden" id="editAssetId" name="Id" value="@Model.Id">

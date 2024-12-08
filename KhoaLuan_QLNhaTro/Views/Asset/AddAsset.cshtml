@@ -1,62 +1,24 @@
-﻿@* @model KhoaLuan_QLNhaTro.ViewModel.AssetViewModel
-
-    <form method="post" asp-action="AddAsset">
-        <div class="form-group">
-            <label for="assetName">Tên tài sản</label>
-            <input type="text" id="assetName" name="Name" class="form-control" placeholder="Nhập tên tài sản" required>
-        </div>
-
-        <div class="form-group">
-            <label for="assetValue">Giá trị tài sản</label>
-            <input type="number" id="assetValue" name="Price" class="form-control" placeholder="Nhập giá trị tài sản" required>
-        </div>
-
-        <div class="form-group">
-            <label for="quantity">Số lượng</label>
-            <input type="number" id="quantity" name="Number" class="form-control" placeholder="Nhập số lượng" required>
-        </div>
-
-        <div class="form-group">
-            <label for="roomId">Chọn phòng</label>
-            <select id="roomId" name="Asset.RoomId" class="form-control" required>
-                <option value="">Chọn phòng</option>
-                @foreach (var room in Model.Rooms)
-                {
-                    <option value="@room.Id" selected="@((Model.Asset.RoomId == room.Id) ? "selected" : "")">@room.Name</option>
-                }
-            </select>
-        </div>
-
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Thêm tài sản</button>
-            <button type="button" class="btn btn-secondary" onclick="closeModal('addModal')">Đóng</button>
-        </div>
-    </form> *@
-
-
-
-
+﻿
 @model KhoaLuan_QLNhaTro.ViewModel.AssetViewModel
+<form asp-action="AddAsset" method="post">
+    @Html.AntiForgeryToken()
 
-<form method="post" asp-action="AddAsset">
+    <!-- Truyền ID nhà trọ qua một input hidden -->
+    <input type="hidden" name="idHouse" value="@ViewBag.IdHouse" />
+
     <div class="form-group">
         <label for="assetName">Tên tài sản</label>
-        <input type="text" id="assetName" name="Name" class="form-control" placeholder="Nhập tên tài sản" required>
+        <input type="text" id="assetName" name="Asset.Name" class="form-control" placeholder="Nhập tên tài sản" required>
     </div>
 
     <div class="form-group">
         <label for="assetValue">Giá trị tài sản</label>
-        <input type="number" id="assetValue" name="Price" class="form-control" placeholder="Nhập giá trị tài sản" required>
-    </div>
-
-    <div class="form-group">
-        <label for="quantity">Số lượng</label>
-        <input type="number" id="quantity" name="Number" class="form-control" placeholder="Nhập số lượng" required>
+        <input type="number" id="assetValue" name="Asset.Price" class="form-control" placeholder="Nhập giá trị tài sản" required>
     </div>
 
     <div class="form-group">
         <label for="status">Trạng thái</label>
-        <input type="text" id="status" name="Status" class="form-control" placeholder="Nhập trạng thái" required>
+        <input type="text" id="status" name="Asset.Status" class="form-control" placeholder="Nhập trạng thái" required>
     </div>
 
     <!-- Danh sách phòng trọ -->
@@ -70,8 +32,7 @@
         }
         else
         {
-            <select id="roomId" name="RoomId" class="form-control" required>
-               @*  <option value="">Chọn phòng</option> *@
+            <select id="roomId" name="Asset.RoomId" class="form-control" required>
                 @foreach (var room in ViewBag.Rooms as List<KhoaLuan_QLNhaTro.Models.Room>)
                 {
                     <option value="@room.Id">@room.Name</option>
@@ -79,9 +40,58 @@
             </select>
         }
     </div>
+
     <div class="btn">
         <button type="submit" class="btn btn-primary">Thêm tài sản</button>
         <button type="button" class="btn btn-secondary" onclick="closeModal('addModal')">Đóng</button>
     </div>
-    
 </form>
+
+
+
+@* <form asp-action="AddAsset" method="post">
+    @Html.AntiForgeryToken()
+
+    <!-- Truyền ID nhà trọ qua một input hidden -->
+    <input type="hidden" name="idHouse" value="@ViewBag.IdHouse" />
+
+    <div class="form-group">
+        <label for="assetName">Tên tài sản</label>
+        <input type="text" id="Name" name="Name" class="form-control" placeholder="Nhập tên tài sản" required>
+    </div>
+
+    <div class="form-group">
+        <label for="assetValue">Giá trị tài sản</label>
+        <input type="number" id="Price" name="Price" class="form-control" placeholder="Nhập giá trị tài sản" required>
+    </div>
+
+    <div class="form-group">
+        <label for="status">Trạng thái</label>
+        <input type="text" id="Status" name="Status" class="form-control" placeholder="Nhập trạng thái" required>
+    </div>
+
+    <!-- Danh sách phòng trọ -->
+    <div class="form-group">
+        <label for="roomId">Chọn phòng</label>
+        @if (ViewBag.Rooms == null || !(ViewBag.Rooms as List<KhoaLuan_QLNhaTro.Models.Room>).Any())
+        {
+            <div class="alert alert-danger">
+                Không có phòng nào trong danh sách. Vui lòng thêm phòng trước!
+            </div>
+        }
+        else
+        {
+            <select id="RoomId" name="RoomId" class="form-control" required>
+                @foreach (var room in ViewBag.Rooms as List<KhoaLuan_QLNhaTro.Models.Room>)
+                {
+                    <option value="@room.Id">@room.Name</option>
+                }
+            </select>
+        }
+    </div>
+
+    <div class="btn">
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('addModal')">Đóng</button>
+    </div>
+</form> *@

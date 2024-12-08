@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KhoaLuan_QLNhaTro</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/KhoaLuan_QLNhaTro.styles.css" asp-append-version="true" />
+    <link href="~/css/layoutuser.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="sidebar">
+        <h3>Phòng trọ</h3>
+        <a href="@Url.Action("RoomMain", "Room")"><i class="fas fa-shopping-cart"></i> Thông tin</a>
+        <a href="@Url.Action("BillMain", "Bill")"><i class="fas fa-tachometer-alt"></i> Hóa đơn</a>
+        <a href="@Url.Action("BillMain", "Bill")"><i class="fas fa-tachometer-alt"></i> Lịch sử thanh toán</a>
+        <a href="@Url.Action("ServiceMain", "Service")"><i class="fas fa-user-tie"></i> Sự cố</a>
+    </div>
+
+    <div class="content">
+        <!-- Logout Section -->
+        <div class="logout-section">
+            <button onclick="window.location.href='/Access/Logout'">Logout</button>
+        </div>
+
+        <div class="container">
+            <main role="main">
+                @RenderBody()
+            </main>
+        </div>
+        
+    </div>
+    <script src="~/js/add-house.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+</body>
+</html>

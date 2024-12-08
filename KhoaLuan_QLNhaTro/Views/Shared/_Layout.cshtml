@@ -11,24 +11,46 @@
 </head>
 <body>
     <div class="sidebar">
-        <div class="sidebar-header">
+        @* <div class="sidebar-header">
             <div class="notification-badge">2</div>
             <div class="icon-text">
                 <div class="house-icon" id="houseIcon">🏠</div>
                 <div>
                     <div class="status-text">Đang quản lý</div>
-                    <div class="property-name">Nhà trọ 123456789</div>
+                    <div class="property-name">
+                        @ViewBag.HouseName
+                    </div>
                 </div>
             </div>
-            <div class="add-button" >+</div>
+           
+            <div class="add-button" id="addHouseButton">
+                <i class="fas fa-plus"></i> 
+            </div>
+
+        </div> *@
+        <div class="sidebar-header" id="sidebarHeader">
+            @* <div class="notification-badge">2</div> *@
+            <div class="icon-text" id="iconText">
+                <div class="house-icon" id="houseIcon">🏠</div>
+                <div>
+                    <div class="status-text">Đang quản lý</div>
+                    <div class="property-name">
+                        @ViewBag.HouseName
+                    </div>
+                </div>
+            </div>
+
+            <div class="add-button" id="addHouseButton">
+                <i class="fas fa-plus"></i>
+            </div>
         </div>
-        <a href="@Url.Action("RoomMain", "Room")"><i class="fas fa-shopping-cart"></i> Quản lý phòng</a>
+        <a href="@Url.Action("RoomMain", "Room", new { houseId = ViewBag.HouseId })"><i class="fas fa-shopping-cart"></i> Quản lý phòng</a>
         <a href="@Url.Action("BillMain", "Bill")"><i class="fas fa-tachometer-alt"></i> Quản lý hóa đơn</a>
-        <a href="@Url.Action("ServiceMain", "Service")"><i class="fas fa-user-tie"></i> Quản lý dịch vụ</a>
-        <a href="@Url.Action("AssetMain", "Asset")"><i class="fas fa-user"></i> Quản lý tài sản</a> 
-        <a href="@Url.Action("ContractMain", "Contract")"><i class="fas fa-box"></i> Quản lý hợp đồng</a>
-        <a href="@Url.Action("UserMain", "User")"><i class="fas fa-receipt"></i> Quản lý khách thuê</a>
-        <a href="@Url.Action("ReportMain", "Report")"><i class="fas fa-cogs"></i> Quản lý sự cố</a>
+        <a href="@Url.Action("ServiceMain", "Service", new { idHouse = ViewBag.HouseId })"><i class="fas fa-user-tie"></i> Quản lý dịch vụ</a>
+        <a href="@Url.Action("AssetMain", "Asset", new { idHouse = ViewBag.HouseId })"><i class="fas fa-user"></i> Quản lý tài sản</a>
+        <a href="@Url.Action("ContractMain", "Contract", new { houseId = ViewBag.HouseId })"><i class="fas fa-box"></i> Quản lý hợp đồng</a>
+        <a href="@Url.Action("UserMain", "User", new { houseId = ViewBag.HouseId })"><i class="fas fa-receipt"></i> Quản lý khách thuê</a>
+        <a href="@Url.Action("IncidentMain", "Incident", new { idHouse = ViewBag.HouseId })"><i class="fas fa-cogs"></i> Quản lý sự cố</a>
         <a href="@Url.Action("ReportMain", "Report")"><i class="fas fa-chart-line"></i> Báo cáo doanh thu</a>
     </div>
 
@@ -43,10 +65,9 @@
                 @RenderBody()
             </main>
         </div>
-        @* @Html.Partial("AddHouseModal") *@
+        
     </div>
 
-    @* Add House *@
     <div class="modal fade" id="addHouseModal" tabindex="-1" role="dialog" aria-labelledby="addHouseModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -57,7 +78,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="addHouseForm" asp-action="CreateHouse" method="post">
+                    <form id="addHouseForm" asp-action="CreateHouseAndRooms" method="post">
+                        <!-- Nhập tên và địa chỉ -->
                         <div class="form-group">
                             <label for="Name">Tên Nhà Trọ</label>
                             <input type="text" class="form-control" id="Name" name="Name" placeholder="Nhập tên nhà trọ" required />
@@ -66,21 +88,19 @@
                             <label for="Address">Địa Chỉ</label>
                             <input type="text" class="form-control" id="Address" name="Address" placeholder="Nhập địa chỉ" required />
                         </div>
+
+                        <!-- Nhập số tầng -->
                         <div class="form-group">
                             <label for="floorNumber">Số Tầng</label>
                             <input type="number" class="form-control" id="floorNumber" name="floorNumber" placeholder="Nhập số tầng" required onchange="generateFloorInputs()" />
                         </div>
-                        <div class="form-group">
-                            <label for="roomNumber">Số Phòng</label>
-                            <input type="number" class="form-control" id="roomNumber" name="roomNumber" placeholder="Nhập tổng số phòng" required />
-                        </div>
 
-                        <!-- Nơi tạo các ô nhập số phòng cho mỗi tầng -->
+                        <!-- Các ô nhập số phòng cho từng tầng -->
                         <div id="floorInputs"></div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="button" class="btn btn-primary" id="saveHouseButton">Lưu</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
                         </div>
                     </form>
                 </div>
@@ -88,14 +108,14 @@
         </div>
     </div>
 
-
-    @* Hiện list *@
+     @* Hiện list *@
     <!-- House List Modal -->
     <div class="modal fade" id="houseListModal" tabindex="-1" role="dialog" aria-labelledby="houseListModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="houseListModalLabel">
+
                         <i class="fas fa-home"></i> Danh sách nhà trọ của bạn
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -103,148 +123,17 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- Example of a house item -->
-                    <div class="house-item active">
-                        <div class="form-row">
-                            <div class="form-group col-md-8">
-                                <strong>Nhà trọ Nha12334</strong>
-                                <p>96 Định Công, Quận Hoàng Mai , Hà Nội</p>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                <button class="btn btn-edit"><i class="fas fa-edit" onclick="showEditModalHouse()"></i></button>
-                                <button class="btn btn-select"><i class="fas fa-arrow-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Nội dung nhà trọ sẽ được cập nhật ở đây thông qua JavaScript -->
                 </div>
             </div>
         </div>
     </div>
 
-    @* modal chỉnh sửa thông tin nhà trọ *@
-    <!-- Modal Structure -->
-    <div class="modal fade edit-property-modal" id="editPropertyModal" tabindex="-1" aria-labelledby="editPropertyModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editPropertyModalLabel"><i class="bi bi-house-door-fill"></i> Chỉnh sửa thông tin Nha12334</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    <!-- Section: Basic Information -->
-                    <div class="form-section">
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="propertyName" class="form-label">Tên nhà trọ</label>
-                                <input type="text" class="form-control" id="propertyName" value="Nha12334">
-                            </div>
-                        </div>
-                    </div>
-
-                    @* <!-- Section: Data Initialization -->
-                    <div class="form-section">
-                        <div class="form-section-title">Chọn phương thức khởi tạo dữ liệu</div>
-                        <p class="form-section-note">Ghi chú: Vui lòng chọn số tầng và nhập số phòng để hệ thống tự động tạo dữ liệu phòng cho bạn.</p>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="floorCount" class="form-label">Số tầng</label>
-                                <input type="number" class="form-control" id="floorCount" min="1">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="roomCount" class="form-label">Số phòng</label>
-                                <input type="number" class="form-control" id="roomCount" min="1">
-                            </div>
-                        </div>
-                    </div> *@
-
-                    <!-- Section: Non-editable Information -->
-                    <div class="form-section">
-                        <div class="form-section-title">Thông tin không thể chỉnh sửa:</div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Số tầng </label>
-                                <input type="text" class="form-control" value="5 tầng" readonly>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Số phòng</label>
-                                <input type="text" class="form-control" value="15" readonly>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section: Address -->
-                    <div class="form-section">
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="detailedAddress" class="form-label">Địa chỉ chi tiết</label>
-                                <input type="text" class="form-control" id="detailedAddress" value="122 Nguyen Duy Trinh">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section: Basic Data -->
-                    <div class="form-section">
-                        <div class="form-section-title">Thông tin cơ bản:</div>
-                        <p class="text-danger">*Các thông tin dưới đây chỉ áp dụng cho lúc tạo nhà trọ tự động và khởi tạo đăng tin cho thuê</p>
-                        @* <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="averagePrice" class="form-label">Giá thuê trung bình (₫)</label>
-                                <input type="text" class="form-control" id="averagePrice" value="3,242,432.424">
-                            </div>
-                        </div> *@
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-success">Chỉnh sửa Nhà trọ</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
+    <script src="~/js/add-house.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        var addHouseUrl = '@Url.Action("AddHouseModal", "HomeController")'; // Thay YourControllerName bằng tên controller của bạn
-
-        $(document).ready(function () {
-            // Mở modal khi bấm vào dấu cộng
-             $('.add-button').click(function () {
-                 window.location.href = '@Url.Action("AddHouse", "Room")';  // Chuyển hướng tới action AddHouse ở trong Controller
-             });
-            $('.close, .btn-secondary').click(function () {
-                $('#addHouseModal').modal('hide');
-            });
-            $('#houseIcon').click(function () {
-                $('#houseListModal').modal('show');
-            });
-            $('.close').click(function () {
-                $('#houseListModal').modal('hide');
-            });
-        });
-
-        function generateFloorInputs() {
-            const totalFloors = document.getElementById("floorNumber").value;
-            const floorInputs = document.getElementById("floorInputs");
-
-            floorInputs.innerHTML = ""; // Xóa các ô nhập cũ nếu có
-            for (let i = 1; i <= totalFloors; i++) {
-                floorInputs.innerHTML += `
-                    <div class="form-group">
-                        <label for="floor${i}">Số phòng tầng ${i}:</label>
-                        <input type="number" class="form-control" name="floorRooms[${i}]" id="floor${i}" min="1" required />
-                    </div>
-                `;
-            }
-        }
-
-    </script>
-    @await RenderSectionAsync("Scripts", required: false)
+    
 </body>
 </html>

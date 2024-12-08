@@ -1,19 +1,23 @@
 ﻿using KhoaLuan_QLNhaTro.Models;
+using KhoaLuan_QLNhaTro.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace KhoaLuan_QLNhaTro.Controllers
 {
-    public class RoomController : Controller
+    public class RoomController : BaseController
     {
-        private readonly NhaTroDbContext _context;
+        //private readonly NhaTroDbContext _context;
 
-        public RoomController(NhaTroDbContext context)
+        //public RoomController(NhaTroDbContext context)
+        //{
+        //    _context = context;
+        //}
+
+        public RoomController(NhaTroDbContext context) : base(context)
         {
-            _context = context;
         }
-
         public IActionResult AddHouse()
         {
             return View();
@@ -37,27 +41,162 @@ namespace KhoaLuan_QLNhaTro.Controllers
             return View(room);
         }
 
-        public IActionResult RoomMain()
-        {
-            // Tải dữ liệu từ database vào bộ nhớ
-            var rooms = _context.Rooms
-                .Include(r => r.Contract)
-                .Include(r => r.User)
-                .ToList();
+        //public IActionResult RoomMain()
+        //{
+        //    // Tải dữ liệu từ database vào bộ nhớ
+        //    var rooms = _context.Rooms
+        //        .Include(r => r.Contract)
+        //        .Include(r => r.User)
+        //        .ToList();
 
-            // Thực hiện sắp xếp trong bộ nhớ
-            var sortedRooms = rooms
-                .OrderBy(r =>
+        //    // Thực hiện sắp xếp trong bộ nhớ
+        //    var sortedRooms = rooms
+        //        .OrderBy(r =>
+        //        {
+        //            var digits = new string(r.Name.Where(char.IsDigit).ToArray());
+        //            return int.TryParse(digits, out int number) ? number : int.MaxValue;
+        //        })
+        //        .ThenBy(r => r.Name)
+        //        .ToList();
+
+        //    return View(sortedRooms);
+        //}
+
+        public IActionResult RoomMain(Guid? houseId)
+        {
+            // Kiểm tra nếu houseId không có trong URL
+            if (houseId == null || houseId == Guid.Empty)
+            {
+                // Thử lấy houseId từ session
+                var houseIdString = HttpContext.Session.GetString("HouseId");
+                if (!string.IsNullOrEmpty(houseIdString) && Guid.TryParse(houseIdString, out Guid sessionHouseId))
                 {
-                    var digits = new string(r.Name.Where(char.IsDigit).ToArray());
-                    return int.TryParse(digits, out int number) ? number : int.MaxValue;
-                })
+                    houseId = sessionHouseId;
+                }
+                else
+                {
+                    // Nếu không có houseId trong session, chuyển về trang mặc định
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            // Lấy thông tin nhà trọ từ cơ sở dữ liệu
+            var house = _context.Houses.FirstOrDefault(h => h.Id == houseId.Value);
+            if (house == null)
+            {
+                return NotFound(); // Nếu không tìm thấy nhà trọ
+            }
+
+            // Lấy danh sách phòng của nhà trọ
+            var rooms = _context.Rooms
+                .Where(r => r.HouseId == houseId.Value)
+                .OrderBy(r => r.FLoorNumber)
                 .ThenBy(r => r.Name)
                 .ToList();
 
-            return View(sortedRooms);
+            // Tạo ViewModel để truyền dữ liệu vào view
+            var model = new RoomMainViewModel
+            {
+                HouseId = houseId.Value,
+                Rooms = rooms
+            };
+
+            // Truyền tên nhà trọ vào ViewBag
+            ViewBag.HouseName = house.Name;
+
+            // Lưu houseId vào session để dùng cho các lần truy cập sau
+            HttpContext.Session.SetString("HouseId", house.Id.ToString());
+            HttpContext.Session.SetString("HouseName", house.Name);
+
+            return View(model);
         }
 
+        //public IActionResult RoomMain(Guid houseId)
+        //{
+        //    // Lấy thông tin nhà trọ từ cơ sở dữ liệu
+        //    var house = _context.Houses.FirstOrDefault(h => h.Id == houseId);
+        //    if (house == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Lấy danh sách phòng của nhà trọ
+        //    var rooms = _context.Rooms
+        //        .Where(r => r.HouseId == houseId)
+        //        .OrderBy(r => r.FLoorNumber)
+        //        .ThenBy(r => r.Name)
+        //        .ToList();
+
+        //    var model = new RoomMainViewModel
+        //    {
+        //        HouseId = houseId,
+        //        Rooms = rooms
+        //    };
+
+        //    // Truyền tên nhà trọ vào ViewBag
+        //    ViewBag.HouseName = house.Name;
+
+        //    return View(model);
+        //}
+
+
+
+        //public IActionResult RoomMain(Guid houseId)
+        //{
+        //    var house = _context.Houses.FirstOrDefault(h => h.Id == houseId);
+        //    if (house == null) return NotFound();
+
+        //    var rooms = _context.Rooms
+        //        .Where(r => r.HouseId == houseId)
+        //        .OrderBy(r => r.FLoorNumber)
+        //        .ThenBy(r => r.Name)
+        //        .ToList();
+
+        //    var model = new RoomMainViewModel
+        //    {
+        //        HouseId = houseId,
+        //        Rooms = rooms
+        //    };
+
+        //    ViewBag.HouseName = house.Name;
+
+        //    return View(model);
+        //}
+
+
+
+        //public IActionResult RoomMain(Guid houseId)
+        //{
+        //    var house = _context.Houses.FirstOrDefault(h => h.Id == houseId);
+        //    if (house == null) return NotFound();
+
+        //    var rooms = _context.Rooms
+        //        .Where(r => r.HouseId == houseId)
+        //        .OrderBy(r => r.FLoorNumber)
+        //        .ThenBy(r => r.Name)
+        //        .ToList();
+
+        //    var model = new RoomMainViewModel
+        //    {
+        //        HouseId = houseId,
+        //        Rooms = rooms
+        //    };
+
+
+        //    // Truyền houseId vào ViewBag
+        //    //ViewBag.HouseId = houseId;
+
+        //    //// Lấy tên nhà trọ từ session nếu cần
+        //    //var houseName = HttpContext.Session.GetString("HouseName");
+        //    //if (string.IsNullOrEmpty(houseName))
+        //    //{
+        //    //    houseName = "Chưa có nhà trọ";
+        //    //}
+
+        //    //// Truyền tên nhà trọ vào ViewBag để hiển thị
+        //    //ViewBag.HouseName = houseName;
+        //    return View(model);
+        //}
 
         [HttpPost]
         public IActionResult AddRoom(Room room)
@@ -74,51 +213,51 @@ namespace KhoaLuan_QLNhaTro.Controllers
             return Json(new { success = false, message = "Dữ liệu không hợp lệ." });
         }
 
-        [HttpPost]
-        [Route("/Room/CreateHouse")]
-        public IActionResult CreateHouse(string Name, string Address, int floorNumber, List<int> floorRooms)
-        {
-            if (ModelState.IsValid)
-            {
-                var house = new House
-                {
-                    Id = Guid.NewGuid(),
-                    Name = Name,
-                    Address = Address,
-                    floorNumber = floorNumber,
-                    CreateAt = DateTime.Now,
-                    UpdateAt = DateTime.Now
-                };
+        //[HttpPost]
+        //[Route("/Room/CreateHouse")]
+        //public IActionResult CreateHouse(string Name, string Address, int floorNumber, List<int> floorRooms)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var house = new House
+        //        {
+        //            Id = Guid.NewGuid(),
+        //            Name = Name,
+        //            Address = Address,
+        //            floorNumber = floorNumber,
+        //            CreateAt = DateTime.Now,
+        //            UpdateAt = DateTime.Now
+        //        };
 
-                _context.Houses.Add(house);
-                _context.SaveChanges();
+        //        _context.Houses.Add(house);
+        //        _context.SaveChanges();
 
-                int roomCount = 1;
-                for (int i = 0; i < floorRooms.Count; i++)
-                {
-                    int roomsInFloor = floorRooms[i]; // Số phòng ở tầng i
-                    for (int j = 0; j < roomsInFloor; j++)
-                    {
-                        var room = new Room
-                        {
-                            Id = Guid.NewGuid(),
-                            Name = $"Tầng {i + 1} - Phòng {roomCount++}",
-                            FLoorNumber = i + 1,
-                            HouseId = house.Id,
-                            CreateAt = DateTime.Now,
-                            UpdateAt = DateTime.Now
-                        };
+        //        int roomCount = 1;
+        //        for (int i = 0; i < floorRooms.Count; i++)
+        //        {
+        //            int roomsInFloor = floorRooms[i]; // Số phòng ở tầng i
+        //            for (int j = 0; j < roomsInFloor; j++)
+        //            {
+        //                var room = new Room
+        //                {
+        //                    Id = Guid.NewGuid(),
+        //                    Name = $"Tầng {i + 1} - Phòng {roomCount++}",
+        //                    FLoorNumber = i + 1,
+        //                    HouseId = house.Id,
+        //                    CreateAt = DateTime.Now,
+        //                    UpdateAt = DateTime.Now
+        //                };
 
-                        _context.Rooms.Add(room);
-                    }
-                }
+        //                _context.Rooms.Add(room);
+        //            }
+        //        }
 
-                _context.SaveChanges();
-                return RedirectToAction("RoomMain");
-            }
+        //        _context.SaveChanges();
+        //        return RedirectToAction("RoomMain");
+        //    }
 
-            return View();
-        }
+        //    return View();
+        //}
 
         [HttpGet]
         public IActionResult GetRoomData(Guid id)
@@ -147,7 +286,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
             if (room != null)
             {
                 room.Name = model.Name;
-                room.FLoorNumber = model.FLoorNumber;
+                //room.FLoorNumber = model.FLoorNumber;
                 room.Price = model.Price;
                 room.Acreage = model.Acreage;
                 _context.SaveChanges();
@@ -172,6 +311,9 @@ namespace KhoaLuan_QLNhaTro.Controllers
 
             return View("RoomMain", rooms);
         }
+
+
+        
 
 
     }

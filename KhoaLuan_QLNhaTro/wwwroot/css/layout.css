@@ -16,6 +16,7 @@
 
         .sidebar a:hover {
             background-color: #1a252f;
+            text-decoration: none;
         }
 
 .content {
@@ -104,6 +105,9 @@
     color: #2E7D32;
 }
 
+.icon-text {
+    cursor: pointer;
+}
 .add-button {
     position: absolute;
     bottom: 10px;
@@ -135,13 +139,17 @@
     margin-right: 8px;
 }
 
+.modal-content{
+    z-index: 5000;
+}
 .house-count {
     font-size: 0.9rem;
     color: #666;
 }
 
 .house-item {
-    display: flex;
+    //display: flex;
+    background-color: #e0e9f2;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
@@ -177,17 +185,20 @@
         justify-content: center;
     }
 
+.form-row {
+    display: flex;
+}
 .btn-delete {
     background-color: #dc3545; /* Red for delete */
 }
 
-.btn-edit {
-    background-color: #6c757d; /* Gray for edit */
+.btn-select {
+    margin-left: 20px;
 }
 
-.btn-select {
-    background-color: #17a2b8; /* Blue for select */
-}
+/*.btn-select {
+    background-color: #17a2b8;*/ /* Blue for select */
+/*}*/
 
 /* Unique modal styles */
 .edit-property-modal .modal-header {
@@ -231,3 +242,16 @@
     background-color: #4CAF50;
     border-color: #4CAF50;
 }
+
+
+/*.modal fade{
+    z-index: 5000;
+}*/
+
+/*.form-row{
+    display: flex;
+}
+
+.form-group{
+    width: 100px;
+}*/

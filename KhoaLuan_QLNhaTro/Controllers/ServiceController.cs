@@ -5,19 +5,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KhoaLuan_QLNhaTro.Controllers
 {
-    public class ServiceController : Controller
+    public class ServiceController : BaseController
     {
-        private readonly NhaTroDbContext _context;
+        //private readonly NhaTroDbContext _context;
 
-        public ServiceController (NhaTroDbContext context) 
+        //public ServiceController (NhaTroDbContext context) 
+        //{
+        //    _context = context;
+        //}
+
+        public ServiceController(NhaTroDbContext context) : base(context)
         {
-            _context = context;
         }
-        public IActionResult ServiceMain()
+        
+        public IActionResult ServiceMain(Guid idHouse)
         {
+            if (idHouse == Guid.Empty)
+            {
+                // Handle the case where idHouse is invalid
+                return NotFound("ID House is invalid.");
+            }
+
+            // Your code to fetch services and rooms
             var serviceMainModels = _context.Services
-                .Include(s => s.RoomServices) // Include liên kết RoomServices
-                    .ThenInclude(rs => rs.Room) // Liên kết với Room
+                .Include(s => s.RoomServices)
+                .ThenInclude(rs => rs.Room)
+                .Where(s => s.RoomServices.Any(rs => rs.Room.HouseId == idHouse))
                 .Select(service => new ServiceMainModel
                 {
                     RoomService = new RoomServiceViewModel
@@ -26,23 +39,23 @@ namespace KhoaLuan_QLNhaTro.Controllers
                         Rooms = service.RoomServices.Select(rs => rs.Room).ToList()
                     },
                     DetailBillList = service.DetailBills.ToList()
-
                 })
                 .ToList();
 
-            // Truyền danh sách phòng (nếu cần cho modal)
-            ViewBag.Rooms = _context.Rooms.ToList();
+            ViewBag.IdHouse = idHouse; // Pass idHouse to ViewBag
             return View(serviceMainModels);
         }
 
         [HttpGet]
-        public IActionResult AddService()
+        public IActionResult AddService(Guid idHouse)
         {
-            // Lấy danh sách các phòng
-            ViewBag.Rooms = _context.Rooms.ToList();
-            return View();
+            var rooms = _context.Rooms.Where(r => r.HouseId == idHouse).ToList();
+            ViewBag.Rooms = rooms;
+            ViewBag.IdHouse = idHouse; // Truyền idHouse xuống View
+            return PartialView("AddService"); // Trả về một PartialView để hiển thị trong modal
         }
 
+        [HttpPost]
         public IActionResult AddService(ServiceViewModel model)
         {
             try
@@ -76,7 +89,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 }
 
                 _context.SaveChanges();
-                return RedirectToAction("ServiceMain");
+                return RedirectToAction("ServiceMain", new { idHouse = model.IdHouse });
             }
             catch (Exception ex)
             {
@@ -90,18 +103,31 @@ namespace KhoaLuan_QLNhaTro.Controllers
         {
             try
             {
+                // Find the service and its associated rooms
                 var service = _context.Services
                     .Include(s => s.RoomServices)
                     .ThenInclude(rs => rs.Room)
                     .FirstOrDefault(s => s.Id == id);
 
                 if (service == null)
-                    return NotFound();
+                {
+                    return NotFound("Dịch vụ không tồn tại.");
+                }
 
-                // Lấy danh sách tất cả các phòng
-                var allRooms = _context.Rooms.ToList();
+                // Get HouseId from one of the service's rooms
+                var houseId = service.RoomServices.FirstOrDefault()?.Room.HouseId;
 
-                // Tạo ViewModel
+                if (houseId == null || houseId == Guid.Empty)
+                {
+                    return NotFound("Không tìm thấy nhà trọ hợp lệ.");
+                }
+
+                // Fetch all rooms belonging to the house
+                var allRooms = _context.Rooms
+                    .Where(r => r.HouseId == houseId)
+                    .ToList();
+
+                // Create the ViewModel
                 var serviceDetails = new ServiceViewModel
                 {
                     Id = service.Id,
@@ -109,15 +135,16 @@ namespace KhoaLuan_QLNhaTro.Controllers
                     Price = service.Price,
                     Unit = service.Unit,
                     SelectedRooms = service.RoomServices.Select(rs => rs.RoomId).ToList(),
-                    AllRooms = allRooms // Gửi tất cả các phòng xuống View
+                    AllRooms = allRooms, // Pass rooms belonging to the house
+                    IdHouse = houseId.Value // Ensure IdHouse is set
                 };
 
                 return PartialView("EditService", serviceDetails);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Lỗi xảy ra: " + ex.Message);
-                return StatusCode(500, "Có lỗi xảy ra trong quá trình xử lý yêu cầu.");
+                Console.WriteLine($"Lỗi xảy ra: {ex.Message}");
+                return StatusCode(500, "Có lỗi xảy ra khi xử lý yêu cầu.");
             }
         }
 
@@ -129,14 +156,8 @@ namespace KhoaLuan_QLNhaTro.Controllers
             // Loại bỏ AllRooms khỏi ModelState để tránh lỗi ràng buộc
             ModelState.Remove("AllRooms");
 
-            // Kiểm tra tính hợp lệ của model
             if (!ModelState.IsValid)
             {
-                Console.WriteLine("ModelState không hợp lệ");
-                foreach (var key in ModelState.Keys)
-                {
-                    Console.WriteLine($"Key: {key}, Error: {string.Join(", ", ModelState[key].Errors.Select(e => e.ErrorMessage))}");
-                }
                 return View(model); // Trả về lại form nếu model không hợp lệ
             }
 
@@ -148,14 +169,13 @@ namespace KhoaLuan_QLNhaTro.Controllers
 
                 if (service == null)
                     return NotFound();
-                // Kiểm tra giá trị Price từ model
-                Console.WriteLine("Price from form: " + model.Price); // Debug xem giá trị Price có hợp lệ không
+
                 // Cập nhật thông tin dịch vụ
                 service.Name = model.Name;
                 service.Price = model.Price;
                 service.Unit = model.Unit;
 
-                // Xóa liên kết phòng cũ
+                // Xóa các liên kết phòng cũ
                 _context.RoomsServices.RemoveRange(service.RoomServices);
 
                 // Thêm các liên kết phòng mới
@@ -173,8 +193,8 @@ namespace KhoaLuan_QLNhaTro.Controllers
 
                 _context.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
 
-                // Chuyển hướng về trang ServiceMain sau khi cập nhật thành công
-                return RedirectToAction("ServiceMain", "Service");
+                // Điều hướng về trang ServiceMain và giữ lại idHouse
+                return RedirectToAction("ServiceMain", new { idHouse = model.IdHouse });
             }
             catch (Exception ex)
             {
