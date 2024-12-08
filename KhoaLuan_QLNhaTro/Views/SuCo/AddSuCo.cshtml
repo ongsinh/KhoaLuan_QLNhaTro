@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+@model KhoaLuan_QLNhaTro.Models.Incident
+
+<div class="container">
+    <h2>Thêm sự cố mới</h2>
+    <form asp-action="AddSuCo" method="post">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Tên sự cố</label>
+            <input type="text" class="form-control" id="Name" name="Name" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Description" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="Description" name="Description" rows="4" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="Date" class="form-label">Ngày dự định sửa chữa</label>
+            <input type="date" class="form-control" id="Date" name="Date" required />
+        </div>
+
+        <button type="submit" class="btn btn-success">Thêm</button>
+        <a href="@Url.Action("SuCoMain", "SuCo")" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+

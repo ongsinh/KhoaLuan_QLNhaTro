@@ -1,0 +1,106 @@
+﻿@{
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+@model KhoaLuan_QLNhaTro.ViewModel.UserRoomViewModel
+
+<link href="~/css/trangchumain.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="info-container">
+        <div class="user-info">
+            <!-- Thông tin cá nhân -->
+            <h4>Thông tin cá nhân</h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Họ và tên</th>
+                    <td>@Model.User.Name</td>
+                </tr>
+                <tr>
+                    <th>CCCD</th>
+                    <td>@Model.User.CCCD</td>
+                </tr>
+                <tr>
+                    <th>Giới tính</th>
+                    <td>@Model.User.Gender</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>@Model.User.Email</td>
+                </tr>
+                <tr>
+                    <th>Ngày sinh</th>
+                    <td>@Model.User.Dob.ToShortDateString()</td>
+                </tr>
+                <tr>
+                    <th>Địa chỉ</th>
+                    <td>@Model.User.Address</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="room-info">
+            <!-- Thông tin phòng trọ -->
+            <h4>Thông tin phòng trọ</h4>
+            @if (Model.Room != null)
+            {
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Tên phòng</th>
+                        <td>@Model.Room.Name</td>
+                    </tr>
+                    <tr>
+                        <th>Giá thuê</th>
+                        <td>@Model.Room.Price</td>
+                    </tr>
+                    <tr>
+                        <th>Tầng</th>
+                        <td>@Model.Room.FLoorNumber</td>
+                    </tr>
+                    <tr>
+                        <th>Diện tích</th>
+                        <td>@Model.Room.Acreage</td>
+                    </tr>
+                    <tr>
+                        <th>Trạng thái</th>
+                        <td>@Model.Room.Status</td>
+                    </tr>
+                </table>
+            }
+            else
+            {
+                <p>Bạn hiện chưa ở phòng nào.</p>
+            }
+        </div>
+    </div>
+
+    <!-- Thông tin dịch vụ -->
+    <div class="service-info">
+        <h4>Dịch vụ đang sử dụng</h4>
+        @if (Model.Services.Count > 0)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Tên dịch vụ</th>
+                        <th>Giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var service in Model.Services)
+                    {
+                        <tr>
+                            <td>@service.Service.Name</td>
+                            <td>@service.Service.Price</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Không có dịch vụ nào được đăng ký.</p>
+        }
+    </div> 
+</div>
+

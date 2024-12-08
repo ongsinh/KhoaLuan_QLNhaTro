@@ -1,0 +1,39 @@
+﻿@model IEnumerable<KhoaLuan_QLNhaTro.Models.IncidentRoom>
+
+<h2>Incident List</h2>
+
+@if (!Model.Any())
+{
+    <p>@ViewBag.Message</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Room Name</th>
+                <th>Incident Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Reported By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var incidentRoom in Model)
+            {
+                <tr>
+                    <td>@incidentRoom.Room.Name</td>
+                    <td>@incidentRoom.Incident.Name</td>
+                    <td>@incidentRoom.Incident.Description</td>
+                    <td>@incidentRoom.Incident.Status</td>
+                    <td>@incidentRoom.Incident.CreateAt.ToString("yyyy-MM-dd")</td>
+                    <td>@incidentRoom.Incident.User?.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="~/js/add-house.js"></script>

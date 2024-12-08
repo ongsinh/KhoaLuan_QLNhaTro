@@ -14,5 +14,6 @@ namespace KhoaLuan_QLNhaTro.ViewModel
 
         [BindNever] // Loại bỏ khỏi quá trình binding
         public List<Room> AllRooms { get; set; }
+        public Guid IdHouse { get; set; } // ID nhà trọ
     }
 }

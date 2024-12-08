@@ -1,4 +1,4 @@
-﻿@model List<KhoaLuan_QLNhaTro.Models.User>
+﻿@model KhoaLuan_QLNhaTro.ViewModel.UserHouseViewModel
 
 @{
     ViewData["Title"] = "UserMain";
@@ -20,8 +20,51 @@
         <input type="text" class="search-bar" placeholder="Tìm kiếm tài khoản...">
     </div>
         
-
     <div class="table-section">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>Tên khách hàng</th>
+                    <th>Giới tính</th>
+                    <th>Ngày sinh</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ </th>
+                    <th>Số CMND/CCCD</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Users != null && Model.Users.Any())
+                {
+                    foreach (var user in Model.Users)
+                    {
+                        <tr>
+                            <td>@user.Name</td>
+                            <td>@user.Gender</td>
+                            <td>@user.Dob.ToString("dd/MM/yyyy")</td>
+                            <td>@user.Account.Phone</td>
+                            <td>@user.Address</td>
+                            <td>@user.CCCD</td>
+                            <td class="options-icon" onclick="toggleDropdown(this)">
+                                <i class="fas fa-ellipsis-v"></i>
+                                <div class="dropdown">
+                                    <a href="#" onclick="openEditModal(event)">Sửa khách thuê</a>
+                                    <a href="#" onclick="openDeleteModal(event)">Xóa khách thuê</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7">Không có dữ liệu khách thuê</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @* <div class="table-section">
         <table class="table table-borderless">
             <thead>
                 <tr>
@@ -64,7 +107,7 @@
                 }
             </tbody>
         </table>
-    </div>
+    </div> *@
 
     <!-- Popup Modal -->
     <div class="modal fade" id="addTenantModal" tabindex="-1" aria-labelledby="addTenantModalLabel" aria-hidden="true">
@@ -252,5 +295,7 @@
     </div>
 
 
-@*  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> *@
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="~/js/usermain.js"></script>
+    <script src="~/js/add-house.js"></script>

@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+@model IEnumerable<KhoaLuan_QLNhaTro.Models.Incident>
+
+<div class="container">
+    <h2>Danh sách sự cố</h2>
+    <a href="@Url.Action("AddSuCo", "SuCo")" class="btn btn-primary mb-3">Thêm sự cố</a>
+
+    @if (!Model.Any())
+    {
+        <p>Bạn chưa gửi sự cố nào.</p>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Tên sự cố</th>
+                    <th>Mô tả</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày thêm</th>
+                    @* <th>Ngày dự định sửa chữa</th> *@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var incident in Model)
+                {
+                    <tr>
+                        <td>@incident.Name</td>
+                        <td>@incident.Description</td>
+                        <td>@incident.Status</td>
+                        <td>@incident.CreateAt.ToShortDateString()</td>
+                        @* <td>@incident.Date.ToShortDateString()</td> *@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+

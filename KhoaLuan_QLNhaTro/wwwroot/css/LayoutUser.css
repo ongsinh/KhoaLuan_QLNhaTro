@@ -1,0 +1,58 @@
+﻿h3 {
+    text-align: center;
+    padding: 15px;
+}
+
+.sidebar {
+    background-color: #f8f1f1;
+    color: black;
+    height: 100vh;
+    position: fixed;
+    width: 250px;
+}
+
+    .sidebar a {
+        color: black;
+        padding: 15px;
+        text-decoration: none;
+        display: block;
+    }
+        .sidebar a:hover {
+            background-color: wheat;
+            text-decoration: none;
+        }
+
+.content {
+    margin-left: 260px;
+    padding: 20px;
+}
+
+    .content .container {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+
+/* Custom style for the logout section */
+.logout-section {
+    //background-color: #f8f9fa;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e3e6f0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+    .logout-section button {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+        .logout-section button:hover {
+            background-color: #c82333;
+        }
