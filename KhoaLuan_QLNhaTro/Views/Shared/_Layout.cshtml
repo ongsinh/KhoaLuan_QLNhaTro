@@ -45,7 +45,7 @@
             </div>
         </div>
         <a href="@Url.Action("RoomMain", "Room", new { houseId = ViewBag.HouseId })"><i class="fas fa-shopping-cart"></i> Quản lý phòng</a>
-        <a href="@Url.Action("BillMain", "Bill")"><i class="fas fa-tachometer-alt"></i> Quản lý hóa đơn</a>
+        <a href="@Url.Action("BillMain", "Bill", new { idHouse = ViewBag.HouseId })"><i class="fas fa-tachometer-alt"></i> Quản lý hóa đơn</a>
         <a href="@Url.Action("ServiceMain", "Service", new { idHouse = ViewBag.HouseId })"><i class="fas fa-user-tie"></i> Quản lý dịch vụ</a>
         <a href="@Url.Action("AssetMain", "Asset", new { idHouse = ViewBag.HouseId })"><i class="fas fa-user"></i> Quản lý tài sản</a>
         <a href="@Url.Action("ContractMain", "Contract", new { houseId = ViewBag.HouseId })"><i class="fas fa-box"></i> Quản lý hợp đồng</a>

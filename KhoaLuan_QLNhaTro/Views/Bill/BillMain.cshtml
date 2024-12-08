@@ -118,7 +118,7 @@
                         <!-- Danh sách các phòng -->
                         <div class="col-md-8 mb-6 room-list">
                             <div class="row">
-                                @foreach(var room in rooms)
+                                @foreach (var room in ViewBag.Rooms)
                                 {
                                     <div class="col-md-6 mb-3">
                                         <div class="card p-3">
@@ -358,6 +358,7 @@
             roomId: null,
             services: []
         };
+        var idHouse = '@ViewBag.IdHouse';
 
         $(document).ready(function () {
             // When a room is selected
@@ -743,6 +744,6 @@
         }
 
     </script>
-
+    <script src="~/js/add-house.js"></script>
 </body>
 </html>

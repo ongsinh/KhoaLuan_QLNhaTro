@@ -56,10 +56,15 @@ namespace KhoaLuan_QLNhaTro.Controllers
         //    return View(bills);
         //}
 
-        public IActionResult BillMain()
+        public IActionResult BillMain(Guid idHouse)
         {
             var services = _context.Services.ToList();
-            var rooms = _context.Rooms.ToList();
+            var rooms = _context.Rooms
+            .Where(r => r.HouseId == idHouse)
+           .ToList();
+            ViewBag.Services = services;
+            ViewBag.Rooms = rooms;
+            ViewBag.IdHouse = idHouse;
             // Lấy tất cả hóa đơn và các dịch vụ liên quan thông qua bảng DetailBill
             var bills = _context.DetailBills
                 .Include(db => db.Bill)  // Lấy thông tin hóa đơn
@@ -87,8 +92,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 })
                 .ToList();
 
-            ViewBag.Services = services;
-            ViewBag.Rooms = rooms;
+            
             return View(bills);
         }
 
