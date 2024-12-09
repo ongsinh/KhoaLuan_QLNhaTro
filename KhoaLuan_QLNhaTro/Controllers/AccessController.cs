@@ -26,6 +26,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(string Phone, string Password)
         {
+            Console.WriteLine($"Phone: {Phone}, Password: {Password}");
             if (string.IsNullOrEmpty(Phone) || string.IsNullOrEmpty(Password))
             {
                 ViewBag.ErrorMessage = "Vui lòng nhập đầy đủ thông tin.";
@@ -46,13 +47,35 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 .Include(a => a.User) // Bao gồm thông tin liên kết đến User
                 .FirstOrDefault(a => a.Phone == Phone && a.Password == Password);
 
-            if (account == null)
+            if (account == null || account.User == null)
             {
                 ViewBag.ErrorMessage = "SĐT hoặc mật khẩu không đúng.";
-                return View(); // Quay lại view login nếu thông tin sai.
+                return View(); // Quay lại view login nếu không tìm thấy tài khoản hoặc không có User liên kết
             }
 
-            HttpContext.Session.SetString("UserId", account.User.Id.ToString()); // Lưu UserId
+            //if (account != null && account.User != null)
+            //{
+            //    HttpContext.Session.SetString("UserId", account.User.Id.ToString());
+            //}
+
+            if (account != null)
+            {
+                var user = _context.Users.FirstOrDefault(u => u.AccountId == account.Id);
+                if (user != null)
+                {
+                    // Lưu UserId vào Session
+                    HttpContext.Session.SetString("UserId", user.Id.ToString());
+                }
+                else
+                {
+                    Console.WriteLine("Không tìm thấy người dùng.");
+                    Console.WriteLine( "SĐT hoặc mật khẩu không đúng.");
+                    return View();
+                }
+            }
+
+            //HttpContext.Session.SetString("UserId", account.User.Id.ToString()); // Lưu UserId
+
             // Lưu thông tin người dùng vào session
             HttpContext.Session.SetString("UserPhone", account.Phone);
             HttpContext.Session.SetString("UserRole", account.RoleId);
@@ -98,135 +121,6 @@ namespace KhoaLuan_QLNhaTro.Controllers
             //ViewBag.ErrorMessage = "Không xác định quyền truy cập.";
             return View();
         }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Login(string Phone, string Password)
-        //{
-        //    if (string.IsNullOrEmpty(Phone) || string.IsNullOrEmpty(Password))
-        //    {
-        //        ViewBag.ErrorMessage = "Vui lòng nhập đầy đủ thông tin.";
-        //        return View(); // Quay lại view login nếu thiếu thông tin.
-        //    }
-
-        //    // Kiểm tra tài khoản và mật khẩu
-        //    var account = _context.Accounts
-        //        .FirstOrDefault(a => a.Phone == Phone && a.Password == Password);
-
-        //    if (account == null)
-        //    {
-        //        ViewBag.ErrorMessage = "SĐT hoặc mật khẩu không đúng.";
-        //        return View(); // Quay lại view login nếu thông tin sai.
-        //    }
-
-        //    // Lưu thông tin người dùng vào session
-        //    HttpContext.Session.SetString("UserPhone", account.Phone);
-        //    HttpContext.Session.SetString("UserRole", account.RoleId);
-
-        //    // Kiểm tra vai trò
-        //    if (account.RoleId == "Role_1") // Nếu là Admin
-        //    {
-        //        var houseIdString = HttpContext.Session.GetString("HouseId");
-        //        Guid houseId;
-
-        //        if (!string.IsNullOrEmpty(houseIdString) && Guid.TryParse(houseIdString, out houseId))
-        //        {
-        //            // Chuyển hướng tới RoomMain với HouseId đã lưu trong session
-        //            return RedirectToAction("RoomMain", "Room", new { houseId = houseId });
-        //        }
-        //    }
-        //    else if (account.RoleId == "Role_2") // Nếu là User
-        //    {
-        //        // Chuyển hướng tới TrangChuMain hoặc trang người dùng
-        //        return RedirectToAction("TrangChuMain", "TrangChu");
-        //    }
-
-        //    // Trường hợp không xác định vai trò
-        //    ViewBag.ErrorMessage = "Không xác định quyền truy cập.";
-        //    // Kiểm tra xem có HouseId trong session không
-        //    //var houseIdString = HttpContext.Session.GetString("HouseId");
-        //    //Guid houseId;
-
-        //    //if (!string.IsNullOrEmpty(houseIdString) && Guid.TryParse(houseIdString, out houseId))
-        //    //{
-        //    //    // Chuyển hướng tới RoomMain với HouseId đã lưu trong session
-        //    //    return RedirectToAction("RoomMain", "Room", new { houseId = houseId });
-        //    //}
-
-        //    // Nếu không có HouseId trong session, lấy nhà trọ mới nhất
-        //    var latestHouse = _context.Houses
-        //        .OrderByDescending(h => h.CreateAt) // Hoặc một trường khác để xác định nhà trọ "mới nhất"
-        //        .FirstOrDefault();
-
-        //    if (latestHouse != null)
-        //    {
-        //        // Lưu thông tin nhà trọ mới nhất vào session
-        //        HttpContext.Session.SetString("HouseId", latestHouse.Id.ToString());
-        //        HttpContext.Session.SetString("HouseName", latestHouse.Name);
-
-        //        // Chuyển hướng tới RoomMain của nhà trọ mới nhất
-        //        return RedirectToAction("RoomMain", "Room", new { houseId = latestHouse.Id });
-        //    }
-
-        //    // Nếu không có nhà trọ nào, chuyển hướng đến trang mặc định
-        //    return RedirectToAction("Index", "Home");
-        //}
-
-        //// POST: Xử lý đăng nhập
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Login(string Phone, string Password)
-        //{
-        //    if (string.IsNullOrEmpty(Phone) || string.IsNullOrEmpty(Password))
-        //    {
-        //        ViewBag.ErrorMessage = "Vui lòng nhập đầy đủ thông tin.";
-        //        return View();  // Return the login view again if validation fails.
-        //    }
-
-        //    // Kiểm tra tài khoản và mật khẩu
-        //    var account = _context.Accounts
-        //        .Where(a => a.Phone == Phone && a.Password == Password)
-        //        .FirstOrDefault();
-
-        //    if (account == null)
-        //    {
-        //        ViewBag.ErrorMessage = "SĐT hoặc mật khẩu không đúng.";
-        //        return View();  // Return the login view again if login fails.
-        //    }
-
-        //    // Lưu thông tin người dùng vào session (hoặc cookie)
-        //    HttpContext.Session.SetString("UserPhone", account.Phone);
-        //    HttpContext.Session.SetString("UserRole", account.RoleId);
-
-        //    // Redirect đến trang chủ sau khi đăng nhập thành công
-        //    return RedirectToAction("AssetMain", "Asset");
-        //    // Xử lý đăng nhập ở đây
-        //    //var user = _dbContext.Users.FirstOrDefault(u => u.Account.Phone == Phone && u.Account.Password == Password);
-
-        //    //if (user != null)
-        //    //{
-        //    //    // Lưu thông tin nhà trọ vào session (nếu có)
-        //    //    var houseId = user.LastHouseId; // Lấy nhà trọ người dùng đã chọn trước đó
-        //    //    var house = _dbContext.Houses.FirstOrDefault(h => h.Id == houseId);
-
-        //    //    if (house != null)
-        //    //    {
-        //    //        // Lưu nhà trọ vào session
-        //    //        HttpContext.Session.SetString("HouseId", house.Id.ToString());
-        //    //        HttpContext.Session.SetString("HouseName", house.Name);
-        //    //    }
-
-        //    //    // Chuyển hướng đến trang chính hoặc trang nhà trọ
-        //    //    return RedirectToAction("RoomMain", "Room");
-        //    //}
-        //    //else
-        //    //{
-        //    //    // Thông báo lỗi đăng nhập
-        //    //    ViewBag.ErrorMessage = "Sai tên đăng nhập hoặc mật khẩu!";
-        //    //    return View();
-        //    //}
-        //}
-
 
         // Đăng xuất
         public IActionResult Logout()

@@ -87,11 +87,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var service in Model.Services)
+                    @foreach (var roomService in Model.Services)
                     {
                         <tr>
-                            <td>@service.Service.Name</td>
-                            <td>@service.Service.Price</td>
+                            <td>@roomService.Service.Name</td>
+                            <td>@roomService.Service.Price</td>
                         </tr>
                     }
                 </tbody>
