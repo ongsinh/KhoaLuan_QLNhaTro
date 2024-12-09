@@ -9,6 +9,33 @@ namespace KhoaLuan_QLNhaTro.Controllers
         public SuCoController(NhaTroDbContext context) : base(context)
         {
         }
+        //    public async Task<IActionResult> SuCoMain()
+        //    {
+        //        var userId = HttpContext.Session.GetString("UserId");
+        //        if (userId == null)
+        //        {
+        //            return RedirectToAction("Login", "Access");
+        //        }
+
+        //        var userGuid = Guid.Parse(userId);
+
+        //        // Lấy danh sách sự cố liên quan đến UserId
+        //        var incidents = await _context.IncidentRooms
+        //.Where(ir => ir.Room.UserId == userGuid) // Kiểm tra UserId của phòng
+        //.Include(ir => ir.Incident) // Bao gồm thông tin sự cố
+        //.Include(ir => ir.Room)    // Bao gồm thông tin phòng
+        //.OrderByDescending(ir => ir.Incident.CreateAt) // Sắp xếp theo ngày tạo sự cố
+        //.ToListAsync();
+
+        //        Console.WriteLine($"Found {incidents.Count} incidents for UserId: {userGuid}");
+
+        //        // Chuyển đổi IncidentRoom thành Incident
+        //        var incidentList = incidents.Select(ir => ir.Incident).ToList();
+
+        //        return View(incidentList);
+
+        //    }
+
         public async Task<IActionResult> SuCoMain()
         {
             var userId = HttpContext.Session.GetString("UserId");
@@ -26,7 +53,6 @@ namespace KhoaLuan_QLNhaTro.Controllers
             Console.WriteLine($"UserId: {userGuid}, Incidents: {incidents.Count}");
             return View(incidents);
         }
-
 
         // Thêm sự cố (GET)
         public IActionResult AddSuCo()

@@ -87,7 +87,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
                     {
                         Id = Guid.NewGuid(), 
                         CreatedAt = DateTime.Now,
-                        Password = "không xác định", 
+                        Password = "khongxacdinh", 
                         Phone = viewModel.Contract.User.Account.Phone, 
                         RoleId = "Role_2", 
                         UpdatedAt = DateTime.Now
@@ -103,7 +103,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
                         Name = viewModel.Contract.User.Name, 
                         CCCD = viewModel.Contract.User.CCCD, 
                         Gender = viewModel.Contract.User.Gender, 
-                        Email = "Không xác định", 
+                        Email = "không xác định", 
                         Dob = viewModel.Contract.User.Dob, 
                         Address = viewModel.Contract.User.Address, 
                         AccountId = account.Id,
