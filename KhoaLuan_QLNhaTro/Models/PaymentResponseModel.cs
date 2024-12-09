@@ -13,6 +13,7 @@ namespace VnPayIntegration.Models
         public string VnPayResponseCode { get; set; }
         public string BillId { get; set; }
         public decimal Total { get; set; }
+        public DateTime PaymentDate { get; set; }
     }
 
 }

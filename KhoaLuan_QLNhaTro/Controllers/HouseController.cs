@@ -18,7 +18,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
         public HouseController(NhaTroDbContext context) : base(context)
         {
         }
-        
+
         // Action để tạo nhà và các phòng
         public IActionResult CreateHouseAndRooms(string Name, string Address, int floorNumber, int[] RoomsPerFloor)
         {
@@ -83,7 +83,12 @@ namespace KhoaLuan_QLNhaTro.Controllers
         public IActionResult HouseList()
         {
             // Lấy tất cả nhà trọ từ cơ sở dữ liệu
-            var houses = _context.Houses.ToList();
+            var houses = _context.Houses.Select(h => new
+            {
+                id = h.Id,
+                name = h.Name,
+                address = h.Address
+            }).ToList();
 
             return Json(houses); // Trả về danh sách nhà trọ dưới dạng JSON
         }
@@ -123,10 +128,10 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 HttpContext.Session.SetString("HouseName", house.Name);
             }
 
-            return RedirectToAction("Room", "RoomMain", new { houseId = house.Id } ); // Redirect to home page after selecting a house
+            return RedirectToAction("Room", "RoomMain", new { houseId = house.Id }); // Redirect to home page after selecting a house
         }
 
-        
+
 
         [HttpPost]
         public IActionResult DeleteHouse(Guid houseId)

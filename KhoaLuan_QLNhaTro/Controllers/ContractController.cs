@@ -133,7 +133,8 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 var room = _context.Rooms.FirstOrDefault(r => r.Id == viewModel.Contract.RoomId);
                 if (room != null)
                 {
-                    room.Status = "Đang ở"; 
+                    room.Status = "Đang ở";
+                    room.UserId = user.Id;
                     _context.SaveChanges(); 
                 }
 

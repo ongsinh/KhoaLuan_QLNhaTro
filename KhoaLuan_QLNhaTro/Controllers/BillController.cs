@@ -17,7 +17,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
         {
             return View();
         }
-
+        
         public BillController(NhaTroDbContext context, IVnPayService vnPayService)
         {
             _context = context;
@@ -107,7 +107,6 @@ namespace KhoaLuan_QLNhaTro.Controllers
 
             ViewBag.Services = services;
             ViewBag.Rooms = _context.Rooms.Where(r => roomIds.Contains(r.Id)).ToList(); // Lấy lại danh sách phòng
-            ViewBag.IdHouse = idHouse;
 
             // Lấy danh sách hóa đơn và dịch vụ liên quan
             var bills = _context.DetailBills
@@ -137,7 +136,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
                                     : db.Number.GetValueOrDefault(0) * db.Price) // Tổng tiền hóa đơn (Tiền phòng + Tiền dịch vụ)
                 })
                 .ToList();
-
+            ViewBag.HouseId = idHouse;
             return View(bills);
         }
 

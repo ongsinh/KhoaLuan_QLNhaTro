@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,20 +13,20 @@
 <body>
     <div class="sidebar">
         @* <div class="sidebar-header">
-            <div class="notification-badge">2</div>
-            <div class="icon-text">
-                <div class="house-icon" id="houseIcon">🏠</div>
-                <div>
-                    <div class="status-text">Đang quản lý</div>
-                    <div class="property-name">
-                        @ViewBag.HouseName
-                    </div>
-                </div>
-            </div>
-           
-            <div class="add-button" id="addHouseButton">
-                <i class="fas fa-plus"></i> 
-            </div>
+        <div class="notification-badge">2</div>
+        <div class="icon-text">
+        <div class="house-icon" id="houseIcon">🏠</div>
+        <div>
+        <div class="status-text">Đang quản lý</div>
+        <div class="property-name">
+        @ViewBag.HouseName
+        </div>
+        </div>
+        </div>
+
+        <div class="add-button" id="addHouseButton">
+        <i class="fas fa-plus"></i>
+        </div>
 
         </div> *@
         <div class="sidebar-header" id="sidebarHeader">
@@ -52,7 +53,6 @@
         <a href="@Url.Action("UserMain", "User", new { houseId = ViewBag.HouseId })"><i class="fas fa-receipt"></i> Quản lý khách thuê</a>
         <a href="@Url.Action("IncidentMain", "Incident", new { idHouse = ViewBag.HouseId })"><i class="fas fa-cogs"></i> Quản lý sự cố</a>
         <a href="@Url.Action("ReportMain", "Report")"><i class="fas fa-chart-line"></i> Báo cáo doanh thu</a>
-        <a href="@Url.Action("ProfileMain", "Profile")"><i class="fas fa-chart-line"></i> Thông tin cá nhân</a>
     </div>
 
     <div class="content">
@@ -66,7 +66,7 @@
                 @RenderBody()
             </main>
         </div>
-        
+
     </div>
 
     <div class="modal fade" id="addHouseModal" tabindex="-1" role="dialog" aria-labelledby="addHouseModalLabel" aria-hidden="true">
@@ -109,7 +109,7 @@
         </div>
     </div>
 
-     @* Hiện list *@
+    @* Hiện list *@
     <!-- House List Modal -->
     <div class="modal fade" id="houseListModal" tabindex="-1" role="dialog" aria-labelledby="houseListModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -135,6 +135,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    
+
 </body>
 </html>

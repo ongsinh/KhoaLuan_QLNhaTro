@@ -1,0 +1,78 @@
+﻿@model KhoaLuan_QLNhaTro.Models.ViewModel.HoaDonViewModel
+
+@{
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<div class="container">
+    <h2 class="text-center">PHIẾU THANH TOÁN HÓA ĐƠN</h2>
+    <div>
+        <p><strong>Tên phòng:</strong> <span id="roomName">@Model.NameRoom</span></p>
+    </div>
+
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>STT</th>
+                <th>Dịch vụ</th>
+                <th>Số lượng</th>
+                <th>Số cũ</th>
+                <th>Số mới</th>
+                <th>Giá</th>
+                <th>Tổng tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model.Details)
+            {
+                <tr>
+                    <td>@(Model.Details.IndexOf(detail) + 1)</td>
+                    <td>@detail.ServiceName</td>
+                    <td>@detail.Number?.ToString()</td>
+                    <td>@detail.OldNumber?.ToString("F0")</td>
+                    <td>@detail.NewNumber?.ToString("F0")</td>
+                    <td>@detail.Price.ToString()</td>
+                    <td>@detail.Total.ToString("F0")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between mt-3">
+        <h4>Tổng tiền: @Model.TotalAmount.ToString("F0")</h4>
+        <button class="btn btn-success" onclick="processPayment('@Model.billID', '@Model.TotalAmount','@Model.NameRoom')">Thanh toán</button>
+    </div>
+</div>
+
+<script>
+    function processPayment(billId, totalBill, roomName) {
+        totalBill = parseFloat(totalBill);
+        // Xác nhận thông tin thanh toán
+        if (confirm(`Bạn có chắc chắn muốn thanh toán hóa đơn cho phòng: ${roomName} với tổng tiền: ${totalBill} VND?`)) {
+            // Gửi dữ liệu thanh toán lên server
+            const data = {
+                BillId: billId,
+                Total: totalBill,
+                RoomName: roomName
+            };
+
+            // AJAX gửi dữ liệu lên controller
+            $.ajax({
+                url: '/HoaDon/CreatePaymentUrlVnpay', // Đường dẫn tới action xử lý
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = response.paymentUrl;
+                    } else {
+                        alert("Thanh toán thất bại: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Đã xảy ra lỗi khi thanh toán!");
+                }
+            });
+        }
+    }
+</script>

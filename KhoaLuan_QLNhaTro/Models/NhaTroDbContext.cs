@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using VnPayIntegration.Models;
 
 namespace KhoaLuan_QLNhaTro.Models
 {
@@ -21,7 +22,7 @@ namespace KhoaLuan_QLNhaTro.Models
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<RoomService> RoomsServices { get; set;}
         public virtual DbSet<Service> Services { get; set; }
-
+        //public virtual DbSet<PaymentResponseModel> PaymentResponseModels { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

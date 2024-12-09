@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Bill>
+@{
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán hóa đơn tiền trọ</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .table-header {
+            background-color: #d0e7ff;
+            font-weight: bold;
+            text-align: center;
+        }
+        .action-btn {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">THANH TOÁN HÓA ĐƠN TIỀN TRỌ</h2>
+        <p class="text-center text-muted">Chọn thông tin để thực hiện thanh toán</p>
+        <table class="table table-bordered">
+            <thead>
+                <tr class="table-header">
+                    <th>STT</th>
+                    <th>Tháng</th>
+                    <th>Năm</th>
+                    <th>Loại khoản thanh toán</th>
+                    <th>Hạn thanh toán</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    int index = 1;
+                    foreach (var bill in Model)
+                    {
+                        @* <tr>
+                            <td>@index</td>
+                            <td>@bill.Room.RoomName</td> <!-- Navigation Property -->
+                            <td>@bill.Month</td> <!-- Tháng của hóa đơn -->
+                            <td>@bill.CreatedDate.ToString("dd/MM/yyyy")</td>
+                            <td>@bill.Amount.ToString("C")</td> <!-- Số tiền -->
+                        </tr> *@
+                        <tr>
+                            <td class="text-center">1</td>
+                            <td class="text-center">11</td>
+                            <td class="text-center">2024</td>
+                            <td class="text-center">Thanh toán tiền trọ</td>
+                            <td class="text-center">@bill.PaymentDate.ToString("dd/MM/yyyy")</td>
+                            <td class="action-btn text-center">
+                                @if (bill.Status == "Chưa thanh toán")
+                                {
+                                    <!-- Nếu chưa thanh toán, nút cho phép nhấn -->
+                                    <button class="btn btn-primary"
+                                            onclick="location.href='@Url.Action("ThanhToan", "HoaDon" , new { billId = bill.Id } )'">
+                                        Thanh toán online
+                                    </button>
+                                }
+                                else
+                                {
+                                    <!-- Nếu đã thanh toán, nút bị disabled -->
+                                    <button class="btn btn-secondary" disabled>
+                                        Đã thanh toán
+                                    </button>
+                                }
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">Không có hóa đơn nào</td>
+                    </tr>
+                }
+                <!-- Thêm các dòng khác nếu cần -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
