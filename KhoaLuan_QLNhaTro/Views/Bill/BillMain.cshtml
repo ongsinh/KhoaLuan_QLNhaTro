@@ -13,7 +13,7 @@
 </head>
 <body>
 
-    <!-- Header Section -->
+    @* <!-- Header Section -->
     <div class="header">
         <h2>Tất cả hóa đơn - 10/2024</h2>
         <div class="navigation">
@@ -43,7 +43,7 @@
             <input type="checkbox" id="pending" />
             <label for="pending">Hóa đơn đang nợ</label>
         </div>
-    </div>
+    </div> *@
 
     <!-- Action Buttons -->
     <div class="actions">
@@ -384,40 +384,41 @@
                         // Display the fetched services
                         services.forEach((service, index) => {
                             const serviceHtml = `
-                <div class="service-item">
-                    <input type="checkbox" class="service-checkbox"
-                           name="DetailBill[${index}].ServiceId"
-                           value="${service.id}" checked>
-                    <span>${service.name}</span>
-                    <p class="price">Giá: <b>${service.price}</b> / ${service.unit}</p>
-                    ${service.unit === "kWh" || service.unit === "m3" ? `
-                        <div class="input-group">
-                            <input type="number" class="form-control old-value"
-                                   name="DetailBill[${index}].OldNumber"
-                                           value="${service.OldNumber || 0}"
-                                   placeholder="Số cũ">
-                            <span class="input-group-text">Số cũ</span>
-                        </div>
-                        <div class="input-group">
-                            <input type="number" class="form-control new-value"
-                                   name="DetailBill[${index}].NewNumber"
-                                                   value="${service.Number || 0}"
-                                   placeholder="Số mới">
-                            <span class="input-group-text">Số mới</span>
-                        </div>
-                    ` : `
-                        <div class="input-group">
-                            <input type="number" class="form-control quantity"
-                                   name="DetailBill[${index}].Number"
-                                   placeholder="Số lượng">
-                            <span class="input-group-text">Số lượng</span>
-                        </div>
-                    `}
-                </div>`;
+                        <div class="service-item">
+                            <input type="checkbox" class="service-checkbox"
+                                   name="DetailBill[${index}].ServiceId"
+                                   value="${service.id}" checked>
+                            <span>${service.name}</span>
+                            <p class="price">Giá: <b>${service.price}</b> / ${service.unit}</p>
+                            ${service.unit === "kWh" || service.unit === "m3" ? `
+                                <div class="input-group">
+                                    <input type="number" class="form-control old-value"
+                                           name="DetailBill[${index}].OldNumber"
+                                                   value="${service.OldNumber }"
+                                           placeholder="Số cũ">
+                                    <span class="input-group-text">Số cũ</span>
+                                </div>
+                                <div class="input-group">
+                                    <input type="number" class="form-control new-value"
+                                           name="DetailBill[${index}].NewNumber"
+                                                           value="${service.NewNumber }"
+                                           placeholder="Số mới">
+                                    <span class="input-group-text">Số mới</span>
+                                </div>
+                            ` : `
+                                <div class="input-group">
+                                    <input type="number" class="form-control quantity"
+                                           name="DetailBill[${index}].Number"
+                                                   value="${service.Number}"
+                                           placeholder="Số lượng">
+                                    <span class="input-group-text">Số lượng</span>
+                                </div>
+                            `}
+                        </div>`;
                             $("#services").append(serviceHtml);
                         });
 
-                       
+
                         $("#service-details").show();
 
                         // Save room data temporarily

@@ -56,34 +56,80 @@ namespace KhoaLuan_QLNhaTro.Controllers
         //    return View(bills);
         //}
 
+        //public IActionResult BillMain(Guid idHouse)
+        //{
+        //    var services = _context.Services.ToList();
+        //    var rooms = _context.Rooms
+        //    .Where(r => r.HouseId == idHouse)
+        //   .ToList();
+        //    ViewBag.Services = services;
+        //    ViewBag.Rooms = rooms;
+        //    ViewBag.IdHouse = idHouse;
+        //    // Lấy tất cả hóa đơn và các dịch vụ liên quan thông qua bảng DetailBill
+        //    var bills = _context.DetailBills
+        //        .Include(db => db.Bill)  // Lấy thông tin hóa đơn
+        //        .Include(db => db.Service)  // Lấy thông tin dịch vụ
+        //        .GroupBy(db => db.BillId)  // Nhóm theo BillId để lấy thông tin mỗi hóa đơn
+        //        .Select(g => new BillViewModal
+        //        {
+        //            BillId = g.Key,
+        //            RoomName = g.FirstOrDefault() != null ? g.FirstOrDefault().Bill.Room.Name : "Chưa xác định", // Lấy tên phòng từ bản ghi đầu tiên
+        //            RoomPrice = g.FirstOrDefault() != null ? g.FirstOrDefault().Bill.Room.Price : 0, // Lấy giá phòng
+        //            Status = g.FirstOrDefault() != null ? g.FirstOrDefault().Bill.Status : "Chưa xác định", // Trạng thái hóa đơn
+        //            Services = g.Select(db => new DetailBillViewModel
+        //            {
+        //                ServiceName = db.Service.Name,  // Tên dịch vụ
+        //                Quantity = db.Number.GetValueOrDefault(0), // Số lượng dịch vụ
+        //                UnitPrice = db.Price, // Đơn giá dịch vụ
+        //                TotalPrice = db.OldNumber.HasValue && db.NewNumber.HasValue
+        //                    ? (db.NewNumber.Value - db.OldNumber.Value) * db.Price // (Số cuối - Số đầu) * Đơn giá
+        //                    : db.Number.GetValueOrDefault(0) * db.Price // Hoặc tính theo Số lượng * Đơn giá nếu không có Số đầu/Số cuối
+        //            }).ToList(),
+        //            TotalBill = (g.FirstOrDefault() != null ? g.FirstOrDefault().Bill.Room.Price : 0)
+        //                        + g.Sum(db => db.OldNumber.HasValue && db.NewNumber.HasValue
+        //                            ? (db.NewNumber.Value - db.OldNumber.Value) * db.Price
+        //                            : db.Number.GetValueOrDefault(0) * db.Price) // Tổng tiền hóa đơn (Tiền phòng + Tiền dịch vụ)
+        //        })
+        //        .ToList();
+
+
+        //    return View(bills);
+        //}
         public IActionResult BillMain(Guid idHouse)
         {
             var services = _context.Services.ToList();
-            var rooms = _context.Rooms
-            .Where(r => r.HouseId == idHouse)
-           .ToList();
+
+            // Lấy danh sách ID của các phòng thuộc nhà
+            var roomIds = _context.Rooms
+                .Where(r => r.HouseId == idHouse)
+                .Select(r => r.Id)
+                .ToList(); // Chỉ lấy danh sách ID để sử dụng trong truy vấn LINQ
+
             ViewBag.Services = services;
-            ViewBag.Rooms = rooms;
+            ViewBag.Rooms = _context.Rooms.Where(r => roomIds.Contains(r.Id)).ToList(); // Lấy lại danh sách phòng
             ViewBag.IdHouse = idHouse;
-            // Lấy tất cả hóa đơn và các dịch vụ liên quan thông qua bảng DetailBill
+
+            // Lấy danh sách hóa đơn và dịch vụ liên quan
             var bills = _context.DetailBills
-                .Include(db => db.Bill)  // Lấy thông tin hóa đơn
-                .Include(db => db.Service)  // Lấy thông tin dịch vụ
-                .GroupBy(db => db.BillId)  // Nhóm theo BillId để lấy thông tin mỗi hóa đơn
+                .Include(db => db.Bill)       // Lấy thông tin hóa đơn
+                .ThenInclude(b => b.Room)    // Lấy thông tin phòng từ hóa đơn
+                .Include(db => db.Service)   // Lấy thông tin dịch vụ
+                .Where(db => roomIds.Contains(db.Bill.RoomId)) // Sử dụng roomIds thay vì rooms.Any(...)
+                .GroupBy(db => db.BillId)    // Nhóm theo BillId để lấy thông tin mỗi hóa đơn
                 .Select(g => new BillViewModal
                 {
                     BillId = g.Key,
-                    RoomName = g.FirstOrDefault() != null ? g.FirstOrDefault().Bill.Room.Name : "Chưa xác định", // Lấy tên phòng từ bản ghi đầu tiên
+                    RoomName = g.FirstOrDefault() != null ? g.FirstOrDefault().Bill.Room.Name : "Chưa xác định", // Lấy tên phòng
                     RoomPrice = g.FirstOrDefault() != null ? g.FirstOrDefault().Bill.Room.Price : 0, // Lấy giá phòng
                     Status = g.FirstOrDefault() != null ? g.FirstOrDefault().Bill.Status : "Chưa xác định", // Trạng thái hóa đơn
                     Services = g.Select(db => new DetailBillViewModel
                     {
-                        ServiceName = db.Service.Name,  // Tên dịch vụ
+                        ServiceName = db.Service.Name,   // Tên dịch vụ
                         Quantity = db.Number.GetValueOrDefault(0), // Số lượng dịch vụ
-                        UnitPrice = db.Price, // Đơn giá dịch vụ
+                        UnitPrice = db.Price,           // Đơn giá dịch vụ
                         TotalPrice = db.OldNumber.HasValue && db.NewNumber.HasValue
                             ? (db.NewNumber.Value - db.OldNumber.Value) * db.Price // (Số cuối - Số đầu) * Đơn giá
-                            : db.Number.GetValueOrDefault(0) * db.Price // Hoặc tính theo Số lượng * Đơn giá nếu không có Số đầu/Số cuối
+                            : db.Number.GetValueOrDefault(0) * db.Price           // Hoặc tính theo Số lượng * Đơn giá nếu không có Số đầu/Số cuối
                     }).ToList(),
                     TotalBill = (g.FirstOrDefault() != null ? g.FirstOrDefault().Bill.Room.Price : 0)
                                 + g.Sum(db => db.OldNumber.HasValue && db.NewNumber.HasValue
@@ -92,92 +138,22 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 })
                 .ToList();
 
-            
             return View(bills);
         }
-
-        //[HttpGet]
-        //public JsonResult GetRoomServices(Guid roomId)
-        //{
-        //    var services = _context.RoomsServices
-        //        .Where(rs => rs.RoomId == roomId)
-        //        .Select(rs => new
-        //        {
-        //            id = rs.Service.Id,
-        //            name = rs.Service.Name,
-        //            price = rs.Service.Price,
-        //            unit = rs.Service.Unit
-        //        })
-        //        .ToList();
-
-        //    return Json(services);
-        //}
-        //[HttpGet]
-        //public IActionResult GetRoomServices(Guid roomId)
-        //{
-        //    var userId = _context.Rooms
-        //            .Where(r => r.Id == roomId)
-        //            .Select(r => r.UserId)
-        //            .FirstOrDefault();
-        //    // Lấy hóa đơn gần nhất của phòng
-        //    var latestBill = _context.Bills
-        //                             .Where(b => b.RoomId == roomId && b.UserId == userId)
-        //                             //.OrderByDescending(b => b.CreateAt)
-        //                             .FirstOrDefault();
-
-        //    if (latestBill == null)
-        //    {
-        //        return Json(new { message = "Không có hóa đơn cho phòng này." });
-        //    }
-
-        //    // Lấy danh sách dịch vụ của hóa đơn gần nhất
-        //    var services = (from billDetail in _context.DetailBills
-        //                    join service in _context.Services on billDetail.ServiceId equals service.Id
-        //                    where billDetail.BillId == latestBill.Id
-        //                    select new
-        //                    {
-        //                        id =service.Id,
-        //                        name =service.Name,
-        //                        price =service.Price,
-        //                        unit = service.Unit,
-        //                        number = billDetail.Number,
-        //                        OldNumber = billDetail.NewNumber,  // Lấy số cũ từ BillDetail
-        //                    }).ToList();
-        //    if(services == null || services.Count == 0)
-        //    {
-        //        var service = _context.RoomsServices
-        //        .Where(rs => rs.RoomId == roomId)
-        //        .Select(rs => new
-        //        {
-        //            id = rs.Service.Id,
-        //            name = rs.Service.Name,
-        //            price = rs.Service.Price,
-        //            unit = rs.Service.Unit
-        //        })
-        //        .ToList();
-        //        return Json(service);
-        //    }
-        //    return Json(services);
-        //}
 
 
         [HttpGet]
         public IActionResult GetRoomServices(Guid roomId)
         {
-            var userId = _context.Rooms
-                .Where(r => r.Id == roomId)
-                .Select(r => r.UserId)
-                .FirstOrDefault();
-
-            // Lấy hóa đơn gần nhất của phòng
+            // Tìm hóa đơn gần nhất theo RoomId
             var latestBill = _context.Bills
-                .Where(b => b.RoomId == roomId && b.UserId == userId)
-                .OrderByDescending(b => b.CreateAt) // Sắp xếp theo thời gian tạo hóa đơn (nếu cần)
+                .Where(b => b.RoomId == roomId)
+                .OrderByDescending(b => b.CreateAt)
                 .FirstOrDefault();
 
             if (latestBill == null)
             {
-                // Không có hóa đơn, trả về danh sách dịch vụ đang áp dụng cho phòng
+                // Nếu không có hóa đơn, lấy danh sách dịch vụ liên quan đến phòng
                 var roomServices = _context.RoomsServices
                     .Where(rs => rs.RoomId == roomId)
                     .Select(rs => new
@@ -185,19 +161,17 @@ namespace KhoaLuan_QLNhaTro.Controllers
                         id = rs.Service.Id,
                         name = rs.Service.Name,
                         price = rs.Service.Price,
-                        unit = rs.Service.Unit
+                        unit = rs.Service.Unit,
+                        OldNumber = 0, // Mặc định số cũ
+                        NewNumber = 0, // Mặc định số mới
+                        Number = 1     // Mặc định số lượng
                     })
                     .ToList();
-
-                if (roomServices == null || !roomServices.Any())
-                {
-                    return Json(new { message = "Phòng này chưa được áp dụng dịch vụ nào." });
-                }
 
                 return Json(roomServices);
             }
 
-            // Lấy danh sách dịch vụ của hóa đơn gần nhất
+            // Nếu có hóa đơn, lấy dịch vụ từ DetailBill của hóa đơn đó
             var services = (from billDetail in _context.DetailBills
                             join service in _context.Services on billDetail.ServiceId equals service.Id
                             where billDetail.BillId == latestBill.Id
@@ -207,29 +181,85 @@ namespace KhoaLuan_QLNhaTro.Controllers
                                 name = service.Name,
                                 price = service.Price,
                                 unit = service.Unit,
-                                number = billDetail.Number,
-                                oldNumber = billDetail.NewNumber // Số cũ từ DetailBill
+                                OldNumber = billDetail.NewNumber ?? 0, // Lấy số mới của hóa đơn cũ làm số cũ
+                                NewNumber = 0, // Số mới để người dùng nhập
+                                Number = billDetail.Number ?? 0        // Số lượng cũ
                             }).ToList();
-
-            if (services == null || !services.Any())
-            {
-                // Nếu hóa đơn không chứa dịch vụ nào, trả về danh sách dịch vụ đang áp dụng cho phòng
-                var roomServices = _context.RoomsServices
-                    .Where(rs => rs.RoomId == roomId)
-                    .Select(rs => new
-                    {
-                        id = rs.Service.Id,
-                        name = rs.Service.Name,
-                        price = rs.Service.Price,
-                        unit = rs.Service.Unit
-                    })
-                    .ToList();
-
-                return Json(roomServices);
-            }
 
             return Json(services);
         }
+
+
+
+        //[HttpGet]
+        //public IActionResult GetRoomServices(Guid roomId)
+        //{
+        //    var userId = _context.Rooms
+        //        .Where(r => r.Id == roomId)
+        //        .Select(r => r.UserId)
+        //        .FirstOrDefault();
+
+        //    // Lấy hóa đơn gần nhất của phòng
+        //    var latestBill = _context.Bills
+        //        .Where(b => b.RoomId == roomId && b.UserId == userId)
+        //        .OrderByDescending(b => b.CreateAt) // Sắp xếp theo thời gian tạo hóa đơn (nếu cần)
+        //        .FirstOrDefault();
+
+        //    if (latestBill == null)
+        //    {
+        //        // Không có hóa đơn, trả về danh sách dịch vụ đang áp dụng cho phòng
+        //        var roomServices = _context.RoomsServices
+        //            .Where(rs => rs.RoomId == roomId)
+        //            .Select(rs => new
+        //            {
+        //                id = rs.Service.Id,
+        //                name = rs.Service.Name,
+        //                price = rs.Service.Price,
+        //                unit = rs.Service.Unit
+        //            })
+        //            .ToList();
+
+        //        if (roomServices == null || !roomServices.Any())
+        //        {
+        //            return Json(new { message = "Phòng này chưa được áp dụng dịch vụ nào." });
+        //        }
+
+        //        return Json(roomServices);
+        //    }
+
+        //    // Lấy danh sách dịch vụ của hóa đơn gần nhất
+        //    var services = (from billDetail in _context.DetailBills
+        //                    join service in _context.Services on billDetail.ServiceId equals service.Id
+        //                    where billDetail.BillId == latestBill.Id
+        //                    select new
+        //                    {
+        //                        id = service.Id,
+        //                        name = service.Name,
+        //                        price = service.Price,
+        //                        unit = service.Unit,
+        //                        number = billDetail.Number,
+        //                        oldNumber = billDetail.NewNumber // Số cũ từ DetailBill
+        //                    }).ToList();
+
+        //    if (services == null || !services.Any())
+        //    {
+        //        // Nếu hóa đơn không chứa dịch vụ nào, trả về danh sách dịch vụ đang áp dụng cho phòng
+        //        var roomServices = _context.RoomsServices
+        //            .Where(rs => rs.RoomId == roomId)
+        //            .Select(rs => new
+        //            {
+        //                id = rs.Service.Id,
+        //                name = rs.Service.Name,
+        //                price = rs.Service.Price,
+        //                unit = rs.Service.Unit
+        //            })
+        //            .ToList();
+
+        //        return Json(roomServices);
+        //    }
+
+        //    return Json(services);
+        //}
 
 
 
