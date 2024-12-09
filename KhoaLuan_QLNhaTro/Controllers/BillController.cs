@@ -112,22 +112,89 @@ namespace KhoaLuan_QLNhaTro.Controllers
 
         //    return Json(services);
         //}
+        //[HttpGet]
+        //public IActionResult GetRoomServices(Guid roomId)
+        //{
+        //    var userId = _context.Rooms
+        //            .Where(r => r.Id == roomId)
+        //            .Select(r => r.UserId)
+        //            .FirstOrDefault();
+        //    // Lấy hóa đơn gần nhất của phòng
+        //    var latestBill = _context.Bills
+        //                             .Where(b => b.RoomId == roomId && b.UserId == userId)
+        //                             //.OrderByDescending(b => b.CreateAt)
+        //                             .FirstOrDefault();
+
+        //    if (latestBill == null)
+        //    {
+        //        return Json(new { message = "Không có hóa đơn cho phòng này." });
+        //    }
+
+        //    // Lấy danh sách dịch vụ của hóa đơn gần nhất
+        //    var services = (from billDetail in _context.DetailBills
+        //                    join service in _context.Services on billDetail.ServiceId equals service.Id
+        //                    where billDetail.BillId == latestBill.Id
+        //                    select new
+        //                    {
+        //                        id =service.Id,
+        //                        name =service.Name,
+        //                        price =service.Price,
+        //                        unit = service.Unit,
+        //                        number = billDetail.Number,
+        //                        OldNumber = billDetail.NewNumber,  // Lấy số cũ từ BillDetail
+        //                    }).ToList();
+        //    if(services == null || services.Count == 0)
+        //    {
+        //        var service = _context.RoomsServices
+        //        .Where(rs => rs.RoomId == roomId)
+        //        .Select(rs => new
+        //        {
+        //            id = rs.Service.Id,
+        //            name = rs.Service.Name,
+        //            price = rs.Service.Price,
+        //            unit = rs.Service.Unit
+        //        })
+        //        .ToList();
+        //        return Json(service);
+        //    }
+        //    return Json(services);
+        //}
+
+
         [HttpGet]
         public IActionResult GetRoomServices(Guid roomId)
         {
             var userId = _context.Rooms
-                    .Where(r => r.Id == roomId)
-                    .Select(r => r.UserId)
-                    .FirstOrDefault();
+                .Where(r => r.Id == roomId)
+                .Select(r => r.UserId)
+                .FirstOrDefault();
+
             // Lấy hóa đơn gần nhất của phòng
             var latestBill = _context.Bills
-                                     .Where(b => b.RoomId == roomId && b.UserId == userId)
-                                     .OrderByDescending(b => b.CreateAt)
-                                     .FirstOrDefault();
+                .Where(b => b.RoomId == roomId && b.UserId == userId)
+                .OrderByDescending(b => b.CreateAt) // Sắp xếp theo thời gian tạo hóa đơn (nếu cần)
+                .FirstOrDefault();
 
             if (latestBill == null)
             {
-                return Json(new { message = "Không có hóa đơn cho phòng này." });
+                // Không có hóa đơn, trả về danh sách dịch vụ đang áp dụng cho phòng
+                var roomServices = _context.RoomsServices
+                    .Where(rs => rs.RoomId == roomId)
+                    .Select(rs => new
+                    {
+                        id = rs.Service.Id,
+                        name = rs.Service.Name,
+                        price = rs.Service.Price,
+                        unit = rs.Service.Unit
+                    })
+                    .ToList();
+
+                if (roomServices == null || !roomServices.Any())
+                {
+                    return Json(new { message = "Phòng này chưa được áp dụng dịch vụ nào." });
+                }
+
+                return Json(roomServices);
             }
 
             // Lấy danh sách dịch vụ của hóa đơn gần nhất
@@ -136,59 +203,34 @@ namespace KhoaLuan_QLNhaTro.Controllers
                             where billDetail.BillId == latestBill.Id
                             select new
                             {
-                                id =service.Id,
-                                name =service.Name,
-                                price =service.Price,
+                                id = service.Id,
+                                name = service.Name,
+                                price = service.Price,
                                 unit = service.Unit,
                                 number = billDetail.Number,
-                                OldNumber = billDetail.NewNumber,  // Lấy số cũ từ BillDetail
+                                oldNumber = billDetail.NewNumber // Số cũ từ DetailBill
                             }).ToList();
-            if(services == null || services.Count == 0)
+
+            if (services == null || !services.Any())
             {
-                var service = _context.RoomsServices
-                .Where(rs => rs.RoomId == roomId)
-                .Select(rs => new
-                {
-                    id = rs.Service.Id,
-                    name = rs.Service.Name,
-                    price = rs.Service.Price,
-                    unit = rs.Service.Unit
-                })
-                .ToList();
-                return Json(service);
+                // Nếu hóa đơn không chứa dịch vụ nào, trả về danh sách dịch vụ đang áp dụng cho phòng
+                var roomServices = _context.RoomsServices
+                    .Where(rs => rs.RoomId == roomId)
+                    .Select(rs => new
+                    {
+                        id = rs.Service.Id,
+                        name = rs.Service.Name,
+                        price = rs.Service.Price,
+                        unit = rs.Service.Unit
+                    })
+                    .ToList();
+
+                return Json(roomServices);
             }
+
             return Json(services);
         }
 
-
-        //[HttpGet]
-        //public JsonResult GetRoomServices(Guid roomId)
-        //{
-        //    var lastInvoice = _context.Bills
-        //.Where(i => i.RoomId == roomId)
-        //.OrderByDescending(i => i.CreateAt)  // Lấy hóa đơn mới nhất
-        //.Select(i => new
-        //{
-        //    BillId = i.Id,  // Lấy ID hóa đơn
-        //    Services = _context.DetailBills
-        //        .Where(d => d.BillId == i.Id)  // Lấy các dịch vụ trong hóa đơn này
-        //        .Select(d => new
-        //        {
-        //            ServiceId = d.ServiceId,
-        //            //ServiceName = d.Service.Name,  // Lấy tên dịch vụ
-        //            OldNumber = d.NewNumber ?? 0,  // Dữ liệu số cũ từ hóa đơn trước
-        //            Number = d.Number ?? 0
-        //        }).ToList()
-        //})
-        //.FirstOrDefault();
-
-        //    if (lastInvoice == null)
-        //    {
-        //        return Json(new { success = true, services = new List<object>() });
-        //    }
-
-        //    return Json(new { success = true, services = lastInvoice.Services });
-        //}
 
 
 
@@ -215,7 +257,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
                         CreateAt = CreateAt,
                         PaymentDate = PaymentDate,
                         UserId = userId.Value,
-                        Status = "False", // Trạng thái "Chưa thanh toán"
+                        Status = "Chưa thanh toán", // Trạng thái "Chưa thanh toán"
                         Total = 0, // Sẽ tính toán sau
                         SettlementDate = SettlementDate,
                     };

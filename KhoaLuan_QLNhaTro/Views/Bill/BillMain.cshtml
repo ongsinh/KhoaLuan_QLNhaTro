@@ -218,10 +218,10 @@
                             <div style="display: none;">
                                 <input type="hidden" id="RoomId" name="RoomId" value="">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3" style="display:none">
                                 <input type="date" id="SettlementDate" name="SettlementDate" value="">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3" style="display:none">
                                 <label>Danh sách dịch vụ</label>
                                 <input  id="ServicesData" name="ServicesData" value="">
                             </div>
@@ -609,7 +609,7 @@
                                         <input type="checkbox" checked> ${service.ServiceName}
                                         <p>Giá: <b>${service.Price}</b></p>
                                         <label>Số lượng:</label>
-                                                <input type="number" class="quantity" value="${service.Number}" placeholder="Số lượng">
+                                                        <input type="number" class="quantity" value="${service.Number||1}"> 
                                     </div>
                                 `);
                             }
