@@ -187,5 +187,52 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 return View(viewModel);
             }
         }
+
+
+        // Phương thức gia hạn hợp đồng
+        public IActionResult RenewContract(string contractId)
+        {
+            // Tìm hợp đồng cũ dựa trên contractId
+            var contract = _context.Contracts.FirstOrDefault(c => c.Id == contractId);
+
+            if (contract == null)
+            {
+                return NotFound("Hợp đồng không tồn tại.");
+            }
+
+            // Cập nhật hợp đồng cũ: thay đổi trạng thái thành "Hết hạn"
+            contract.Status = "Hết hạn";
+            contract.UpdateAt = DateTime.Now;
+            _context.SaveChanges();
+
+            // Tạo hợp đồng mới (gia hạn hợp đồng)
+            var newContract = new Contract
+            {
+                Id = Guid.NewGuid().ToString(),
+                StartDate = contract.StartDate.AddMonths(contract.Time), // Ngày bắt đầu là ngày sau khi hợp đồng cũ kết thúc
+                Time = contract.Time, // Thời gian thuê mới (có thể thay đổi nếu cần)
+                Deposit = contract.Deposit, // Tiền cọc (giữ nguyên)
+                Status = "Đang trong hạn", // Trạng thái hợp đồng mới
+                RoomId = contract.RoomId, // Liên kết phòng với hợp đồng mới
+                UserId = contract.UserId, // Liên kết người dùng với hợp đồng mới
+                CreateAt = DateTime.Now,
+                UpdateAt = DateTime.Now
+            };
+
+            // Thêm hợp đồng mới vào cơ sở dữ liệu
+            _context.Contracts.Add(newContract);
+            _context.SaveChanges();
+
+            // Cập nhật phòng để liên kết với hợp đồng mới
+            var room = _context.Rooms.FirstOrDefault(r => r.Id == contract.RoomId);
+            if (room != null)
+            {
+                room.Contract.Id = newContract.Id; // Liên kết phòng với hợp đồng mới
+                _context.SaveChanges();
+            }
+
+            // Quay lại trang danh sách hợp đồng của nhà
+            return RedirectToAction("ContractMain", new { houseId = contract.Room.HouseId });
+        }
     }
 }

@@ -51,7 +51,8 @@
                             @* <td>@contract.User người</td> *@
                             <td>@contract.Room.Price</td>
                             <td>@contract.Deposit</td>
-                            <td>@DateTime.Now.ToString("dd/MM/yyyy")</td>
+                            <td>@contract.CreateAt.ToString("dd/MM/yyyy")</td>
+                            @* <td>@DateTime.Now.ToString("dd/MM/yyyy")</td> *@
                             <td>@contract.StartDate.ToString("dd/MM/yyyy")</td>
                             <td>@contract.Time tháng</td>
                             <td>
@@ -63,6 +64,12 @@
                             <td class="options-icon" onclick="toggleDropdown(this)">
                                 <i class="fas fa-ellipsis-v"></i>
                                 <div class="dropdown">
+                                    @if (contract.Status == "Hết hạn hợp đồng")
+                                    {
+                                        <a href="@Url.Action("RenewContract", "Contract", new { contractId = contract.Id })" class="btn btn-warning">
+                                            Gia hạn hợp đồng
+                                        </a>
+                                    }
                                     <a href="javascript:void(0)" onclick="openEditModal(event)">Sửa khách thuê</a>
                                     <a href="javascript:void(0)" onclick="openDeleteModal(event)">Xóa khách thuê</a>
                                 </div>
