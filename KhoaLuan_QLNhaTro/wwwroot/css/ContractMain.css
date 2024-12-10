@@ -49,6 +49,14 @@
     border-radius: 5px;
     font-size: 12px;
 }
+
+.status-expired {
+    background-color: #d02020;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
 .status-badge {
     padding: 0.2rem 0.5rem;
     border-radius: 0.25rem;
@@ -248,3 +256,6 @@
 .padding2 {
     padding: 0px 10px 0px 10px;
 }
+
+
+
