@@ -73,7 +73,7 @@
                                 <tr>
                                     <td>@room.Name</td> <!-- Tên phòng tự động: Phòng 1, Phòng 2... -->
                                     @* <td>@room.FLoorNumber</td> *@
-                                    <td>@room.Price.ToString("C0")</td> <!-- Giá phòng -->
+                                    <td>@room.Price.ToString("F0")</td> <!-- Giá phòng -->
                                     <td>@(room.Contract?.Deposit != null ? $"{room.Contract.Deposit}đ" : "0đ")</td> <!-- Tiền cọc -->
                                     @* <td>@room.Acreage</td> *@
                                     

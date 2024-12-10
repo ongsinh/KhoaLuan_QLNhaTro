@@ -65,6 +65,7 @@
                     <th>@service.Name</th> <!-- Tên dịch vụ được thêm làm cột -->
                 }
                 <th>Tổng cộng</th>
+                <th>Ngày tạo</th>
                 <th>Trạng thái</th>
                 <th></th>
             </tr>
@@ -80,15 +81,17 @@
             {
                 <tr>
                     <td>@bill.RoomName</td>
-                    <td>@bill.RoomPrice</td>
+                    <td>@bill.RoomPrice.ToString("F0")</td>
                     @foreach (var service in ViewBag.Services)
                     {
                         var matchingService = bill.Services.FirstOrDefault(s => s.ServiceName == service.Name);
                         <td>
-                            @((matchingService != null) ? matchingService.TotalPrice : 0) <!-- Hiển thị giá trị 0 nếu không có dịch vụ -->
+                            @((matchingService != null) ? Math.Round(matchingService.TotalPrice.GetValueOrDefault(), 0) : 0)
+                            <!-- Hiển thị giá trị 0 nếu không có dịch vụ -->
                         </td>
                     }
-                    <td>@bill.TotalBill</td>
+                    <td>@string.Format("{0:F0}", bill.TotalBill)</td>
+                    <td>@bill.CreateAt.ToString("dd/MM/yyyy")</td>
                     <td><span class="badge unpaid">@bill.Status</span></td>
                     <td>
                         <div class="action-menu">
@@ -630,63 +633,6 @@
                 }
             });
         }
-
-        // function updateBill() {
-        //     const services = [];
-        //     $('#invoiceEditModal .service-item').each(function () {
-        //         const serviceId = $(this).data('id');
-        //         const isChecked = $(this).find('input[type="checkbox"]').is(':checked');
-        //         const oldNumber = $(this).find('.old-number').val();
-        //         const newNumber = $(this).find('.new-number').val();
-        //         const quantity = $(this).find('.quantity').val();
-
-        //         if (isChecked) {
-        //             const service = ({
-        //                 ServiceId: serviceId,
-        //                 OldNumber: oldNumber || null,
-        //                 NewNumber: newNumber || null,
-        //                 Number: quantity || null
-        //             });
-        //             services.push(service);
-        //         }
-        //     });
-        //     $("#servicesData").val(JSON.stringify(services));
-
-        //     const createAt = $('#DateCreate').val();  // Ngày lập hóa đơn (kiểu string từ input)
-        //     const paymentDate = $('#DatePay').val(); // Hạn đóng tiền (kiểu string từ input)
-        //     const formattedCreateAt = new Date(createAt).toISOString();;  // Định dạng ISO 8601
-        //     const formattedPaymentDate = new Date(paymentDate).toISOString();  // Định dạng ISO 8601
-        //     const billId = $('#billId').text;
-        //     const servicesData = $("#servicesData").val();
-        //     const services = JSON.parse(servicesData);
-
-        //     const data = {
-        //         billId: billId,
-        //         createAt: formattedCreateAt,
-        //         paymentDate: formattedPaymentDate,
-        //         servicesData: services
-        //     };
-
-        //     // Gửi yêu cầu AJAX để cập nhật
-        //     $.ajax({
-        //         url: '/Bill/UpdateBill',
-        //         type: 'POST',
-        //         dataType: 'json',
-        //         contentType: 'application/json',
-        //         data: JSON.stringify(data),
-        //         success: function (response) {
-        //             if (response.success) {
-        //                 alert('Cập nhật hóa đơn thành công!');
-        //                 $('#invoiceEditModal').modal('hide');
-        //             } else {
-        //                 alert(response.message);
-        //             }
-        //         },
-        //         error: function (error) {
-        //             console.error('Không thể cập nhật hóa đơn:', error);
-        //         }
-        //     });
-        // }
 
         function updateBill() {
             const services = [];

@@ -11,5 +11,6 @@ namespace KhoaLuan_QLNhaTro.Models
         public List<DetailBillViewModel> Services { get; set; }
         public List<Room> Rooms { get; set; }
         public decimal? TotalBill { get; set; }
+        public DateTime CreateAt {  get; set; }
     }
 }
