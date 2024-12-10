@@ -10,11 +10,18 @@
     <div class="info-container">
         <div class="user-info">
             <!-- Thông tin cá nhân -->
-            <h4>Thông tin cá nhân</h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Thông tin cá nhân</h4>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editUserInfoModal">Sửa thông tin</button>
+            </div>
             <table class="table table-bordered">
                 <tr>
                     <th>Họ và tên</th>
                     <td>@Model.User.Name</td>
+                </tr>
+                <tr>
+                    <th>Số điện thoại</th>
+                    <td>@Model.User.Account.Phone</td>
                 </tr>
                 <tr>
                     <th>CCCD</th>
@@ -104,3 +111,87 @@
     </div> 
 </div>
 
+<div class="modal fade" id="editUserInfoModal" tabindex="-1" aria-labelledby="editUserInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserInfoModalLabel">Sửa thông tin cá nhân</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserInfoForm">
+                    <input type="hidden" name="Id" value="@Model.User.Id" />
+                    <div class="mb-3">
+                        <label for="userName" class="form-label">Họ và tên</label>
+                        <input type="text" class="form-control" id="userName" name="Name" value="@Model.User.Name" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="userCCCD" class="form-label">CCCD</label>
+                        <input type="text" class="form-control" id="userCCCD" name="CCCD" value="@Model.User.CCCD" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="userGender" class="form-label">Giới tính</label>
+                        <select class="form-select" id="userGender" name="Gender">
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="userEmail" name="Email" value="@Model.User.Email" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="userDob" class="form-label">Ngày sinh</label>
+                        <input type="date" class="form-control" id="userDob" name="Dob" value="@Model.User.Dob.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="userAddress" class="form-label">Địa chỉ</label>
+                        <input type="text" class="form-control" id="userAddress" name="Address" value="@Model.User.Address" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="userPhone" class="form-label">Số điện thoại</label>
+                        <input type="number" class="form-control" id="userPhone" name="Phone" value="@Model.User.Account.Phone" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="userPassword" class="form-label">Địa chỉ</label>
+                        <input type="password" class="form-control" id="userPassword" name="Password" value="@Model.User.Account.Password" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="saveUserInfoBtn">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('saveUserInfoBtn').addEventListener('click', function () {
+        const formData = new FormData(document.getElementById('editUserInfoForm'));
+
+        fetch('/TrangChu/UpdateInfo', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('Cập nhật thông tin thành công!');
+                    location.reload(); // Reload giao diện.
+                } else {
+                    alert(`Lỗi: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                alert('Không thể kết nối đến server, vui lòng thử lại sau.');
+            });
+    });
+
+</script>

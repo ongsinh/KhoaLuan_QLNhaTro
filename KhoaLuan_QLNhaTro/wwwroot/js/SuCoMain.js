@@ -12,6 +12,10 @@ document.addEventListener('click', function (event) {
     });
 });
 
+document.getElementById('editIncidentModal').addEventListener('hidden.bs.modal', function () {
+    console.log('Modal đã được đóng');
+});
+
 function openEditModal(url) {
     // Open the modal
     $('#editModal').modal('show');

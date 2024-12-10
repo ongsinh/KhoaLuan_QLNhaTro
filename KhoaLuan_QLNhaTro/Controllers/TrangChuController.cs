@@ -33,10 +33,10 @@ namespace KhoaLuan_QLNhaTro.Controllers
 
             if (user == null) return NotFound("Không tìm thấy thông tin sinh viên.");
             var contract = await _context.Contracts
-        .Include(c => c.Room)
-            .ThenInclude(r => r.RoomServices)
+                .Include(c => c.Room)
+                .ThenInclude(r => r.RoomServices)
                 .ThenInclude(rs => rs.Service) // Bao gồm thông tin chi tiết của dịch vụ
-        .FirstOrDefaultAsync(c => c.UserId == userGuid);
+                .FirstOrDefaultAsync(c => c.UserId == userGuid);
 
             if (contract == null || contract.Room == null)
             {
@@ -60,47 +60,48 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 Room = room,
                 Services = room.RoomServices.ToList() // Lấy toàn bộ RoomService, vì View có thể cần thêm thông tin
             };
-            // Lấy thông tin hợp đồng có liên kết với UserId
-            //var contract = await _context.Contracts
-            //    .Include(c => c.Room) // Bao gồm thông tin phòng
-            //    .FirstOrDefaultAsync(c => c.UserId == userGuid);
-
-            //Room? room = null;
-            //if (contract != null)
-            //{
-            //    room = contract.Room; // Lấy thông tin phòng từ hợp đồng
-            //}
-            //var services = room.RoomServices.ToList();
-            //// Lấy danh sách dịch vụ liên kết với phòng
-            ////var services = room != null
-            ////    ? await _context.RoomsServices
-            ////        .Include(rs => rs.Service)
-            ////        .Where(rs => rs.RoomId == room.Id)
-            ////        .ToListAsync()
-            ////    : new List<RoomService>();
-
-            //// Lấy thông tin phòng của sinh viên
-            ////var room = await _context.Rooms
-            ////    .Include(r => r.House) // Nếu cần thông tin nhà
-            ////    .FirstOrDefaultAsync(r => r.UserId == userGuid);
-
-            ////// Lấy danh sách dịch vụ của phòng
-            ////var services = room != null
-            ////    ? await _context.RoomsServices
-            ////        .Include(rs => rs.Service) // Load thông tin chi tiết dịch vụ
-            ////        .Where(rs => rs.RoomId == room.Id)
-            ////        .ToListAsync()
-            ////    : new List<RoomService>();
-
-            //// Truyền dữ liệu sang ViewModel
-            //var model = new UserRoomViewModel
-            //{
-            //    User = user,
-            //    Room = room,
-            //    Services = room.RoomServices
-            //};
-
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateInfo([FromForm] UserUpdateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Dữ liệu không hợp lệ!" });
+            }
+
+            try
+            {
+                // Lấy người dùng từ database
+             
+                var user = _context.Users
+                    .Include(u => u.Account) // Bao gồm liên kết đến bảng Account
+                    .FirstOrDefault(u => u.Id == model.Id);
+
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "Người dùng không tồn tại!" });
+                }
+
+                // Cập nhật thông tin
+                user.Name = model.Name;
+                user.CCCD = model.CCCD;
+                user.Gender = model.Gender;
+                user.Email = model.Email;
+                user.Dob = model.Dob;
+                user.Address = model.Address;
+                user.Account.Phone = model.Phone;
+                user.Account.Password = model.Password; // Đảm bảo bảo mật nếu mật khẩu thay đổi.
+
+                _context.SaveChanges(); // Lưu thay đổi vào DB.
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
     }
