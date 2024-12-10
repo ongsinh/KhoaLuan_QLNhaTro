@@ -63,6 +63,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
             incident.UserId = userGuid;
             incident.CreateAt = DateTime.Now;
             incident.UpdateAt = DateTime.Now;
+            incident.Date = DateTime.Now;
             incident.Status = "Pending"; // You can set it based on your logic
 
             try
@@ -98,8 +99,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
             return RedirectToAction("SuCoMain");
         }
 
-        // Action to get the incident for editing
-        // Lấy thông tin sự cố để sửa (Ajax)
+        
         [HttpGet]
         public IActionResult EditSuCo(Guid id)
         {
@@ -131,42 +131,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
             //return Json(new { success = true });
         }
 
-        // Xóa sự cố
-        //[HttpPost]
-        //public IActionResult DeleteSuCo(Guid id)
-        //{
-        //    var incident = _context.Incidents.FirstOrDefault(x => x.Id == id);
-        //    if (incident == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Incidents.Remove(incident);
-        //    _context.SaveChanges();
-        //    return Json(new { success = true });
-        //}
-        //[HttpPost]
-        //public IActionResult DeleteSuCo(Guid id)
-        //{
-        //    try
-        //    {
-        //        var incident = _context.Incidents.FirstOrDefault(x => x.Id == id);
-        //        if (incident == null)
-        //        {
-        //            return NotFound();
-        //        }
-
-        //        _context.Incidents.Remove(incident);
-        //        _context.SaveChanges();
-        //        return Json(new { success = true });
-        //    }
-        //    catch (DbUpdateException ex)
-        //    {
-        //        // Log lỗi chi tiết
-        //        Console.WriteLine($"Error: {ex.InnerException?.Message}");
-        //        return Json(new { success = false, message = "Không thể xóa sự cố. Hãy kiểm tra lại." });
-        //    }
-        //}
+        
         [HttpPost]
         public IActionResult DeleteSuCo(Guid id)
         {
