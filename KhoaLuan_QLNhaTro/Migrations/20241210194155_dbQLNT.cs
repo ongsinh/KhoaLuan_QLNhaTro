@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KhoaLuan_QLNhaTro.Migrations
 {
     /// <inheritdoc />
-    public partial class a9999 : Migration
+    public partial class dbQLNT : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
