@@ -27,10 +27,16 @@
 
 function updateContractStatus() {
     $(".table-section tbody tr").each(function () {
-        const startDate = new Date($(this).find("td:nth-child(5)").text()); // Ngày vào ở (cột thứ 5)
+        const createAtText = $(this).find("td:nth-child(4)").text().trim();
+
+        // Tách chuỗi ngày DD/MM/YYYY
+        const createAtParts = createAtText.split('/'); // Chia chuỗi thành các phần: [DD, MM, YYYY]
+
+        // Chuyển đổi chuỗi ngày thành đối tượng Date (tháng trong JavaScript bắt đầu từ 0, vì vậy trừ đi 1)
+        const createAt = new Date(createAtParts[2], createAtParts[1] - 1, createAtParts[0]);
         const time = parseInt($(this).find("td:nth-child(6)").text()); // Thời hạn hợp đồng (cột thứ 6)
-        const endDate = new Date(startDate);
-        endDate.setMonth(startDate.getMonth() + time); // Tính ngày kết thúc hợp đồng
+        const endDate = new Date(createAt);
+        endDate.setMonth(createAt.getMonth() + time); // Tính ngày kết thúc hợp đồng
         const statusElement = $(this).find("td:nth-child(7) span"); // Cột trạng thái (cột thứ 7)
 
         // Nếu ngày hiện tại vượt quá ngày kết thúc hợp đồng, thay đổi trạng thái
