@@ -72,8 +72,22 @@ thead th {
     font-weight: bold;
 }
 
+.badge-success {
+    color: #fff;
+    background-color: #65b565;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+.badge-danger {
+    color: #fff;
+    background-color: #d02020;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
 /* Status badge styles */
-.status-badge {
+/*.status-badge {
     padding: 5px 10px;
     border-radius: 12px;
     color: #fff;
@@ -90,7 +104,7 @@ thead th {
 
 .status-success {
     background-color: #5cb85c;
-}
+}*/
 
 /* Action icon and popup menu */
 /* Style cho icon hành động */
