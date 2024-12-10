@@ -32,31 +32,15 @@
                 <thead class="thead-light">
                     <tr>
                         <th>Tên phòng</th>
-                        @* <th>Nhóm</th> *@
                         <th>Giá thuê</th>
                         <th>Tiền cọc</th>
-                        @* <th>Diện tích</th> *@
-                        @* <th>Khách thuê</th> *@
                         <th>Ngày vào ở </th>
                         <th>Thời hạn hợp đồng</th>
                         <th>Tình trạng</th>
                         <th></th>
                     </tr>
                 </thead>
-                @*tbody>
-                    @if (Model != null && Model.Any())
-                    {
-                        @foreach (var room in Model)
-                        {
-                    <tr>
-                                <td>@room.Name</td>
-                                <td>@room.FLoorNumber</td>
-                                <td>@room.Price</td>
-                                <td>@room.Contract.Deposit</td>
-                                <td>2 người</td>
-                                <td>@room.Contract.StartDate.ToString("dd/MM/yyyy")</td>
-                                <td>@room.Contract.Time Tháng</td>
-                                <td><span class="status-badge status-success">@room.Status</span></td> *@
+                
                 <tbody>
                     @if (Model.Rooms != null && Model.Rooms.Any())
                     {
@@ -72,8 +56,7 @@
                             {
                                 <tr>
                                     <td>@room.Name</td> <!-- Tên phòng tự động: Phòng 1, Phòng 2... -->
-                                    @* <td>@room.FLoorNumber</td> *@
-                                    <td>@room.Price.ToString("F0")</td> <!-- Giá phòng -->
+                                    <td>@room.Price.ToString("C0")</td> <!-- Giá phòng -->
                                     <td>@(room.Contract?.Deposit != null ? $"{room.Contract.Deposit}đ" : "0đ")</td> <!-- Tiền cọc -->
                                     @* <td>@room.Acreage</td> *@
                                     
@@ -81,11 +64,17 @@
                                     <td>@(room.Contract?.Time != null ? $"{room.Contract.Time} Tháng" : "Không xác định")</td> <!-- Thời hạn hợp đồng -->
 
                                     <td>
-                                        <span class="badge @(room.Status == "Available" ? "badge-success" : "badge-danger")">
+                                        <span class="@(room.Status == "Còn trống" ? "badge-danger" : "badge-success" )">
                                             @room.Status
                                         </span>
                                     </td>
-                                    
+                                    @* <td>
+                                        <span class="@(room.Status == "Còn trống" ? "badge-danger" : (room.Status == "Đang ở" ? "badge-success" : "badge-warning"))">
+                                            @room.Status
+                                        </span>
+                                    </td> *@
+
+
                             <td>
                                         <!-- Thêm lớp edit-room-btn vào icon để dễ dàng thao tác -->
                                         <i class="fas fa-ellipsis-v action-icon edit-room-btn" data-room-id="@room.Id"></i>

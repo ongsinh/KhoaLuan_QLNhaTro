@@ -56,7 +56,10 @@
                             <td>@contract.StartDate.ToString("dd/MM/yyyy")</td>
                             <td>@contract.Time tháng</td>
                             <td>
-                                <span class="status-active">@contract.Status</span>
+                                @* <span class="status-active">@contract.Status</span> *@
+                                <span class="@(contract.Status == "Hết hạn hợp đồng" ? "status-expired" : "status-active")">
+                                    @contract.Status
+                                </span>
                             </td>
                             <td class="options-icon" onclick="toggleDropdown(this)">
                                 <i class="fas fa-ellipsis-v"></i>

@@ -20,6 +20,22 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 .Include(c => c.User)  // Bao gồm User để truy xuất thông tin khách thuê
                 .ToList();
 
+            // Lặp qua danh sách hợp đồng và tính trạng thái hợp đồng
+            foreach (var contract in contracts)
+            {
+                // Tính ngày kết thúc hợp đồng
+                DateTime endDate = contract.StartDate.AddMonths(contract.Time);
+
+                // Kiểm tra nếu ngày hiện tại đã vượt qua ngày kết thúc hợp đồng
+                if (DateTime.Now > endDate)
+                {
+                    contract.Status = "Hết hạn hợp đồng";  // Cập nhật trạng thái nếu hết hạn
+                }
+                else
+                {
+                    contract.Status = "Trong hạn hợp đồng";  // Trạng thái "Trong hạn" nếu chưa hết hạn
+                }
+            }
             // Truyền houseId qua ViewBag
             ViewBag.HouseId = houseId;
 
