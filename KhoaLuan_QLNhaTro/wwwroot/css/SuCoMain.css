@@ -1,6 +1,5 @@
 ﻿.container {
     margin-top: 20px;
-    max-width: 800px;
 }
 
 .table th, .table td {
@@ -10,3 +9,34 @@
 .btn {
     margin: 5px 0;
 }
+
+.options-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+
+.dropdown {
+    width: 130px;
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+    .dropdown a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        cursor: pointer;
+    }
+
+        .dropdown a:hover {
+            background-color: #f0f0f0;
+        }

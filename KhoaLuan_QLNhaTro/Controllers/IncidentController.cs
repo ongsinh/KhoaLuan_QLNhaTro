@@ -21,7 +21,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 return BadRequest("Invalid house ID.");
             }
 
-            // Get all rooms in the house
+            // Step 1: Get all rooms in the house
             var roomIds = await _context.Rooms
                 .Where(r => r.HouseId == idHouse)
                 .Select(r => r.Id)
@@ -35,26 +35,30 @@ namespace KhoaLuan_QLNhaTro.Controllers
 
             Console.WriteLine($"Found room IDs for house {idHouse}: {string.Join(", ", roomIds)}");
 
-            // Get incidents linked to these rooms
-            var incidents = await _context.IncidentRooms
-                .Where(ir => roomIds.Contains(ir.RoomId)) // Make sure it's linked to rooms of the correct house
-                .Include(ir => ir.Incident) // Include incident details
-                .Include(ir => ir.Room)    // Include room details
-                .OrderByDescending(ir => ir.Incident.Date) // Sort incidents by date
+            // Step 2: Get incidents linked to these rooms (IncidentRoom model)
+            var incidentRooms = await _context.IncidentRooms
+                .Where(ir => roomIds.Contains(ir.RoomId)) // Filter by rooms in the specified house
+                .Include(ir => ir.Incident)  // Include incident details
+                .ThenInclude(i => i.User)
+                .Include(ir => ir.Room)      // Include room details
+                .OrderByDescending(ir => ir.Incident.Date) // Order by incident date
                 .ToListAsync();
 
-            if (!incidents.Any())
+            if (!incidentRooms.Any())
             {
                 ViewBag.Message = "No incidents found for this house.";
                 Console.WriteLine("No incidents found.");
             }
             else
             {
-                Console.WriteLine($"Found incidents: {incidents.Count}");
+                Console.WriteLine($"Found incidents: {incidentRooms.Count}");
             }
 
-            return View(incidents);
+            // Step 3: Return to the view with the incident rooms
+            return View(incidentRooms);
         }
+
+
 
 
 

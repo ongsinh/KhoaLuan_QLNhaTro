@@ -87,7 +87,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
                     {
                         Id = Guid.NewGuid(), 
                         CreatedAt = DateTime.Now,
-                        Password = "khongxacdinh", 
+                        Password = "11111", 
                         Phone = viewModel.Contract.User.Account.Phone, 
                         RoleId = "Role_2", 
                         UpdatedAt = DateTime.Now
@@ -128,13 +128,36 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 };
 
                 _context.Contracts.Add(contract);
-                _context.SaveChanges(); 
+                _context.SaveChanges();
 
-                var room = _context.Rooms.FirstOrDefault(r => r.Id == viewModel.Contract.RoomId);
+                var room = _context.Rooms
+                    .Include(r => r.Contract) // Đảm bảo hợp đồng được tải
+                    .FirstOrDefault(r => r.Id == viewModel.Contract.RoomId);
+
                 if (room != null)
                 {
-                    room.Status = "Đang ở"; 
-                    _context.SaveChanges(); 
+                    // Nếu phòng có hợp đồng, cập nhật các thông tin của hợp đồng
+                    if (room.Contract != null)
+                    {
+                        room.Contract.Deposit = viewModel.Contract.Deposit; // Cập nhật tiền cọc
+                        room.Contract.StartDate = viewModel.Contract.StartDate; // Cập nhật ngày bắt đầu
+                        room.UserId = user.Id; // Cập nhật UserId
+                    }
+                    else
+                    {
+                        // Nếu phòng chưa có hợp đồng, thông báo hoặc xử lý thêm
+                        Console.WriteLine("Phòng này chưa có hợp đồng.");
+                    }
+
+                    // Cập nhật trạng thái phòng
+                    room.Status = "Đang ở";
+
+                    // Lưu thay đổi
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    Console.WriteLine("Phòng không tồn tại.");
                 }
 
 
