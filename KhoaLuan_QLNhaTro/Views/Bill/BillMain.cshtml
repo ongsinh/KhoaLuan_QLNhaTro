@@ -51,7 +51,6 @@
     <!-- Action Buttons -->
     <div class="actions">
         <button class="add-button-bill" data-toggle="modal" data-target="#billingModal">+</button>
-        <button>In hóa đơn</button>
     </div>
 
     <!-- Table Section -->
@@ -199,10 +198,10 @@
 
                     <form id="invoiceForm" asp-action="CreateInvoice" asp-controller="Bill" method="post">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            @* <div class="col-md-6 mb-3">
                                 <label for="month" class="form-label">Tháng lập phiếu*</label>
                                 <input type="text" class="form-control" id="month" name="month" value="11/2024" readonly>
-                            </div>
+                            </div> *@
 
                             <div class="col-md-6 mb-3">
                                 <label for="CreateAt" class="form-label">Ngày lập hóa đơn*</label>
@@ -266,10 +265,10 @@
                 <!-- Modal Body -->
                     <div class="modal-body">
                         <!-- Thông tin lập phiếu -->
-                            <div class="form-group">
+                           @*  <div class="form-group">
                                 <label>Tháng lập phiếu</label>
                                 <input type="text" class="form-control" value="11/2024" readonly>
-                            </div>
+                            </div> *@
                             <div class="form-group">
                                 <label>Ngày lập hóa đơn</label>
                                 <input type="date" id="DateCreate" name="CreateAt" class="form-control" value="2024-11-03">
@@ -281,7 +280,7 @@
                             <div class="form-group">
                                 <label>Tiền phòng: <p id="roomPrice"></p></label>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" style="display :none">
                                 <input id="billId" name="BillId">
                                 <input id="servicesData" name="servicesData" value="">
                             </div>
@@ -663,12 +662,14 @@
             const paymentDate = $('#DatePay').val(); // Hạn đóng tiền
             const billId = $('#billId').val();       // ID hóa đơn
             const servicesData = $("#servicesData").val(); // JSON dịch vụ
+            const formattedCreateAt = new Datetime(createAt).toISOString();
+            const formattedPaymentDate = new Date(paymentDate).toISOString();
 
             // Dữ liệu gửi đến server
             const data = {
                 billId: billId,
-                createAt: createAt,
-                paymentDate: paymentDate,
+                createAt: formattedCreateAt,
+                paymentDate: formattedPaymentDate,
                 servicesData: JSON.parse(servicesData) // Chuyển đổi lại từ JSON string
             };
 

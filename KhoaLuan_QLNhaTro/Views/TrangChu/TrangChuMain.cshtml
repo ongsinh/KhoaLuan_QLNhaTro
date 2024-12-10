@@ -58,7 +58,7 @@
                     </tr>
                     <tr>
                         <th>Giá thuê</th>
-                        <td>@Model.Room.Price</td>
+                        <td>@Model.Room.Price.ToString("F0")</td>
                     </tr>
                     <tr>
                         <th>Tầng</th>
@@ -66,7 +66,7 @@
                     </tr>
                     <tr>
                         <th>Diện tích</th>
-                        <td>@Model.Room.Acreage</td>
+                        <td>@Model.Room.Acreage.ToString("F0")</td>
                     </tr>
                     <tr>
                         <th>Trạng thái</th>
@@ -98,7 +98,7 @@
                     {
                         <tr>
                             <td>@roomService.Service.Name</td>
-                            <td>@roomService.Service.Price</td>
+                            <td>@roomService.Service.Price.ToString("F0")</td>
                         </tr>
                     }
                 </tbody>

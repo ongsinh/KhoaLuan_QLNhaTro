@@ -29,11 +29,11 @@
                                 </tr>
                                 <tr>
                                     <th>Giá thuê</th>
-                                <td>@Model.Price</td>
+                                <td>@Model.Price.ToString("F0")</td>
                                 </tr>
                                 <tr>
                                     <th>Diện tích</th>
-                                <td>@Model.Acreage</td>
+                                <td>@Model.Acreage.ToString("F0")</td>
                                 </tr>
                                 <tr>
                                     <th>Ngày vào ở</th>
@@ -79,7 +79,7 @@
                                     <td>@service.Service.Name </td>
                                     <td>Chỉ số hiện tại: 0</td>
                                     <td>Cố định</td>
-                                    <td>@service.Service.Price</td>
+                                            <td>@service.Service.Price.ToString("F0")</td>
                                 </tr>
                             }
                         }

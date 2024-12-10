@@ -30,6 +30,18 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 .Include(r => r.Contract)
                 .FirstOrDefault(r => r.Id == id);
 
+            if (room == null)
+            {
+                return NotFound("Phòng không tồn tại.");
+            }
+
+            // Kiểm tra nếu phòng không có UserID
+            if (room.UserId == null)
+            {
+                TempData["Message"] = "Phòng chưa có người ở."; // Truyền thông báo qua TempData
+                return RedirectToAction("RoomMain"); // Chuyển hướng tới danh sách phòng (hoặc trang khác phù hợp)
+            }
+
             // Truy vấn danh sách dịch vụ liên kết với phòng qua RoomService
             var services = _context.RoomsServices
                 .Where(rs => rs.RoomId == id)

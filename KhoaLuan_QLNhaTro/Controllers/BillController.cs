@@ -410,7 +410,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
 
             return Json(new { success = true, bill, totalBill , roomPrice });
         }
-
+        [HttpPost]
         public IActionResult UpdateBill(string billId, DateTime createAt, DateTime paymentDate, string servicesData)
         {
 
@@ -447,8 +447,11 @@ namespace KhoaLuan_QLNhaTro.Controllers
 
             // Lưu thay đổi vào cơ sở dữ liệu
             _context.SaveChanges();
-
-            return Json(new { success = true, message = "Cập nhật hóa đơn và dịch vụ thành công!" });
+            var houseId = _context.Bills
+            .Where(b => b.Id == billId) // Tìm hóa đơn theo BillId
+            .Select(b => b.Room.HouseId) // Truy xuất RoomId từ Bill và lấy HouseId từ Room
+            .FirstOrDefault();
+            return RedirectToAction("BillMain", new { idHouse = houseId });
         }
 
     }
