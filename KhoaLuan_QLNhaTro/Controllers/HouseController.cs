@@ -40,7 +40,6 @@ namespace KhoaLuan_QLNhaTro.Controllers
             };
 
             _context.Houses.Add(house);
-            _context.SaveChanges();
 
             // Tạo phòng trọ
             int roomNumber = 1;
@@ -57,7 +56,6 @@ namespace KhoaLuan_QLNhaTro.Controllers
                         Price = 1000000,
                         Acreage = 30,
                         Status = "Còn trống",
-                        //Acreage = 30,
                         CreateAt = DateTime.Now,
                         UpdateAt = DateTime.Now
                     };

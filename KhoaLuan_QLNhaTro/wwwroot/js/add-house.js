@@ -24,39 +24,42 @@ function generateFloorInputs() {
 }
 
 $(document).ready(function () {
-    $('#addHouseForm').submit(function (event) {
-        event.preventDefault(); // Ngừng form submit mặc định
+    if (!$('#addHouseForm').data('hasSubmitEvent')) {
+        $('#addHouseForm').data('hasSubmitEvent', true);
+        $('#addHouseForm').submit(function (event) {
+            event.preventDefault(); // Ngừng form submit mặc định
+            
+            var formData = new FormData(this);  // Lấy tất cả dữ liệu trong form
 
-        var formData = new FormData(this);  // Lấy tất cả dữ liệu trong form
+            // Debug thông tin FormData
+            console.log("FormData:", formData);
 
-        // Debug thông tin FormData
-        console.log("FormData:", formData);
+            $.ajax({
+                url: '/House/CreateHouseAndRooms',  // Đường dẫn action
+                method: 'POST',
+                data: formData,  // Dữ liệu gửi đi từ formData
+                processData: false,  // Đảm bảo không xử lý dữ liệu tự động
+                contentType: false,  // Không dùng content-type mặc định
+                success: function (response) {
+                    if (response.success) {
+                        // Hiển thị tên nhà trọ mới tại sidebar
+                        $('.property-name').text(response.houseName);
 
-        $.ajax({
-            url: '/House/CreateHouseAndRooms',  // Đường dẫn action
-            method: 'POST',
-            data: formData,  // Dữ liệu gửi đi từ formData
-            processData: false,  // Đảm bảo không xử lý dữ liệu tự động
-            contentType: false,  // Không dùng content-type mặc định
-            success: function (response) {
-                if (response.success) {
-                    // Hiển thị tên nhà trọ mới tại sidebar
-                    $('.property-name').text(response.houseName);
+                        // Lưu houseId vào session để dùng cho các yêu cầu tiếp theo
+                        sessionStorage.setItem('houseId', response.houseId);
+                        sessionStorage.setItem('houseName', response.houseName);
 
-                    // Lưu houseId vào session để dùng cho các yêu cầu tiếp theo
-                    sessionStorage.setItem('houseId', response.houseId);
-                    sessionStorage.setItem('houseName', response.houseName);
-
-                    window.location.href = `/Room/RoomMain?houseId=${response.houseId}`;
-                } else {
-                    alert('Lỗi khi tạo nhà trọ.');
+                        window.location.href = `/Room/RoomMain?houseId=${response.houseId}`;
+                    } else {
+                        alert('Lỗi khi tạo nhà trọ.');
+                    }
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra khi gửi dữ liệu.');
                 }
-            },
-            error: function () {
-                alert('Có lỗi xảy ra khi gửi dữ liệu.');
-            }
+            });
         });
-    });
+    }
 });
 // Khi modal đóng
 // Đảm bảo modal đóng được khi nhấn "x" hoặc nút "Đóng"
@@ -167,23 +170,7 @@ $(document).ready(function () {
     });
 });
 
-//function showEditModalHouse(houseId) {
-//    // Mở modal chỉnh sửa và điền thông tin nhà trọ
-//    $.ajax({
-//        url: '/House/GetHouseById',  // Lấy thông tin nhà trọ qua AJAX
-//        method: 'GET',
-//        data: { id: houseId },
-//        success: function (response) {
-//            if (response.success) {
-//                // Điền thông tin vào modal chỉnh sửa
-//                $('#editHouseName').val(response.house.Name);
-//                $('#editHouseAddress').val(response.house.Address);
-//                $('#editHouseId').val(response.house.Id);
-//                $('#editHouseModal').modal('show');
-//            }
-//        }
-//    });
-//}
+
 
 
 
