@@ -4,7 +4,7 @@ namespace KhoaLuan_QLNhaTro.ViewModel
 {
     public class UserHouseViewModel
     {
-        public Guid IdHouse { get; set; }
+        public Guid HouseId { get; set; }
         public List<User> Users { get; set; }
     }
 }

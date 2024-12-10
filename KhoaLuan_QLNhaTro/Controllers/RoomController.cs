@@ -89,6 +89,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
 
             // Lấy danh sách phòng của nhà trọ
             var rooms = _context.Rooms
+                .Include(r => r.Contract)  // Đảm bảo hợp đồng được nạp đầy đủ
                 .Where(r => r.HouseId == houseId.Value)
                 .OrderBy(r => r.FLoorNumber)
                 .ThenBy(r => r.Name)
@@ -212,52 +213,6 @@ namespace KhoaLuan_QLNhaTro.Controllers
             }
             return Json(new { success = false, message = "Dữ liệu không hợp lệ." });
         }
-
-        //[HttpPost]
-        //[Route("/Room/CreateHouse")]
-        //public IActionResult CreateHouse(string Name, string Address, int floorNumber, List<int> floorRooms)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var house = new House
-        //        {
-        //            Id = Guid.NewGuid(),
-        //            Name = Name,
-        //            Address = Address,
-        //            floorNumber = floorNumber,
-        //            CreateAt = DateTime.Now,
-        //            UpdateAt = DateTime.Now
-        //        };
-
-        //        _context.Houses.Add(house);
-        //        _context.SaveChanges();
-
-        //        int roomCount = 1;
-        //        for (int i = 0; i < floorRooms.Count; i++)
-        //        {
-        //            int roomsInFloor = floorRooms[i]; // Số phòng ở tầng i
-        //            for (int j = 0; j < roomsInFloor; j++)
-        //            {
-        //                var room = new Room
-        //                {
-        //                    Id = Guid.NewGuid(),
-        //                    Name = $"Tầng {i + 1} - Phòng {roomCount++}",
-        //                    FLoorNumber = i + 1,
-        //                    HouseId = house.Id,
-        //                    CreateAt = DateTime.Now,
-        //                    UpdateAt = DateTime.Now
-        //                };
-
-        //                _context.Rooms.Add(room);
-        //            }
-        //        }
-
-        //        _context.SaveChanges();
-        //        return RedirectToAction("RoomMain");
-        //    }
-
-        //    return View();
-        //}
 
         [HttpGet]
         public IActionResult GetRoomData(Guid id)

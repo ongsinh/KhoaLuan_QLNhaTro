@@ -1,0 +1,24 @@
+﻿@model KhoaLuan_QLNhaTro.Models.Incident
+
+<form id="editIncidentForm" asp-action="EditSuCo">
+    <input type="hidden" id="incidentId" name="incidentId" value="@Model.Id" />
+    <div class="form-group">
+        <label for="incidentName">Tên sự cố</label>
+        <input type="text" class="form-control" id="incidentName" name="name" value="@Model.Name" required />
+    </div>
+    <div class="form-group">
+        <label for="incidentDescription">Mô tả</label>
+        <textarea class="form-control" id="incidentDescription" name="description" rows="4" required>@Model.Description</textarea>
+    </div>
+    <div class="form-group">
+        <label for="incidentStatus">Trạng thái</label>
+        <select asp-for="Status" class="form-control">
+            <option value="Pending">Pending</option>
+            <option value="Resolved">Resolved</option>
+        </select>
+
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    @* <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button> *@
+</form>
+
