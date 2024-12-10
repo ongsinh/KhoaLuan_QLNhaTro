@@ -286,6 +286,8 @@ namespace KhoaLuan_QLNhaTro.Controllers
                     .Select(r => r.UserId)
                     .FirstOrDefault();
 
+
+
                 //    // Tạo hóa đơn mới
                     var bill = new Bill
                     {
@@ -335,8 +337,11 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 }
                 _context.SaveChanges();
             }
-
-            return RedirectToAction("BillMain");
+            var houseId = _context.Rooms
+            .Where(r => r.Id == Guid.Parse(RoomId))
+            .Select(r => r.HouseId) // Thay HouseId bằng tên thuộc tính chính xác của bạn
+            .FirstOrDefault();
+            return RedirectToAction("BillMain", new { idHouse = houseId });
         }
 
 

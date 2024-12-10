@@ -292,7 +292,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 _context.SaveChanges();
                 return Json(new { success = true });
             }
-            return Json(new { success = false });
+            return View("RoomMain");
         }
 
         [HttpGet]

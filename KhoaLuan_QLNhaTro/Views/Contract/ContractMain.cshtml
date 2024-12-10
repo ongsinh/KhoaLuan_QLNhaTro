@@ -50,7 +50,7 @@
                                 <small>Đại diện: @contract.User.Name</small>
                             </td>
                             @* <td>@contract.User người</td> *@
-                            <td>@contract.Room.Price</td>
+                            <td>@contract.Room.Price.ToString("F0")</td>
                             <td>@contract.Deposit</td>
                             <td>@DateTime.Now.ToString("dd/MM/yyyy")</td>
                             <td>@contract.StartDate.ToString("dd/MM/yyyy")</td>
