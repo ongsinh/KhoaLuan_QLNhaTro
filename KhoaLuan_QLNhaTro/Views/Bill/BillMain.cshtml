@@ -2,6 +2,9 @@
 @{
     var rooms = ViewBag.Rooms as List<KhoaLuan_QLNhaTro.Models.Room>;  // Lấy danh sách phòng từ ViewBag
 }
+@{
+    ViewData["Title"] = "BillMain";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,7 +66,7 @@
                 }
                 <th>Tổng cộng</th>
                 <th>Trạng thái</th>
-                <th>Actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>

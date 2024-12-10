@@ -97,7 +97,15 @@ namespace KhoaLuan_QLNhaTro.Controllers
         //}
         public IActionResult BillMain(Guid idHouse)
         {
-            var services = _context.Services.ToList();
+            //var services = _context.Services.ToList();
+            var services = _context.RoomsServices
+                .Where(rs => rs.Room.HouseId == idHouse) // Lọc theo HouseId
+                .Select(rs => new
+                {
+                    rs.Service.Name,
+                })
+                .Distinct() // Loại bỏ trùng lặp nếu dịch vụ được liên kết với nhiều phòng
+                .ToList();
 
             // Lấy danh sách ID của các phòng thuộc nhà
             var roomIds = _context.Rooms

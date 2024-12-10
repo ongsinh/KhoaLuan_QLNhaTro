@@ -22,7 +22,7 @@ namespace KhoaLuan_QLNhaTro.Models
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<RoomService> RoomsServices { get; set;}
         public virtual DbSet<Service> Services { get; set; }
-        //public virtual DbSet<PaymentResponseModel> PaymentResponseModels { get; set; }
+        public virtual DbSet<PaymentResponseModel> PaymentResponseModels { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -72,7 +72,7 @@ namespace KhoaLuan_QLNhaTro.Models
                 .HasOne(c => c.Service)
                 .WithMany(d => d.DetailBills)
                 .HasForeignKey(c => c.ServiceId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

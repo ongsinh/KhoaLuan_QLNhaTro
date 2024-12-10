@@ -52,7 +52,7 @@
         <a href="@Url.Action("ContractMain", "Contract", new { houseId = ViewBag.HouseId })"><i class="fas fa-box"></i> Quản lý hợp đồng</a>
         <a href="@Url.Action("UserMain", "User", new { houseId = ViewBag.HouseId })"><i class="fas fa-receipt"></i> Quản lý khách thuê</a>
         <a href="@Url.Action("IncidentMain", "Incident", new { idHouse = ViewBag.HouseId })"><i class="fas fa-cogs"></i> Quản lý sự cố</a>
-        <a href="@Url.Action("ReportMain", "Report")"><i class="fas fa-chart-line"></i> Báo cáo doanh thu</a>
+        <a href="@Url.Action("ReportMain", "Report",new { idHouse = ViewBag.HouseId })"><i class="fas fa-chart-line"></i> Báo cáo doanh thu</a>
     </div>
 
     <div class="content">

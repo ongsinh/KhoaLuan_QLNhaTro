@@ -1,8 +1,12 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace VnPayIntegration.Models
 {
     public class PaymentResponseModel
     {
+        [Key]
+        public Guid id { get; set; }
         public string OrderDescription { get; set; }
         public string TransactionId { get; set; }
         public string OrderId { get; set; }

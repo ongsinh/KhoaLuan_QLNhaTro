@@ -57,6 +57,14 @@ namespace KhoaLuan_QLNhaTro.Controllers
                            .Where(b => b.Id == billId)
                            .Select(b => b.Room.Name)  // Lấy tên phòng từ mối quan hệ với Room
                            .FirstOrDefault();
+            var roomPrice = _context.Bills
+                           .Where(b => b.Id == billId)
+                           .Select(b => b.Room.Price)  // Lấy tên phòng từ mối quan hệ với Room
+                           .FirstOrDefault();
+            var creationDate = _context.Bills
+                               .Where(b => b.Id == billId)
+                               .Select(b => b.CreateAt)
+                               .FirstOrDefault();
 
             var details = _context.DetailBills
                                   .Where(d => d.BillId == billId)
@@ -77,6 +85,7 @@ namespace KhoaLuan_QLNhaTro.Controllers
             }
 
             decimal totalAmount = details.Sum(d => d.Total);
+            totalAmount += roomPrice;
 
             // Trả về View với ViewModel
             var model = new HoaDonViewModel
@@ -85,6 +94,8 @@ namespace KhoaLuan_QLNhaTro.Controllers
                 TotalAmount = totalAmount,
                 billID = billId,
                 NameRoom = roomName,
+                roomPrice = roomPrice,
+                CreateAt = creationDate,
             };
 
             return View(model);
@@ -144,6 +155,44 @@ namespace KhoaLuan_QLNhaTro.Controllers
                     // Lưu thay đổi vào cơ sở dữ liệu
                     _context.SaveChanges();
                 }
+
+                var paymenthistory = new PaymentResponseModel
+                {
+                    id = Guid.NewGuid(),
+                    OrderDescription = response.OrderDescription,
+                    TransactionId = response.TransactionId,
+                    OrderId = response.OrderId,
+                    PaymentMethod = response.PaymentMethod,
+                    PaymentId = response.PaymentId,
+                    Success = response.Success,
+                    Token = response.Token,
+                    VnPayResponseCode = response.VnPayResponseCode,
+                    BillId = response.BillId,
+                    Total = response.Total,
+                    PaymentDate = DateTime.Now // Hoặc lấy từ response
+                };
+                _context.PaymentResponseModels.Add(paymenthistory);
+                _context.SaveChanges();
+            }
+            else
+            {
+                var paymenthistory = new PaymentResponseModel
+                {
+                    id = Guid.NewGuid(),
+                    OrderDescription = response.OrderDescription,
+                    TransactionId = response.TransactionId,
+                    OrderId = response.OrderId,
+                    PaymentMethod = response.PaymentMethod,
+                    PaymentId = response.PaymentId,
+                    Success = false,
+                    Token = response.Token,
+                    VnPayResponseCode = response.VnPayResponseCode,
+                    BillId = response.BillId,
+                    Total = response.Total,
+                    PaymentDate = DateTime.Now // Hoặc lấy từ response
+                };
+                _context.PaymentResponseModels.Add(paymenthistory);
+                _context.SaveChanges();
             }
             return View(response); // Trả về view với model PaymentResponseModel
         }

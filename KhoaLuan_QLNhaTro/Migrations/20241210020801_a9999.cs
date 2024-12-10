@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KhoaLuan_QLNhaTro.Migrations
 {
     /// <inheritdoc />
-    public partial class a11 : Migration
+    public partial class a9999 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,6 +26,28 @@ namespace KhoaLuan_QLNhaTro.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Houses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentResponseModels",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Success = table.Column<bool>(type: "bit", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VnPayResponseCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BillId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentResponseModels", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -436,6 +458,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
 
             migrationBuilder.DropTable(
                 name: "IncidentRooms");
+
+            migrationBuilder.DropTable(
+                name: "PaymentResponseModels");
 
             migrationBuilder.DropTable(
                 name: "RoomsServices");

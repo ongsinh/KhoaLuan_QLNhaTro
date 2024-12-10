@@ -7,7 +7,9 @@
 <div class="container">
     <h2 class="text-center">PHIẾU THANH TOÁN HÓA ĐƠN</h2>
     <div>
+        <p><strong>Ngày tạo hóa đơn:</strong> <span id="roomName">@Model.CreateAt.ToString("dd/MM/yyyy")</span></p>
         <p><strong>Tên phòng:</strong> <span id="roomName">@Model.NameRoom</span></p>
+        <p><strong>Giá phòng:</strong> <span id="roomName">@Model.roomPrice.ToString("F0")</span></p>
     </div>
 
     <table class="table table-bordered">
@@ -31,7 +33,7 @@
                     <td>@detail.Number?.ToString()</td>
                     <td>@detail.OldNumber?.ToString("F0")</td>
                     <td>@detail.NewNumber?.ToString("F0")</td>
-                    <td>@detail.Price.ToString()</td>
+                    <td>@detail.Price.ToString("F0")</td>
                     <td>@detail.Total.ToString("F0")</td>
                 </tr>
             }

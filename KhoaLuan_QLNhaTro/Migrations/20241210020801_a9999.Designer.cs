@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KhoaLuan_QLNhaTro.Migrations
 {
     [DbContext(typeof(NhaTroDbContext))]
-    [Migration("20241125064209_a88")]
-    partial class a88
+    [Migration("20241210020801_a9999")]
+    partial class a9999
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,6 +106,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("SettlementDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -179,7 +182,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.Property<decimal?>("NewNumber")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Number")
+                    b.Property<int?>("Number")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("OldNumber")
@@ -187,6 +190,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("SettlementDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
@@ -362,7 +368,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
 
                     b.HasIndex("HouseId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Rooms");
                 });
@@ -462,6 +470,58 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("VnPayIntegration.Models.PaymentResponseModel", b =>
+                {
+                    b.Property<Guid>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BillId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Success")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VnPayResponseCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("PaymentResponseModels");
+                });
+
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.Account", b =>
                 {
                     b.HasOne("KhoaLuan_QLNhaTro.Models.Role", "Role")
@@ -533,7 +593,7 @@ namespace KhoaLuan_QLNhaTro.Migrations
                     b.HasOne("KhoaLuan_QLNhaTro.Models.Service", "Service")
                         .WithMany("DetailBills")
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Bill");
@@ -597,8 +657,8 @@ namespace KhoaLuan_QLNhaTro.Migrations
                         .HasForeignKey("HouseId");
 
                     b.HasOne("KhoaLuan_QLNhaTro.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithOne("Room")
+                        .HasForeignKey("KhoaLuan_QLNhaTro.Models.Room", "UserId");
 
                     b.Navigation("House");
 
@@ -663,6 +723,9 @@ namespace KhoaLuan_QLNhaTro.Migrations
             modelBuilder.Entity("KhoaLuan_QLNhaTro.Models.User", b =>
                 {
                     b.Navigation("Bills");
+
+                    b.Navigation("Room")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
